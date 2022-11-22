@@ -3,3 +3,4 @@
 # Example .gitignore files: https://github.com/github/gitignore
 /.vscode/
 /.DS_Store/
+.DS_Store

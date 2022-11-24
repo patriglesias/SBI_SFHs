@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 from torch import nn
-from torchinterp1d import Interp1d
+#from torchinterp1d import Interp1d
 
 class MLP(nn.Sequential):
     """Multi-Layer Perceptron

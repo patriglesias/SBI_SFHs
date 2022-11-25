@@ -7,24 +7,40 @@ from torch import optim
 from accelerate import Accelerator #to use pytorch
 from torch.utils.data import DataLoader
 import spender
-from ..generate_input import *
+from generate_input import sfr_linear_exp,generate_weights_from_SFHs,get_data,get_tbins,interpolate,generate_all_spectrums
+print('Modules prepared')
 
 
 # CUDA for PyTorch
 use_cuda = torch.cuda.is_available()
 device = torch.device("cuda:0" if use_cuda else "cpu")
 torch.backends.cudnn.benchmark = True
+print('CPU prepared')
 
-#generate data:
+generate=False
 
-#generate parametrizations
-t,ms,percentiles=generate_weights_from_SFHs(SFR=sfr_linear_exp,mgal=10**10,tau=np.linspace(0.3,5,100),ti=np.arange(0,5,0.5),tmin=0,tmax=14,step=0.01,percen=True)
-#load MILES spectra and interpolate
-wave,data=get_data(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
-tbins=get_tbins(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
-data_extended=interpolate(tbins,t,data)
-#generate spectra for the parametrized SFHs
-wave,seds=generate_all_spectrums(t,ms,wave,data_extended)
+if generate:    
+    #generate data:
+    print('Generating data...')
+    #generate parametrizations
+    t,ms,percentiles=generate_weights_from_SFHs(SFR=sfr_linear_exp,mgal=10**10,tau=np.linspace(0.3,5,100),ti=np.arange(0,5,0.5),tmin=0,tmax=14,step=0.01,percen=True)
+    #load MILES spectra and interpolate
+    wave,data=get_data(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
+    tbins=get_tbins(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
+    data_extended=interpolate(tbins,t,data)
+    #generate spectra for the parametrized SFHs
+    wave,seds=generate_all_spectrums(t,ms,wave,data_extended)
+    np.savez('./saved_input/input.npz',x=t,y=percentiles,w=wave,z=seds)
+
+else:
+    #load data:
+    print('Loading data...')
+    npzfile = np.load('./saved_input/input.npz')
+    t=npzfile['x']
+    percentiles=npzfile['y']
+    w=npzfile['w']
+    seds=npzfile['z']
+
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -58,6 +74,7 @@ max_epochs = 100
 #seds shape(1000, 10)
 #percentiles shape (1000, 4300)
 
+print('Creating datasets...')
 x_train = seds[:,:] #seds
 y_train = percentiles[:,:] #percentiles
 
@@ -81,8 +98,11 @@ training_generator = torch.utils.data.DataLoader(training_set, **params)
 validation_set = Dataset(x_val, y_val)
 validation_generator = torch.utils.data.DataLoader(validation_set, **params)"""
 
-
+"""
+print('Calling accelerator...')
 dataloader = Accelerator.prepare(training_generator)
+"""
+
 
 """ss, losses, halphas, zs, norms, ids = [], [], [], [], [], []
 with torch.no_grad():

@@ -6,8 +6,10 @@ from torch import nn
 from torch import optim
 from accelerate import Accelerator #to use pytorch
 from torch.utils.data import DataLoader
-import spender
+from spender import SpectrumEncoder
 from generate_input import sfr_linear_exp,generate_weights_from_SFHs,get_data,get_tbins,interpolate,generate_all_spectrums
+
+
 print('Modules prepared')
 
 
@@ -103,20 +105,98 @@ print('Calling accelerator...')
 dataloader = Accelerator.prepare(training_generator)
 """
 
-print('Just encoding, without regression with percentiles')
+print('Training starts now')
 
-ss= []
+class MLPRegressor(nn.Module):
 
-with torch.no_grad():
-    for spec,percent in training_generator:
-        # create the latents
-        s = model.encode(spec)
-        ss.append(s) 
+    def __init__(self, emb_szs, n_cont, out_sz, layers, p=0.5):
+        super().__init__()
+        self.embeds = nn.ModuleList([nn.Embedding(ni, nf) for ni,nf in emb_szs])
+        self.emb_drop = nn.Dropout(p)
+        self.bn_cont = nn.BatchNorm1d(n_cont)
+        
+        layerlist = []
+        n_emb = sum((nf for ni,nf in emb_szs))
+        n_in = n_emb + n_cont
+        
+        for i in layers:
+            layerlist.append(nn.Linear(n_in,i)) 
+            layerlist.append(nn.ReLU(inplace=True))
+            layerlist.append(nn.BatchNorm1d(i))
+            layerlist.append(nn.Dropout(p))
+            n_in = i
+        layerlist.append(nn.Linear(layers[-1],out_sz))
+            
+        self.layers = nn.Sequential(*layerlist)
+    
+    def forward(self, x_cat, x_cont):
+        embeddings = []
+        for i,e in enumerate(self.embeds):
+            embeddings.append(e(x_cat[:,i]))
+        x = torch.cat(embeddings, 1)
+        x = self.emb_drop(x)
+        
+        x_cont = self.bn_cont(x_cont)
+        x = torch.cat([x, x_cont], 1)
+        x = self.layers(x)
+        return x
 
 
-ss = np.concatenate(ss, axis=0) # converts to numpy
+print('Initializing both the encoder and the MLP')
+# Initialize the MLP
+mlp = MLPRegressor()
+#Initialize the encoder
+encoder=SpectrumEncoder()
 
-print(ss)
-print(np.shape(ss))
+# Define the loss function and optimizer
+loss_function = nn.MSELoss()
+optimizer = torch.optim.Adam(mlp.parameters(), lr=1e-4)
+
+print('Just training dataset')
+# Run the training loop
+for epoch in range(0, 100): # 100 epochs at maximum
+
+    # Print epoch
+    print(f'Starting epoch {epoch+1}')
+
+    # Set current loss value
+    current_t_loss = 0.0
+    current_v_loss=  0.0
+
+    # Iterate over the DataLoader for training data
+    for i, data in enumerate(training_generator, 0):
+        
+        # Get and prepare inputs
+        seds, percentiles = data
+        
+        # Zero the gradients
+        optimizer.zero_grad()
+        
+        # Perform forward pass
+        inputs=encoder(seds)
+        outputs = mlp(inputs)
+        
+        # Compute loss
+        loss = loss_function(outputs, percentiles)
+        
+        # Perform backward pass
+        loss.backward()
+        
+        # Perform optimization
+        optimizer.step()
+        
+        # Print statistics
+        current_t_loss += loss.item()
+        if i % 10 == 0:
+            print('Loss after mini-batch %5d: %.3f' %
+                (i + 1, current_loss / 500))
+            current_loss = 0.0
+
+# Process is complete.
+print('Training process has finished.')
+
+
+
+
 
 

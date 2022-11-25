@@ -40,7 +40,7 @@ else:
     npzfile = np.load('./saved_input/input.npz')
     t=npzfile['x']
     percentiles=npzfile['y']
-    w=npzfile['w']
+    wave=npzfile['w']
     seds=npzfile['z']
 
 
@@ -67,7 +67,7 @@ class Dataset(torch.utils.data.Dataset):
 
 
 # Parameters
-params = {'batch_size': 64,
+params = {'batch_size': 128,
           'shuffle': True,
           'num_workers': 6}
 max_epochs = 100
@@ -112,7 +112,7 @@ print('Initializing both the encoder and the MLP')
 
 #Initialize the encoder
 
-encoder=SpectrumEncoder(instrument=None,n_latent=10,n_hidden=(128, 64, 32),act=None,n_aux=1,dropout=0)
+encoder=SpectrumEncoder(instrument=None,n_latent=10,n_hidden=(128, 64, 32),act=None,n_aux=0,dropout=0)
 
 # Initialize the MLP (n_in=n_latent,n_out=n_percentiles)
 
@@ -124,7 +124,9 @@ optimizer = torch.optim.Adam(mlp.parameters(), lr=1e-4)
 
 print('Just training dataset')
 # Run the training loop
-for epoch in range(0, 100): # 100 epochs at maximum
+training_loss=[]
+latents=[]
+for epoch in range(0, 5): # 100 epochs at maximum
 
     # Print epoch
     print(f'Starting epoch {epoch+1}')
@@ -137,17 +139,21 @@ for epoch in range(0, 100): # 100 epochs at maximum
     for i, data in enumerate(training_generator, 0):
         
         # Get and prepare inputs
-        seds, percentiles = data
+        x,y = data
+        x,y=x.float(),y.float()
         
         # Zero the gradients
         optimizer.zero_grad()
         
         # Perform forward pass
-        inputs=encoder(seds)
-        outputs = mlp(inputs)
+        latent=encoder(x)
         
+        outputs = mlp(latent)
+
+        latents.append(latent.detach().numpy())
+
         # Compute loss
-        loss = loss_function(outputs, percentiles)
+        loss = loss_function(outputs,y)
         
         # Perform backward pass
         loss.backward()
@@ -155,18 +161,31 @@ for epoch in range(0, 100): # 100 epochs at maximum
         # Perform optimization
         optimizer.step()
         
-        # Print statistics
+        # Print and save statistics
         current_t_loss += loss.item()
+    
+
         if i % 10 == 0:
-            print('Loss after mini-batch %5d: %.3f' %
-                (i + 1, current_loss / 500))
-            current_loss = 0.0
+            print('Loss after mini-batch: ',current_t_loss)
+     
+    training_loss.append(current_t_loss)
 
 # Process is complete.
 print('Training process has finished.')
 
 
+#saving losses
+np.save('./saved_model/losses.npy',np.array(training_loss))
+#saving latents
+try:
+    np.save('./saved_model/latents.npy',np.array(latents))
+except:
+    print('error saving latents')
 
+
+plt.plot(range(5),training_loss)
+plt.title('Losses')
+plt.savefig('./saved_model/loss_curve.png')
 
 
 

@@ -103,29 +103,20 @@ print('Calling accelerator...')
 dataloader = Accelerator.prepare(training_generator)
 """
 
+print('Just encoding, without regression with percentiles')
 
-"""ss, losses, halphas, zs, norms, ids = [], [], [], [], [], []
+ss= []
+
 with torch.no_grad():
+    for spec,percent in training_generator:
+        # create the latents
+        s = model.encode(spec)
+        ss.append(s) 
 
-    for spec, w, z, id, norm, zerr in dataloader:
-        # need the latents, of course
-        s = model.encode(spec, aux=z.unsqueeze(1))
-        # everything else is to color code the UMap
-        s, spec_rest, spec_reco = model._forward(spec, z=z, s=s) # reuse latents
-        loss = model._loss(spec, w, spec_reco, individual=True)
-        halpha = l_halpha(model, spec_reco, spec_rest, dim=-1)
-        
-        ss.append(s)
-        losses.append(loss)
-        halphas.append(halpha)
-        zs.append(z)
-        norms.append(norm)
-        ids.append(id)
 
 ss = np.concatenate(ss, axis=0) # converts to numpy
-losses = np.concatenate(losses, axis=0)
-halphas = np.concatenate(halphas, axis=0)
-zs = np.concatenate(zs, axis=0)
-norms = np.concatenate(norms, axis=0)
-ids = np.concatenate(ids, axis=0)"""
+
+print(ss)
+print(np.shape(ss))
+
 

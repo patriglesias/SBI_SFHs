@@ -6,7 +6,7 @@ from torch import nn
 from torch import optim
 from accelerate import Accelerator #to use pytorch
 from torch.utils.data import DataLoader
-from spender import SpectrumEncoder
+from spender import SpectrumEncoder,MLP
 from generate_input import sfr_linear_exp,generate_weights_from_SFHs,get_data,get_tbins,interpolate,generate_all_spectrums
 
 
@@ -73,8 +73,8 @@ params = {'batch_size': 64,
 max_epochs = 100
 
 # Datasets 
-#seds shape(1000, 10)
-#percentiles shape (1000, 4300)
+#percentiles shape(1000, 10)
+#seds  shape (1000, 4300)
 
 print('Creating datasets...')
 x_train = seds[:,:] #seds
@@ -107,46 +107,16 @@ dataloader = Accelerator.prepare(training_generator)
 
 print('Training starts now')
 
-class MLPRegressor(nn.Module):
-
-    def __init__(self, emb_szs, n_cont, out_sz, layers, p=0.5):
-        super().__init__()
-        self.embeds = nn.ModuleList([nn.Embedding(ni, nf) for ni,nf in emb_szs])
-        self.emb_drop = nn.Dropout(p)
-        self.bn_cont = nn.BatchNorm1d(n_cont)
-        
-        layerlist = []
-        n_emb = sum((nf for ni,nf in emb_szs))
-        n_in = n_emb + n_cont
-        
-        for i in layers:
-            layerlist.append(nn.Linear(n_in,i)) 
-            layerlist.append(nn.ReLU(inplace=True))
-            layerlist.append(nn.BatchNorm1d(i))
-            layerlist.append(nn.Dropout(p))
-            n_in = i
-        layerlist.append(nn.Linear(layers[-1],out_sz))
-            
-        self.layers = nn.Sequential(*layerlist)
-    
-    def forward(self, x_cat, x_cont):
-        embeddings = []
-        for i,e in enumerate(self.embeds):
-            embeddings.append(e(x_cat[:,i]))
-        x = torch.cat(embeddings, 1)
-        x = self.emb_drop(x)
-        
-        x_cont = self.bn_cont(x_cont)
-        x = torch.cat([x, x_cont], 1)
-        x = self.layers(x)
-        return x
-
-
 print('Initializing both the encoder and the MLP')
-# Initialize the MLP
-mlp = MLPRegressor()
+
+
 #Initialize the encoder
-encoder=SpectrumEncoder()
+
+encoder=SpectrumEncoder(instrument=None,n_latent=10,n_hidden=(128, 64, 32),act=None,n_aux=1,dropout=0)
+
+# Initialize the MLP (n_in=n_latent,n_out=n_percentiles)
+
+mlp = MLP(n_in=10,n_out=10,n_hidden=(16, 16, 16),act=None,dropout=0.5)
 
 # Define the loss function and optimizer
 loss_function = nn.MSELoss()

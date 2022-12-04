@@ -556,3 +556,171 @@ class SpectrumAutoencoder(BaseAutoencoder):
             encoder,
             decoder,
         )
+
+
+
+#by Patricia, to generate latents optimized for getting percentiles
+
+class Base_encoder_percentiles(nn.Module):
+    """Base class for spectrum encoder optimized for obtaining percentiles
+
+    This class is agnostic about the encoder and MPL architectures. It simply calls
+    them in order and computes the loss for the recontruction fidelity.
+
+    The only requirements for the modules is that they have the same latent
+    dimensionality, and for the 'loss' method the length of the observed spectrum
+    vectors need to agree.
+
+    Parameter
+    ---------
+    encoder: `nn.Module`
+        Encoder
+    MPL: `nn.Module`
+        MPL
+    """
+    def __init__(self,
+                 encoder,
+                 mpl,
+                ):
+
+        super(BaseAutoencoder, self).__init__()
+        assert encoder.n_latent == mpl.n_in
+        self.encoder = encoder
+        self.mpl = mpl
+
+    def encode(self, y, aux=None):
+        """Encode from observed spectrum to latents
+
+        Parameters
+        ----------
+        y: `torch.tensor`, shape (N, L)
+            Batch of observed spectra
+        aux: `torch.tensor`, shape (N, n_aux)
+            (optional) Batch of auxiliary inputs to MLP
+        Returns
+        -------
+        s: `torch.tensor`, shape (N, n_latent)
+            Batch of latents that encode `spectra`
+        """
+        return self.encoder(y, aux=aux)
+
+    def mpl(self, s):
+        """From latents to percentiles
+
+        Parameter
+        ---------
+        s: `torch.tensor`, shape (N, S)
+            Batch of latents
+
+        Returns
+        -------
+        x: `torch.tensor`, shape (N, 10)
+            Batch of percentiles
+        """
+        return self.mpl(s)
+
+    def _forward(self, y,s=None):
+        if s is None:
+            s = self.encode(y)
+
+        y = self.mpl(s)
+        return s, y
+
+    def forward(self, y, s=None):
+        """Forward method
+
+        Transforms observed spectra into their reconstruction for a given intrument
+        and redshift.
+
+        Parameter
+        ---------
+        y: `torch.tensor`, shape (N, L)
+            Batch of observed spectra
+        s: `torch.tensor`, shape (N, S)
+            (optional) Batch of latents. When given, encoding is omitted and these
+            latents are used instead.
+
+        Returns
+        -------
+        y: `torch.tensor`, shape (N, 10)
+            Batch of percentiles
+        """
+        s, x, y_ = self._forward(y, s=s)
+        return y_
+
+    def loss(self, y, w, s=None, individual=False):
+        """Weighted MSE loss
+
+        Parameter
+        --------
+        y: `torch.tensor`, shape (N, 10)
+            Batch of percentiles
+        w: `torch.tensor`, shape (N, 10)
+            Batch of weights for percentiles
+        s: `torch.tensor`, shape (N, S)
+            (optional) Batch of latents. When given, encoding is omitted and these
+            latents are used instead.
+        individual: bool
+            Whether the loss is computed for each spectrum individually or aggregated
+
+        Returns
+        -------
+        float or `torch.tensor`, shape (N,) of weighted MSE loss
+        """
+
+        y_ = self.forward(y, s=s)
+        return self._loss(y, w, y_, individual=individual)
+
+    def _loss(self, y, w, y_, individual=False):
+        # loss = total squared deviation in units of variance
+        # if the model is identical to observed spectrum (up to the noise),
+        # then loss per object = D (number of non-zero bins)
+
+        # to make it to order unity for comparing losses, divide out L (number of bins)
+        # instead of D, so that spectra with more valid bins have larger impact
+        loss_ind = torch.sum(0.5 * w * (y - y_).pow(2), dim=1) / y.shape[1]
+
+        if individual:
+            return loss_ind
+
+        return torch.sum(loss_ind)
+
+    @property
+    def n_parameter(self):
+        """Number of parameters in this model"""
+        return sum(p.numel() for p in self.parameters() if p.requires_grad)
+
+
+
+class encoder_percentiles(Base_encoder_percentiles):
+    """Concrete implementation of spectrum encoder
+
+    Constructs and uses :class:`SpectrumEncoder` as encoder and :class:`MPL`.
+
+    Parameter
+    ---------
+    n_latent: int
+        Dimension of latent space
+    n_hidden: list of int
+        Dimensions for every hidden layer of the class:`MLP`
+    act: list of callables
+        Activation functions for the decoder. Needs to have len(n_hidden) + 1
+        If `None`, will be set to `LeakyReLU` for every layer.
+    n_out: int
+        Number of percentiles
+    """
+    def __init__(self,
+                 n_latent=10,
+                 n_aux=1,
+                 n_hidden=(16,16,16),
+                 act=None,
+                ):
+
+        encoder = SpectrumEncoder(n_latent)
+
+        mlp = MLP(n_in=n_latent,n_out=10,n_hidden=n_hidden,act=act)
+
+        super(encoder_percentiles, self).__init__(
+            encoder,
+            mlp,
+        )

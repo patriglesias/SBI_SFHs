@@ -1,3 +1,7 @@
+#using mpl and spectrum encoder as different models
+
+
+
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import numpy as np

@@ -132,6 +132,7 @@ print('Training and validation datasets')
 training_loss=[]
 latents=[]
 y_pred=[]
+validation_loss=[]
 for epoch in range(0, 5): # 100 epochs at maximum
 
     # Print epoch
@@ -194,6 +195,8 @@ for epoch in range(0, 5): # 100 epochs at maximum
         
         # Print and save statistics
         current_v_loss += loss.item()
+        if i % 10 == 0:
+            print('Validation loss after mini-batch: ',current_v_loss)
     #save validation losses
     validation_loss.append(current_v_loss)
 

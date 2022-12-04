@@ -130,7 +130,7 @@ y_pred=[]
 for epoch in range(0, 5): # 100 epochs at maximum
 
     # Print epoch
-    print(f'Starting epoch {epoch+1}')
+    print('Starting epoch: ', epoch+1)
 
     # Set current loss value
     current_t_loss = 0.0

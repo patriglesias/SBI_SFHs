@@ -54,10 +54,10 @@ plt.show()
 
 training_loss=np.load('losses.npy',allow_pickle=True)
 validation_loss=np.load('val_losses.npy',allow_pickle=True)
-plt.plot(range(15),training_loss,label='Training')
-#plt.plot(range(15),validation_loss,label='Validation')
-
-plt.title('Losses')
+plt.plot(range(100),training_loss,label='Training')
+#plt.plot(range(100),validation_loss,label='Validation')
+plt.xlabel('Epochs')
+plt.title('Losses - No latents')
 plt.legend()
 
 

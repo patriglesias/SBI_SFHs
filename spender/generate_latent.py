@@ -1,4 +1,4 @@
-
+from tqdm import tqdm
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -118,7 +118,7 @@ encoder=SpectrumEncoder(instrument=None,n_latent=10,n_hidden=(128, 64, 32),act=N
 
 # Initialize the MLP (n_in=n_latent,n_out=n_percentiles)
 
-mlp = MLP(n_in=4300,n_out=10,n_hidden=(16, 16, 16),act=None,dropout=0.5)
+mlp = MLP(n_in=10,n_out=10,n_hidden=(16, 16, 16),act=None,dropout=0.5)
 
 # Define the loss function and optimizer
 loss_function = nn.MSELoss()
@@ -134,7 +134,10 @@ latents=[]
 y_pred=[]
 validation_loss=[]
 
-for epoch in range(0, 100):
+
+
+
+for epoch in tqdm(range(100)):
 
     # Print epoch
     print('Starting epoch: ', epoch+1)
@@ -154,13 +157,12 @@ for epoch in range(0, 100):
         optimizer.zero_grad()
         
         # Perform forward pass
-        #latent=encoder(x)
-        
-        outputs = mlp(x)
+        latent=encoder(x)
+        outputs = mlp(latent)
 
         #save latents and output percentiles
         y_pred.append(outputs.detach().numpy())
-        #latents.append(latent.detach().numpy())
+        latents.append(latent.detach().numpy())
 
         # Compute loss
         loss = loss_function(outputs,y)
@@ -174,9 +176,7 @@ for epoch in range(0, 100):
         # Print and save statistics
         current_t_loss += loss.item()
     
-
-        if i % 10 == 0:
-            print('Training loss after mini-batch: ',current_t_loss)
+        print('Training loss after mini-batch: ',current_t_loss)
      
     #save training losses
     training_loss.append(current_t_loss)
@@ -188,16 +188,17 @@ for epoch in range(0, 100):
         x,y=x.float(),y.float()
         
         #encode and predict
-        #latent=encoder(x)
-        outputs = mlp(x)
+        latent=encoder(x)
+        outputs = mlp(latent)
 
         # Compute loss
         loss = loss_function(outputs,y)
         
         # Print and save statistics
         current_v_loss += loss.item()
-        if i % 10 == 0:
-            print('Validation loss after mini-batch: ',current_v_loss)
+    
+        print('Validation loss after mini-batch: ',current_v_loss)
+    
     #save validation losses
     validation_loss.append(current_v_loss)
 
@@ -217,10 +218,6 @@ try:
     np.save('./saved_model/y_pred.npy',np.array(y_pred))
 except:
     print('error saving latents and percentiles')
-
-#plt.plot(range(5),training_loss)
-#plt.title('Losses')
-#plt.savefig('./saved_model/loss_curve.png')
 
 #save percentiles (real ones)
 np.save('./saved_model/y_train.npy',np.array(y_train))

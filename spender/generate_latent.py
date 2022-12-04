@@ -126,6 +126,7 @@ print('Just training dataset')
 # Run the training loop
 training_loss=[]
 latents=[]
+y_pred=[]
 for epoch in range(0, 5): # 100 epochs at maximum
 
     # Print epoch
@@ -150,6 +151,8 @@ for epoch in range(0, 5): # 100 epochs at maximum
         
         outputs = mlp(latent)
 
+        #save latents and output percentiles
+        y_pred.append(outputs.detach().numpy())
         latents.append(latent.detach().numpy())
 
         # Compute loss
@@ -168,6 +171,7 @@ for epoch in range(0, 5): # 100 epochs at maximum
         if i % 10 == 0:
             print('Loss after mini-batch: ',current_t_loss)
      
+    #save training losses
     training_loss.append(current_t_loss)
 
 # Process is complete.
@@ -176,12 +180,12 @@ print('Training process has finished.')
 
 #saving losses
 np.save('./saved_model/losses.npy',np.array(training_loss))
-#saving latents
+#saving latents and percentiles
 try:
     np.save('./saved_model/latents.npy',np.array(latents))
+    np.save('./saved_model/y_pred.npy',np.array(y_pred))
 except:
-    print('error saving latents')
-
+    print('error saving latents and percentiles')
 
 plt.plot(range(5),training_loss)
 plt.title('Losses')

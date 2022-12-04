@@ -191,5 +191,5 @@ plt.plot(range(5),training_loss)
 plt.title('Losses')
 plt.savefig('./saved_model/loss_curve.png')
 
-
-
+#save percentiles (real ones)
+np.save('./saved_model/y_train.npy',np.array(y_train))

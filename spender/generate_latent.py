@@ -77,18 +77,20 @@ max_epochs = 100
 #seds  shape (1000, 4300)
 
 print('Creating datasets...')
+
+"""
 x_train = seds[:,:] #seds
 y_train = percentiles[:,:] #percentiles
+"""
 
-
-"""x_train = seds[:int(0.8*len(seds)),:] #seds
+x_train = seds[:int(0.8*len(seds)),:] #seds
 y_train = percentiles[:int(0.8*len(seds)),:] #percentiles
 
 x_val = seds[int(0.8*len(seds)):int(0.9*len(seds)),:] #seds
 y_val = percentiles[int(0.8*len(seds)):int(0.9*len(seds)),:] #percentiles
 
 x_test = seds[int(0.9*len(seds)):,:] #seds
-y_test = percentiles[int(0.9*len(seds)):,:] #percentiles"""
+y_test = percentiles[int(0.9*len(seds)):,:] #percentiles
 
 
 
@@ -96,9 +98,9 @@ y_test = percentiles[int(0.9*len(seds)):,:] #percentiles"""
 training_set = Dataset(x_train, y_train)
 training_generator = torch.utils.data.DataLoader(training_set, **params)
 
-"""
+
 validation_set = Dataset(x_val, y_val)
-validation_generator = torch.utils.data.DataLoader(validation_set, **params)"""
+validation_generator = torch.utils.data.DataLoader(validation_set, **params)
 
 """
 print('Calling accelerator...')
@@ -122,7 +124,10 @@ mlp = MLP(n_in=10,n_out=10,n_hidden=(16, 16, 16),act=None,dropout=0.5)
 loss_function = nn.MSELoss()
 optimizer = torch.optim.Adam(mlp.parameters(), lr=1e-4)
 
-print('Just training dataset')
+#print('Just training dataset')
+print('Training and validation datasets')
+
+
 # Run the training loop
 training_loss=[]
 latents=[]
@@ -169,10 +174,31 @@ for epoch in range(0, 5): # 100 epochs at maximum
     
 
         if i % 10 == 0:
-            print('Loss after mini-batch: ',current_t_loss)
+            print('Training loss after mini-batch: ',current_t_loss)
      
     #save training losses
     training_loss.append(current_t_loss)
+
+    # Iterate over the DataLoader for validation data
+    for i, data in enumerate(validation_generator, 0):
+        # Get and prepare inputs
+        x,y = data
+        x,y=x.float(),y.float()
+        
+        #encode and predict
+        latent=encoder(x)
+        outputs = mlp(latent)
+
+        # Compute loss
+        loss = loss_function(outputs,y)
+        
+        # Print and save statistics
+        current_v_loss += loss.item()
+    #save validation losses
+    validation_loss.append(current_v_loss)
+
+
+    
 
 # Process is complete.
 print('Training process has finished.')
@@ -180,6 +206,7 @@ print('Training process has finished.')
 
 #saving losses
 np.save('./saved_model/losses.npy',np.array(training_loss))
+np.save('./saved_model/val_losses.npy',np.array(validation_loss))
 #saving latents and percentiles
 try:
     np.save('./saved_model/latents.npy',np.array(latents))

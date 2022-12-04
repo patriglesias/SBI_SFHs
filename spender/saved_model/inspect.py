@@ -23,4 +23,24 @@ for i in range(len(latent_2[:,0])):
     
 plt.title('Components of the latents')
 plt.show()
+
+y_pred=np.load('y_pred.npy',allow_pickle=True)
+
+
+percentiles=[]
+for i in range(len(y_pred)):
+    for j in range(len(y_pred[i])):
+        percentiles.append(y_pred[i][j])
+        
+percentiles=np.array(percentiles)
+
+
+for i in range(len(percentiles[:,0])):
+    plt.plot(range(10),percentiles[i,:],'.')
+    
+plt.title('Percentiles')
+plt.show()
+
+
+
         

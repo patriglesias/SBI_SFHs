@@ -134,7 +134,7 @@ latents=[]
 y_pred=[]
 validation_loss=[]
 
-for epoch in range(0, 15):
+for epoch in range(0, 100):
 
     # Print epoch
     print('Starting epoch: ', epoch+1)
@@ -160,7 +160,7 @@ for epoch in range(0, 15):
 
         #save latents and output percentiles
         y_pred.append(outputs.detach().numpy())
-        latents.append(latent.detach().numpy())
+        #latents.append(latent.detach().numpy())
 
         # Compute loss
         loss = loss_function(outputs,y)
@@ -218,9 +218,9 @@ try:
 except:
     print('error saving latents and percentiles')
 
-plt.plot(range(5),training_loss)
-plt.title('Losses')
-plt.savefig('./saved_model/loss_curve.png')
+#plt.plot(range(5),training_loss)
+#plt.title('Losses')
+#plt.savefig('./saved_model/loss_curve.png')
 
 #save percentiles (real ones)
 np.save('./saved_model/y_train.npy',np.array(y_train))

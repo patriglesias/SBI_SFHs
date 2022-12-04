@@ -118,7 +118,7 @@ encoder=SpectrumEncoder(instrument=None,n_latent=10,n_hidden=(128, 64, 32),act=N
 
 # Initialize the MLP (n_in=n_latent,n_out=n_percentiles)
 
-mlp = MLP(n_in=10,n_out=10,n_hidden=(16, 16, 16),act=None,dropout=0.5)
+mlp = MLP(n_in=4300,n_out=10,n_hidden=(16, 16, 16),act=None,dropout=0.5)
 
 # Define the loss function and optimizer
 loss_function = nn.MSELoss()
@@ -154,9 +154,9 @@ for epoch in range(0, 15):
         optimizer.zero_grad()
         
         # Perform forward pass
-        latent=encoder(x)
+        #latent=encoder(x)
         
-        outputs = mlp(latent)
+        outputs = mlp(x)
 
         #save latents and output percentiles
         y_pred.append(outputs.detach().numpy())
@@ -188,8 +188,8 @@ for epoch in range(0, 15):
         x,y=x.float(),y.float()
         
         #encode and predict
-        latent=encoder(x)
-        outputs = mlp(latent)
+        #latent=encoder(x)
+        outputs = mlp(x)
 
         # Compute loss
         loss = loss_function(outputs,y)

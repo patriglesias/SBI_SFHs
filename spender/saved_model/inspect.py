@@ -25,7 +25,7 @@ for i in range(len(latent_2[:,0])):
 plt.title('Components of the latents')
 plt.show()
 """
-
+"""
 y_pred=np.load('y_pred.npy',allow_pickle=True)
 
 
@@ -50,7 +50,15 @@ for i in range(len(y_train[:,0])):
     
 plt.title('Real Percentiles')
 plt.show()
+"""
 
+training_loss=np.load('losses.npy',allow_pickle=True)
+validation_loss=np.load('val_losses.npy',allow_pickle=True)
+#plt.plot(range(5),training_loss,label='Training')
+plt.plot(range(5),validation_loss,label='Validation')
+
+plt.title('Losses')
+plt.legend()
 
 
 

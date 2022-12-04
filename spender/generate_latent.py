@@ -147,7 +147,7 @@ for epoch in range(0, 5): # 100 epochs at maximum
         
         # Get and prepare inputs
         x,y = data
-        x,y=x.float(),y.float()
+        x,y=x.float().cuda(),y.float().cuda()
         
         # Zero the gradients
         optimizer.zero_grad()
@@ -184,7 +184,7 @@ for epoch in range(0, 5): # 100 epochs at maximum
     for i, data in enumerate(validation_generator, 0):
         # Get and prepare inputs
         x,y = data
-        x,y=x.float(),y.float()
+        x,y=x.float().cuda(),y.float().cuda()
         
         #encode and predict
         latent=encoder(x)

@@ -1,9 +1,8 @@
-#using mpl and spectrum encoder as different models included in 
+#using spectrum encoder and mlp as different models included in 
 #encode_percentiles (new class in spender_model)
 
 
 from pickle import NONE
-from spender.spender.spender_model import encoder_percentiles
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,7 +11,7 @@ from torch import nn
 from torch import optim
 from accelerate import Accelerator #to use pytorch
 from torch.utils.data import DataLoader
-from spender import SpectrumEncoder,MLP
+from spender import SpectrumEncoder,MLP,encoder_percentiles
 from generate_input import sfr_linear_exp,generate_weights_from_SFHs,get_data,get_tbins,interpolate,generate_all_spectrums
 
 
@@ -74,8 +73,7 @@ class Dataset(torch.utils.data.Dataset):
 
 # Parameters
 params = {'batch_size': 128,
-          'shuffle': True,
-          'num_workers': 6}
+          'shuffle': True}
 max_epochs = 100
 
 # Datasets 
@@ -105,8 +103,10 @@ validation_generator = torch.utils.data.DataLoader(validation_set, **params)
 
 
 print('Calling accelerator...')
-trainloader = Accelerator.prepare(training_generator)
-validloader= Accelerator.prepare(validation_generator)
+accelerator = Accelerator(mixed_precision='fp16')
+print(accelerator.distributed_type)
+trainloader = accelerator.prepare(training_generator)
+validloader= accelerator.prepare(validation_generator)
 
 
 print('Training starts now')
@@ -116,11 +116,11 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
     optimizer = optim.Adam(model.parameters(), lr=lr)
     scheduler = optim.lr_scheduler.OneCycleLR(optimizer, lr, total_steps=n_epoch)
 
-    accelerator = Accelerator(mixed_precision='fp16')
+    accelerator = Accelerator()
     model,  trainloader, validloader, optimizer = accelerator.prepare(model,  trainloader, validloader, optimizer)
 
     if outfile is None:
-        outfile = "checkpoint.pt"
+        outfile = "./saved_model/generate_latent_2/checkpoint.pt"
 
     epoch = 0
     if losses is None:
@@ -135,14 +135,13 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
         except: # OK if losses are empty
             pass
 
-    for epoch_ in range(epoch, n_epoch):
+    for epoch_ in tqdm(range(epoch, n_epoch)):
         model.train()
         train_loss = 0.
         n_sample = 0
         for k, batch in enumerate(trainloader):
             batch_size = len(batch[0])
-            print(batch)
-            spec,percent = batch
+            spec,percent = batch[0].float(),batch[1].float()
             loss = model.loss(percent)
             accelerator.backward(loss)
             train_loss += loss.item()
@@ -161,7 +160,7 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
             n_sample = 0
             for k, batch in enumerate(validloader):
                 batch_size = len(batch[0])
-                spec,percent= batch
+                spec,percent= batch[0].float(),batch[1].float()
                 loss = model.loss(percent)
                 valid_loss += loss.item()
                 n_sample += batch_size
@@ -185,8 +184,11 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
             }, outfile)
 
 
- # define and train the model
+# define and train the model
+print('Model defined')
 model = encoder_percentiles(n_latent=10,n_out=10,n_hidden=(16,16,16),act=None)
 
-train(model, trainloader, validloader, n_epoch=5, n_batch=128, outfile=None, losses=None, lr=3e-4, verbose=True)
+train(model, trainloader, validloader, n_epoch=100, n_batch=128, outfile=None, losses=None, lr=3e-4, verbose=True)
 
+print('Training has finished')
+print('Model saved')

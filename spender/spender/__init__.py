@@ -1,5 +1,5 @@
 import torch
-from .spender_model import MLP, SpeculatorActivation, SpectrumEncoder, SpectrumDecoder, SpectrumAutoencoder
+from .spender_model import MLP, SpeculatorActivation, SpectrumEncoder, SpectrumDecoder, SpectrumAutoencoder,encoder_percentiles
 from .instrument import Instrument, LSF
 
 

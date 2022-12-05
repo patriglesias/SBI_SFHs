@@ -112,7 +112,7 @@ class SpectrumEncoder(nn.Module):
                  n_latent,
                  n_hidden=(128, 64, 32),
                  act=None,
-                 n_aux=1,
+                 n_aux=0,
                  dropout=0):
 
         super(SpectrumEncoder, self).__init__()
@@ -564,7 +564,7 @@ class SpectrumAutoencoder(BaseAutoencoder):
 class Base_encoder_percentiles(nn.Module):
     """Base class for spectrum encoder optimized for obtaining percentiles
 
-    This class is agnostic about the encoder and MPL architectures. It simply calls
+    This class is agnostic about the encoder and MLP architectures. It simply calls
     them in order and computes the loss for the recontruction fidelity.
 
     The only requirements for the modules is that they have the same latent
@@ -575,18 +575,17 @@ class Base_encoder_percentiles(nn.Module):
     ---------
     encoder: `nn.Module`
         Encoder
-    MPL: `nn.Module`
-        MPL
+    MLP: `nn.Module`
+        MLP
     """
     def __init__(self,
                  encoder,
-                 mpl,
+                 mlp,
                 ):
 
-        super(BaseAutoencoder, self).__init__()
-        assert encoder.n_latent == mpl.n_in
+        super(Base_encoder_percentiles, self).__init__()
         self.encoder = encoder
-        self.mpl = mpl
+        self.mlp = mlp
 
     def encode(self, y, aux=None):
         """Encode from observed spectrum to latents
@@ -604,7 +603,7 @@ class Base_encoder_percentiles(nn.Module):
         """
         return self.encoder(y, aux=aux)
 
-    def mpl(self, s):
+    def _mlp(self, s):
         """From latents to percentiles
 
         Parameter
@@ -614,39 +613,39 @@ class Base_encoder_percentiles(nn.Module):
 
         Returns
         -------
-        x: `torch.tensor`, shape (N, 10)
-            Batch of percentiles
+        y_: `torch.tensor`, shape (N, 10)
+            Batch of predicted percentiles
         """
-        return self.mpl(s)
+        return self.mlp(s)
 
     def _forward(self, y,s=None):
         if s is None:
             s = self.encode(y)
-
-        y = self.mpl(s)
-        return s, y
+        y_ = self._mlp(s)
+        return s, y_
 
     def forward(self, y, s=None):
         """Forward method
 
-        Transforms observed spectra into their reconstruction for a given intrument
-        and redshift.
+        Transforms observed spectra into percentiles using latents (we want the percentiles)
 
         Parameter
         ---------
-        y: `torch.tensor`, shape (N, L)
-            Batch of observed spectra
+        y: `torch.tensor`, shape (N, 10)
+            Batch of real percentiles
         s: `torch.tensor`, shape (N, S)
             (optional) Batch of latents. When given, encoding is omitted and these
             latents are used instead.
 
         Returns
         -------
-        y: `torch.tensor`, shape (N, 10)
-            Batch of percentiles
+        s: `torch.tensor`, shape (N, S)
+            Batch of latents.
+        y_: `torch.tensor`, shape (N, 10)
+            Batch of predicted percentiles
         """
-        s, x, y_ = self._forward(y, s=s)
-        return y_
+        s,  y_ = self._forward(y, s=s)
+        return s,y_
 
     def loss(self, y, w=None, s=None, individual=False):
         """Weighted MSE loss
@@ -667,11 +666,10 @@ class Base_encoder_percentiles(nn.Module):
         -------
         float or `torch.tensor`, shape (N,) of weighted MSE loss
         """
-
-        y_ = self.forward(y, s=s) #predicted percentiles
+        s,y_ = self.forward(y, s=s) #predicted percentiles
         return self._loss(y, y_, w=None, individual=individual)
 
-    def _loss(self, y, y_ ,w=None individual=False):  #w removed
+    def _loss(self, y, y_ ,w=None, individual=False):  #w removed
         # loss = total squared deviation in units of variance
         # if the model is identical to observed spectrum (up to the noise),
         # then loss per object = D (number of non-zero bins)
@@ -719,9 +717,9 @@ class encoder_percentiles(Base_encoder_percentiles):
                  act=None,
                 ):
 
-        encoder = SpectrumEncoder(n_latent)
+        encoder = SpectrumEncoder(None,n_latent)
 
-        mlp = MLP(n_in=n_latent,n_out=n_out,n_hidden=n_hidden,act=act)
+        mlp = MLP(n_latent,n_out,n_hidden=n_hidden,act=act)
 
         super(encoder_percentiles, self).__init__(
             encoder,

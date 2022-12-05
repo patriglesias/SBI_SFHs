@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt
 
 checkpoint = torch.load('checkpoint.pt')
 
-losses=checkpoint['losses']
+losses=np.array(checkpoint['losses'])
 model_loaded=checkpoint['model']
 
 
 print(np.shape(losses))
+np.savetxt('./generate_latent_2/losses.txt',np.array(losses))

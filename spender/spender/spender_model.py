@@ -648,7 +648,7 @@ class Base_encoder_percentiles(nn.Module):
         s, x, y_ = self._forward(y, s=s)
         return y_
 
-    def loss(self, y, w, s=None, individual=False):
+    def loss(self, y, w=None, s=None, individual=False):
         """Weighted MSE loss
 
         Parameter
@@ -656,7 +656,7 @@ class Base_encoder_percentiles(nn.Module):
         y: `torch.tensor`, shape (N, 10)
             Batch of percentiles
         w: `torch.tensor`, shape (N, 10)
-            Batch of weights for percentiles
+            Batch of weights for percentiles (optional?)
         s: `torch.tensor`, shape (N, S)
             (optional) Batch of latents. When given, encoding is omitted and these
             latents are used instead.
@@ -668,17 +668,20 @@ class Base_encoder_percentiles(nn.Module):
         float or `torch.tensor`, shape (N,) of weighted MSE loss
         """
 
-        y_ = self.forward(y, s=s)
-        return self._loss(y, w, y_, individual=individual)
+        y_ = self.forward(y, s=s) #predicted percentiles
+        return self._loss(y, y_, w=None, individual=individual)
 
-    def _loss(self, y, w, y_, individual=False):
+    def _loss(self, y, y_ ,w=None individual=False):  #w removed
         # loss = total squared deviation in units of variance
         # if the model is identical to observed spectrum (up to the noise),
         # then loss per object = D (number of non-zero bins)
 
         # to make it to order unity for comparing losses, divide out L (number of bins)
         # instead of D, so that spectra with more valid bins have larger impact
-        loss_ind = torch.sum(0.5 * w * (y - y_).pow(2), dim=1) / y.shape[1]
+        if w==None:
+            loss_ind = torch.sum(0.5 * (y - y_).pow(2), dim=1) / y.shape[1]
+        else:
+            loss_ind = torch.sum(0.5 *w* (y - y_).pow(2), dim=1) / y.shape[1]
 
         if individual:
             return loss_ind
@@ -711,14 +714,14 @@ class encoder_percentiles(Base_encoder_percentiles):
     """
     def __init__(self,
                  n_latent=10,
-                 n_aux=1,
+                 n_out=10,
                  n_hidden=(16,16,16),
                  act=None,
                 ):
 
         encoder = SpectrumEncoder(n_latent)
 
-        mlp = MLP(n_in=n_latent,n_out=10,n_hidden=n_hidden,act=act)
+        mlp = MLP(n_in=n_latent,n_out=n_out,n_hidden=n_hidden,act=act)
 
         super(encoder_percentiles, self).__init__(
             encoder,

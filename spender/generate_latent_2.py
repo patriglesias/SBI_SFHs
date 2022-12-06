@@ -228,3 +228,4 @@ else:
     print('Saving latents and predicted percentiles...')
     np.savetxt('./saved_model/generate_latent_2/y_test_pred.txt',y_.cpu())
     np.savetxt('./saved_model/generate_latent_2/latents.txt',s.cpu())
+    np.savetxt('./saved_model/generate_latent_2/y_test.txt',percent.cpu())

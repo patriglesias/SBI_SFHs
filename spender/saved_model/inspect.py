@@ -1,5 +1,5 @@
 import numpy as np
-import torch
+#import torch
 import matplotlib.pyplot as plt
 
 """
@@ -8,7 +8,7 @@ losses=np.array(checkpoint['losses'])
 model_loaded=checkpoint['model']
 np.savetxt('./generate_latent_2/losses.txt',np.array(losses))
 """
-
+"""
 losses=np.loadtxt('./generate_latent_2/losses.txt')
 
 #plot losses
@@ -17,4 +17,10 @@ plt.plot(epochs,losses[:,0],label='Training loss')
 plt.plot(epochs,losses[:,1],label='Validation loss')
 plt.xlabel('Epochs')
 plt.title('Loss')
+plt.legend()
 plt.savefig('./generate_latent_2/losses.png')
+"""
+
+
+
+

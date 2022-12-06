@@ -30,7 +30,7 @@ if generate:
     #generate data:
     print('Generating data...')
     #generate parametrizations
-    t,ms,percentiles=generate_weights_from_SFHs(SFR=sfr_linear_exp,mgal=10**10,tau=np.linspace(0.3,5,100),ti=np.arange(0,5,0.5),tmin=0,tmax=14,step=0.01,percen=True)
+    t,ms,percentiles=generate_weights_from_SFHs(SFR=sfr_linear_exp,mgal=10**10,tau=np.linspace(0.3,5,100),ti=np.linspace(0,5,100),tmin=0,tmax=14,step=0.01,percen=True)
     #load MILES spectra and interpolate
     wave,data=get_data(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
     tbins=get_tbins(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
@@ -74,7 +74,7 @@ class Dataset(torch.utils.data.Dataset):
 # Parameters
 params = {'batch_size': 128,
           'shuffle': True}
-max_epochs = 100
+
 
 # Datasets 
 #percentiles shape(1000, 10)
@@ -92,24 +92,6 @@ x_test = seds[int(0.9*len(seds)):,:] #seds
 y_test = percentiles[int(0.9*len(seds)):,:] #percentiles
 
 
-
-# Generators
-training_set = Dataset(x_train, y_train)
-training_generator = torch.utils.data.DataLoader(training_set, **params)
-
-
-validation_set = Dataset(x_val, y_val)
-validation_generator = torch.utils.data.DataLoader(validation_set, **params)
-
-
-print('Calling accelerator...')
-accelerator = Accelerator(mixed_precision='fp16')
-print(accelerator.distributed_type)
-trainloader = accelerator.prepare(training_generator)
-validloader= accelerator.prepare(validation_generator)
-
-
-print('Training starts now')
 
 def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=None, losses=None, verbose=False, lr=3e-4):
 
@@ -184,11 +166,52 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
             }, outfile)
 
 
-# define and train the model
-print('Model defined')
-model = encoder_percentiles(n_latent=10,n_out=10,n_hidden=(16,16,16),act=None)
+training_mode=False
 
-train(model, trainloader, validloader, n_epoch=100, n_batch=128, outfile=None, losses=None, lr=3e-4, verbose=True)
 
-print('Training has finished')
-print('Model saved')
+### TRAINING MODE ###
+if training_mode:
+
+    # Generators
+    training_set = Dataset(x_train, y_train)
+    training_generator = torch.utils.data.DataLoader(training_set, **params)
+
+
+    validation_set = Dataset(x_val, y_val)
+    validation_generator = torch.utils.data.DataLoader(validation_set, **params)
+
+
+    print('Calling accelerator...')
+    accelerator = Accelerator(mixed_precision='fp16')
+    print(accelerator.distributed_type)
+    trainloader = accelerator.prepare(training_generator)
+    validloader= accelerator.prepare(validation_generator)
+
+    print('Training starts now...')
+
+    # define and train the model
+    print('Model defined')
+    model = encoder_percentiles(n_latent=10,n_out=10,n_hidden=(16,16,16),act=None)
+
+    train(model, trainloader, validloader, n_epoch=100, n_batch=128, outfile=None, losses=None, lr=3e-4, verbose=True)
+
+    print('Training has finished')
+    print('Model saved')
+
+### TESTING MODE ###
+else:
+    test_set = Dataset(x_test, y_test)
+    test_generator = torch.utils.data.DataLoader(test_set, **params)
+
+    print('Calling accelerator...')
+    accelerator = Accelerator(mixed_precision='fp16')
+    print(accelerator.distributed_type)
+    testloader = accelerator.prepare(test_generator)
+
+    print('Loading model...')
+    model_file = "./saved_model/generate_latent_2/checkpoint.pt"
+    model, loss = spender.load_model(model_file, device=accelerator.device)
+    model = accelerator.prepare(model)
+    model.eval()
+
+

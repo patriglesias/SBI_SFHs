@@ -27,9 +27,10 @@ plt.savefig('./generate_latent_2/losses.png')
 ### load and visualize percentiles and latents###
 percent_pred=np.loadtxt('./generate_latent_2/y_test_pred.txt')
 latents=np.loadtxt('./generate_latent_2/latents.txt')
-
+percent=np.loadtxt('./generate_latent_2/y_test.txt')
 for i in range(100):
     plt.plot(np.arange(10)*10,percent_pred[i,:],'.')
+    plt.plot(np.arange(10)*10,percent[i,:],'.')
 plt.title('Percentiles')
 plt.xlabel('Percentiles (%)')
 plt.xticks(ticks=np.arange(10)*10)

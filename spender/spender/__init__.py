@@ -26,8 +26,7 @@ def load_model(filename, device=None):
 
     model = encoder_percentiles()
 
-    try:
-        model.load_state_dict(model_struct['model'], strict=False)
+    model.load_state_dict(model_struct['model'], strict=False)
 
     loss = torch.tensor(model_struct['losses'])
     return model, loss

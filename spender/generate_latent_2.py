@@ -11,7 +11,7 @@ from torch import nn
 from torch import optim
 from accelerate import Accelerator #to use pytorch
 from torch.utils.data import DataLoader
-from spender import SpectrumEncoder,MLP,encoder_percentiles
+from spender import SpectrumEncoder,MLP,encoder_percentiles,load_model
 from generate_input import sfr_linear_exp,generate_weights_from_SFHs,get_data,get_tbins,interpolate,generate_all_spectrums
 
 
@@ -201,7 +201,9 @@ if training_mode:
 ### TESTING MODE ###
 else:
     test_set = Dataset(x_test, y_test)
-    test_generator = torch.utils.data.DataLoader(test_set, **params)
+    print(np.shape(x_test))
+    params={'batch_size':len(x_test[:,0]) }
+    test_generator = torch.utils.data.DataLoader(test_set,**params) #without minibatches
 
     print('Calling accelerator...')
     accelerator = Accelerator(mixed_precision='fp16')
@@ -210,8 +212,19 @@ else:
 
     print('Loading model...')
     model_file = "./saved_model/generate_latent_2/checkpoint.pt"
-    model, loss = spender.load_model(model_file, device=accelerator.device)
+    model, loss = load_model(model_file, device=accelerator.device)
     model = accelerator.prepare(model)
-    model.eval()
-
-
+    with torch.no_grad():
+        model.eval()
+        print('Testing starts now...')
+        for k, batch in enumerate(testloader):
+                batch_size = len(batch[0])
+                spec,percent= batch[0].float(),batch[1].float()
+                s,y_ = model._forward(spec)
+                
+    
+    
+    
+    print('Saving latents and predicted percentiles...')
+    np.savetxt('./saved_model/generate_latent_2/y_test_pred.txt',y_.cpu())
+    np.savetxt('./saved_model/generate_latent_2/latents.txt',s.cpu())

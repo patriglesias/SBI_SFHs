@@ -4,3 +4,5 @@
 /.vscode/
 /.DS_Store/
 .DS_Store
+/spender/saved_input/input_10000.npz
+./spender/saved_input/input_10000.npz

@@ -11,7 +11,7 @@ np.savetxt('./generate_latent_2/losses.txt',np.array(losses))
 """
 
 
-"""
+
 ### Load and visualize losses ###
 losses=np.loadtxt('./generate_latent_2/losses.txt')
 #plot losses
@@ -22,20 +22,21 @@ plt.xlabel('Epochs')
 plt.title('Loss')
 plt.legend()
 plt.savefig('./generate_latent_2/losses.png')
-"""
+plt.show()
 
 ### load and visualize percentiles and latents###
 percent_pred=np.loadtxt('./generate_latent_2/y_test_pred.txt')
 latents=np.loadtxt('./generate_latent_2/latents.txt')
 percent=np.loadtxt('./generate_latent_2/y_test.txt')
 for i in range(100):
-    plt.plot(np.arange(10)*10,percent_pred[i,:],'.')
+    #plt.plot(np.arange(10)*10,percent_pred[i,:],'.')
     plt.plot(np.arange(10)*10,percent[i,:],'.')
 plt.title('Percentiles')
 plt.xlabel('Percentiles (%)')
 plt.xticks(ticks=np.arange(10)*10)
 plt.ylabel('Time (Gyrs)')
 plt.show()
+
 
 
 for i in range(100):

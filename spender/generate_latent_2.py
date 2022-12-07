@@ -72,7 +72,10 @@ class Dataset(torch.utils.data.Dataset):
 
 
 # Parameters
-params = {'batch_size': 128,
+batch_size=64
+max_epochs=100
+lr=3e-4
+params = {'batch_size': batch_size,
           'shuffle': True}
 
 
@@ -166,7 +169,7 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
             }, outfile)
 
 
-training_mode=False
+training_mode=True
 
 
 ### TRAINING MODE ###
@@ -193,10 +196,14 @@ if training_mode:
     print('Model defined')
     model = encoder_percentiles(n_latent=10,n_out=10,n_hidden=(16,16,16),act=None)
 
-    train(model, trainloader, validloader, n_epoch=100, n_batch=128, outfile=None, losses=None, lr=3e-4, verbose=True)
+    train(model, trainloader, validloader, n_epoch=max_epochs, n_batch=batch_size, outfile=None, losses=None, lr=lr, verbose=True)
 
     print('Training has finished')
     print('Model saved')
+
+    description='n_epochs: %d, batch_size: %d, lr: %.e'%(max_epochs,batch_size,lr)
+
+    np.savetxt('./saved_model/generate_latent_2/description.txt',description)
 
 ### TESTING MODE ###
 else:

@@ -156,9 +156,7 @@ class SpectrumEncoder(nn.Module):
         # apply attention
         x = torch.sum(h * a, dim=2)
 
-        # redshift depending feature combination to final latents
-        if aux is not None and aux is not False:
-            x = torch.cat((x, aux), dim=-1)
+        #final MLP
         x = self.mlp(x)
         return x
 

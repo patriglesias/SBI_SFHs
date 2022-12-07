@@ -206,9 +206,16 @@ if training_mode:
     f=open('./saved_model/generate_latent_2/description.txt', "w")
     f.write(description)
     f.close()
+  
+    checkpoint = torch.load('./generate_latent_2/checkpoint.pt')
+    losses=np.array(checkpoint['losses'])
+    np.savetxt('./generate_latent_2/losses.txt',np.array(losses))
+
+
 
 ### TESTING MODE ###
 else:
+
     test_set = Dataset(x_test, y_test)
     print(np.shape(x_test))
     params={'batch_size':len(x_test[:,0]) }

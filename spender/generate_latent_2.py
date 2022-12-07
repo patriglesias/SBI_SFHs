@@ -169,7 +169,7 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
             }, outfile)
 
 
-training_mode=False
+training_mode=True
 
 
 ### TRAINING MODE ###
@@ -207,9 +207,9 @@ if training_mode:
     f.write(description)
     f.close()
   
-    checkpoint = torch.load('./generate_latent_2/checkpoint.pt')
+    checkpoint = torch.load('./saved_model/generate_latent_2/checkpoint.pt')
     losses=np.array(checkpoint['losses'])
-    np.savetxt('./generate_latent_2/losses.txt',np.array(losses))
+    np.savetxt('./saved_model/generate_latent_2/losses.txt',np.array(losses))
 
 
 

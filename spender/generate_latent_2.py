@@ -169,7 +169,7 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
             }, outfile)
 
 
-training_mode=True
+training_mode=False
 
 
 ### TRAINING MODE ###
@@ -202,8 +202,10 @@ if training_mode:
     print('Model saved')
 
     description='n_epochs: %d, batch_size: %d, lr: %.e'%(max_epochs,batch_size,lr)
-
-    np.savetxt('./saved_model/generate_latent_2/description.txt',description)
+    print(description)
+    f=open('./saved_model/generate_latent_2/description.txt', "w")
+    f.write(description)
+    f.close()
 
 ### TESTING MODE ###
 else:

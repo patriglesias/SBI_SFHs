@@ -175,7 +175,7 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
             }, outfile)
 
 
-training_mode=True
+training_mode=False
 
 
 ### TRAINING MODE ###

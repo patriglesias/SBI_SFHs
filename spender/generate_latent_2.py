@@ -20,6 +20,7 @@ print('Modules prepared')
 
 # CUDA for PyTorch
 use_cuda = torch.cuda.is_available()
+#torch.cuda.set_device(1)
 device = torch.device("cuda:0" if use_cuda else "cpu")
 torch.backends.cudnn.benchmark = True
 print('CPU prepared')
@@ -47,7 +48,7 @@ if generate:
 else:
     #load data:
     print('Loading data...')
-    npzfile = np.load('./saved_input/input.npz')
+    npzfile = np.load('../../input_10000.npz')
     t=npzfile['x']
     percentiles=npzfile['y']
     wave=npzfile['w']
@@ -77,7 +78,7 @@ class Dataset(torch.utils.data.Dataset):
 
 
 # Parameters
-batch_size=64
+batch_size=128
 max_epochs=100
 lr=3e-4
 params = {'batch_size': batch_size,
@@ -174,7 +175,7 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
             }, outfile)
 
 
-training_mode=True
+training_mode=None
 
 
 ### TRAINING MODE ###
@@ -223,7 +224,7 @@ else:
 
     test_set = Dataset(x_test, y_test)
     print(np.shape(x_test))
-    params={'batch_size':len(x_test[:,0]) }
+    params={'batch_size': 128} #len(x_test[:,0]) }
     test_generator = torch.utils.data.DataLoader(test_set,**params) #without minibatches
 
     print('Calling accelerator...')
@@ -235,6 +236,11 @@ else:
     model_file = "./saved_model/generate_latent_2/checkpoint.pt"
     model, loss = load_model(model_file, device=accelerator.device)
     model = accelerator.prepare(model)
+        
+    percentiles=[]
+    ss=[]
+    ys_=[]
+
     with torch.no_grad():
         model.eval()
         print('Testing starts now...')
@@ -242,11 +248,13 @@ else:
                 batch_size = len(batch[0])
                 spec,percent= batch[0].float(),batch[1].float()
                 s,y_ = model._forward(spec)
-                
+                percentiles.append(percent.cpu().numpy())
+                ss.append(s.cpu().numpy())
+                ys_.append(y_.cpu().numpy())
     
     
     
     print('Saving latents and predicted percentiles...')
-    np.savetxt('./saved_model/generate_latent_2/y_test_pred.txt',y_.cpu())
-    np.savetxt('./saved_model/generate_latent_2/latents.txt',s.cpu())
-    np.savetxt('./saved_model/generate_latent_2/y_test.txt',percent.cpu())
+    np.save('./saved_model/generate_latent_2/y_test_pred.npy',ys_)#y_.cpu())
+    np.save('./saved_model/generate_latent_2/latents.npy',ss) #s.cpu())
+    np.save('./saved_model/generate_latent_2/y_test.npy', percentiles) #,percent.cpu())

@@ -42,13 +42,13 @@ if generate:
     #generate spectra for the parametrized SFHs
     print('Step 4/4')
     wave,seds=generate_all_spectrums(t,ms,wave,data_extended)
-    np.savez('./saved_input/input_10000.npz',x=t,y=percentiles,w=wave,z=seds)
+    np.savez('./saved_input/input.npz',x=t,y=percentiles,w=wave,z=seds)
 
 
 else:
     #load data:
     print('Loading data...')
-    npzfile = np.load('../../input_10000.npz')
+    npzfile = np.load('./saved_input/input.npz')
     t=npzfile['x']
     percentiles=npzfile['y']
     wave=npzfile['w']
@@ -80,7 +80,7 @@ class Dataset(torch.utils.data.Dataset):
 # Parameters
 batch_size=128
 max_epochs=100
-lr=3e-4
+lr=1e-4
 params = {'batch_size': batch_size,
           'shuffle': True}
 
@@ -111,7 +111,7 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
     model,  trainloader, validloader, optimizer = accelerator.prepare(model,  trainloader, validloader, optimizer)
 
     if outfile is None:
-        outfile = "./saved_model/generate_latent_2/checkpoint.pt"
+        outfile = "./saved_model/generate_latent_2/checkpoint_2.pt"
 
     epoch = 0
     if losses is None:
@@ -175,7 +175,7 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
             }, outfile)
 
 
-training_mode=None
+training_mode=False
 
 
 ### TRAINING MODE ###
@@ -200,7 +200,7 @@ if training_mode:
 
     # define and train the model
     print('Model defined')
-    model = encoder_percentiles(n_latent=10,n_out=10,n_hidden=(16,16,16),act=None)
+    model = encoder_percentiles(n_latent=10,n_out=10,n_hidden=(16,32,64),act=None)
 
     train(model, trainloader, validloader, n_epoch=max_epochs, n_batch=batch_size, outfile=None, losses=None, lr=lr, verbose=True)
 
@@ -213,7 +213,7 @@ if training_mode:
     f.write(description)
     f.close()
   
-    checkpoint = torch.load('./saved_model/generate_latent_2/checkpoint.pt')
+    checkpoint = torch.load('./saved_model/generate_latent_2/checkpoint_2.pt')
     losses=np.array(checkpoint['losses'])
     np.savetxt('./saved_model/generate_latent_2/losses.txt',np.array(losses))
 
@@ -223,8 +223,8 @@ if training_mode:
 else:
 
     test_set = Dataset(x_test, y_test)
-    print(np.shape(x_test))
-    params={'batch_size': 128} #len(x_test[:,0]) }
+    print('Shape of the test set: ',np.shape(x_test))
+    params={'batch_size': len(x_test[:,0]) } #no minitbatches or 128
     test_generator = torch.utils.data.DataLoader(test_set,**params) #without minibatches
 
     print('Calling accelerator...')
@@ -233,8 +233,8 @@ else:
     testloader = accelerator.prepare(test_generator)
 
     print('Loading model...')
-    model_file = "./saved_model/generate_latent_2/checkpoint.pt"
-    model, loss = load_model(model_file, device=accelerator.device)
+    model_file = "./saved_model/generate_latent_2/checkpoint_2.pt"
+    model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32,64))
     model = accelerator.prepare(model)
         
     percentiles=[]

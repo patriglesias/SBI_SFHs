@@ -78,7 +78,7 @@ class Dataset(torch.utils.data.Dataset):
 
 
 # Parameters
-batch_size=128
+batch_size=16
 max_epochs=100
 lr=1e-4
 params = {'batch_size': batch_size,
@@ -111,7 +111,7 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
     model,  trainloader, validloader, optimizer = accelerator.prepare(model,  trainloader, validloader, optimizer)
 
     if outfile is None:
-        outfile = "./saved_model/generate_latent_2/checkpoint_2.pt"
+        outfile = "./saved_model/generate_latent_2/checkpoint.pt"
 
     epoch = 0
     if losses is None:
@@ -175,7 +175,7 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
             }, outfile)
 
 
-training_mode=False
+training_mode=True
 
 
 ### TRAINING MODE ###
@@ -213,7 +213,7 @@ if training_mode:
     f.write(description)
     f.close()
   
-    checkpoint = torch.load('./saved_model/generate_latent_2/checkpoint_2.pt')
+    checkpoint = torch.load('./saved_model/generate_latent_2/checkpoint.pt')
     losses=np.array(checkpoint['losses'])
     np.savetxt('./saved_model/generate_latent_2/losses.txt',np.array(losses))
 
@@ -233,7 +233,7 @@ else:
     testloader = accelerator.prepare(test_generator)
 
     print('Loading model...')
-    model_file = "./saved_model/generate_latent_2/checkpoint_2.pt"
+    model_file = "./saved_model/generate_latent_2/checkpoint.pt"
     model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32,64))
     model = accelerator.prepare(model)
         

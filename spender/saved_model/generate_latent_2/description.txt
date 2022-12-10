@@ -1,1 +1,1 @@
-n_epochs: 100, batch_size: 128, lr: 1e-04
+n_epochs: 100, batch_size: 16, lr: 1e-04

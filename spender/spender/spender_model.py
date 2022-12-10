@@ -334,12 +334,12 @@ class encoder_percentiles(Base_encoder_percentiles):
                  n_latent=10,
                  n_out=10,
                  n_hidden=(16,16,16),
-                 act=None,
+                 act=None,dropout_1=0,dropout_2=0
                 ):
 
-        encoder = SpectrumEncoder(None,n_latent)
+        encoder = SpectrumEncoder(None,n_latent,dropout=dropout_1)
 
-        mlp = MLP(n_latent,n_out,n_hidden=n_hidden,act=act)
+        mlp = MLP(n_latent,n_out,n_hidden=n_hidden,act=act,dropout=dropout_2)
 
         super(encoder_percentiles, self).__init__(
             encoder,

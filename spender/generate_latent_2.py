@@ -78,7 +78,7 @@ class Dataset(torch.utils.data.Dataset):
 
 
 # Parameters
-batch_size=16
+batch_size=32
 max_epochs=100
 lr=1e-4
 params = {'batch_size': batch_size,
@@ -90,6 +90,12 @@ params = {'batch_size': batch_size,
 #seds  shape (1000, 4300)
 
 print('Creating datasets...')
+
+#shuffling
+ind_sh=np.arange(1000)
+np.random.shuffle(ind_sh)
+seds=seds[ind_sh,:]
+percentiles=percentiles[ind_sh,:] #ojo, así parte del test será usado para el entrenoo
 
 x_train = seds[:int(0.8*len(seds)),:] #seds
 y_train = percentiles[:int(0.8*len(seds)),:] #percentiles
@@ -175,7 +181,7 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
             }, outfile)
 
 
-training_mode=False
+training_mode=True
 
 
 ### TRAINING MODE ###
@@ -219,32 +225,31 @@ if training_mode:
 
 
 
-### TESTING MODE ###
-else:
+### TESTING ###
+test_set = Dataset(x_test, y_test)
+print('Shape of the test set: ',np.shape(x_test))
+params={'batch_size': len(x_test[:,0]) } #no minitbatches or 128
+test_generator = torch.utils.data.DataLoader(test_set,**params) #without minibatches
 
-    test_set = Dataset(x_test, y_test)
-    print('Shape of the test set: ',np.shape(x_test))
-    params={'batch_size': len(x_test[:,0]) } #no minitbatches or 128
-    test_generator = torch.utils.data.DataLoader(test_set,**params) #without minibatches
+print('Calling accelerator...')
+accelerator = Accelerator(mixed_precision='fp16')
+print(accelerator.distributed_type)
+testloader = accelerator.prepare(test_generator)
 
-    print('Calling accelerator...')
-    accelerator = Accelerator(mixed_precision='fp16')
-    print(accelerator.distributed_type)
-    testloader = accelerator.prepare(test_generator)
-
+if not training_mode:
     print('Loading model...')
     model_file = "./saved_model/generate_latent_2/checkpoint.pt"
     model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32,64))
     model = accelerator.prepare(model)
         
-    percentiles=[]
-    ss=[]
-    ys_=[]
+percentiles=[]
+ss=[]
+ys_=[]
 
-    with torch.no_grad():
-        model.eval()
-        print('Testing starts now...')
-        for k, batch in enumerate(testloader):
+with torch.no_grad():
+    model.eval()
+    print('Testing starts now...')
+    for k, batch in enumerate(testloader):
                 batch_size = len(batch[0])
                 spec,percent= batch[0].float(),batch[1].float()
                 s,y_ = model._forward(spec)
@@ -254,7 +259,7 @@ else:
     
     
     
-    print('Saving latents and predicted percentiles...')
-    np.save('./saved_model/generate_latent_2/y_test_pred.npy',ys_)#y_.cpu())
-    np.save('./saved_model/generate_latent_2/latents.npy',ss) #s.cpu())
-    np.save('./saved_model/generate_latent_2/y_test.npy', percentiles) #,percent.cpu())
+print('Saving latents and predicted percentiles...')
+np.save('./saved_model/generate_latent_2/y_test_pred.npy',ys_)#y_.cpu())
+np.save('./saved_model/generate_latent_2/latents.npy',ss) #s.cpu())
+np.save('./saved_model/generate_latent_2/y_test.npy', percentiles) #,percent.cpu())

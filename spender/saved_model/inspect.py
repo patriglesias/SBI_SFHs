@@ -10,8 +10,8 @@ model_loaded=checkpoint['model']
 np.savetxt('./generate_latent_2/losses.txt',np.array(losses))
 """
 
-"""
 
+"""
 ### Load and visualize losses ###
 losses=np.loadtxt('./generate_latent_2/losses.txt')
 #plot losses
@@ -55,8 +55,8 @@ for j in range(len(percent)):
 
 """
 for i in range(test_set): 
-    plt.plot(np.arange(10)*10,percent_pred_arr[i,:],'.')
-    #plt.plot(np.arange(10)*10,percent_arr[i,:],'.')
+    plt.plot(np.arange(10)*10,percent_pred_arr[i,:],'r.')
+    plt.plot(np.arange(10)*10,percent_arr[i,:],'k.')
 plt.title('Percentiles')
 plt.xlabel('Percentiles (%)')
 plt.xticks(ticks=np.arange(10)*10)
@@ -68,10 +68,10 @@ plt.show()
 for j in range(10):
     for i in range(test_set):
         plt.plot(j,latents_arr[i,j],'.')
-    plt.title('Latents')
-    plt.xlabel('Component')
-    plt.ylabel('Value')
-    plt.show()
+plt.title('Latents')
+plt.xlabel('Component')
+plt.ylabel('Value')
+plt.show()
 
 
 

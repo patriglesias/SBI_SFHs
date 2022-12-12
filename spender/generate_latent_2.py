@@ -89,13 +89,20 @@ params = {'batch_size': batch_size,
 #percentiles shape(1000, 10)
 #seds  shape (1000, 4300)
 
+training_mode=True
+
 print('Creating datasets...')
 
-#shuffling
-ind_sh=np.arange(1000)
-np.random.shuffle(ind_sh)
+#shuffling (indices are saved for the case of just testing)
+if training_mode:
+    ind_sh=np.arange(len(seds[:,0]))
+    np.random.shuffle(ind_sh)
+    np.save('./saved_model/ind_sh.npy',ind_sh)
+else:
+    ind_sh=np.load('./saved_model/ind_sh.npy')
+
 seds=seds[ind_sh,:]
-percentiles=percentiles[ind_sh,:] #ojo, así parte del test será usado para el entrenoo
+percentiles=percentiles[ind_sh,:]
 
 x_train = seds[:int(0.8*len(seds)),:] #seds
 y_train = percentiles[:int(0.8*len(seds)),:] #percentiles
@@ -179,9 +186,6 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
                 "model": unwrapped_model.state_dict(),
                 "losses": losses,
             }, outfile)
-
-
-training_mode=True
 
 
 ### TRAINING MODE ###

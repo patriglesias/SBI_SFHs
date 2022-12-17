@@ -294,7 +294,7 @@ class Base_encoder_percentiles(nn.Module):
         s,y_ = self.forward(y, s=s) #predicted percentiles
         return self._loss(y, y_, w=None, individual=individual)
 
-    def _loss(self, y, y_ ,w=None, individual=False):  #w unnecesary
+    def _loss(self, y, y_ ,w=None, individual=False):  #w not used
         # loss = total squared deviation in units of variance
 
         if w==None:

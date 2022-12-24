@@ -42,10 +42,10 @@ if generate:
     #generate spectra for the parametrized SFHs
     print('Step 4/4')
     wave,seds=generate_all_spectrums(t,ms,wave,data_extended)
-    np.save('./saved_input/t.npy')
-    np.save('./saved_input/percentiles.npy')
-    np.save('./saved_input/waves.npy')
-    np.save('./saved_input/seds.npy')
+    np.save('./saved_input/t.npy',t)
+    np.save('./saved_input/percentiles.npy',percentiles)
+    np.save('./saved_input/waves.npy',wave)
+    np.save('../../seds.npy',seds) #too large file for github
 
 
 else:
@@ -54,7 +54,7 @@ else:
     t = np.load('./saved_input/t.npy')
     percentiles=np.load('./saved_input/percentiles.npy')
     wave=np.load('./saved_input/waves.npy')
-    seds=np.load('./saved_input/seds.npy')
+    seds=np.load('../../seds.npy') #too large file for github
 
 
 class Dataset(torch.utils.data.Dataset):
@@ -86,6 +86,8 @@ lr=1e-4
 params = {'batch_size': batch_size,
           'shuffle': True}
 
+n_latent=16
+
 
 # Datasets 
 #percentiles shape(1000, 10)
@@ -99,9 +101,9 @@ print('Creating datasets...')
 if training_mode:
     ind_sh=np.arange(len(seds[:,0]))
     np.random.shuffle(ind_sh)
-    np.save('./saved_model/ind_sh.npy',ind_sh)
+    np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/ind_sh.npy',ind_sh)
 else:
-    ind_sh=np.load('./saved_model/ind_sh.npy')
+    ind_sh=np.load('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/ind_sh.npy')
 
 seds=seds[ind_sh,:]
 percentiles=percentiles[ind_sh,:]
@@ -115,8 +117,8 @@ y_val = percentiles[int(0.8*len(seds)):int(0.9*len(seds)),:] #percentiles
 x_test = seds[int(0.9*len(seds)):,:] #seds
 y_test = percentiles[int(0.9*len(seds)):,:] #percentiles
 
-n_latent=10
 
+print(str(n_latent)+' components selected for the latent vectors')
 
 def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, outfile=None, losses=None, verbose=False, lr=3e-4):
 
@@ -226,9 +228,9 @@ if training_mode:
     f.write(description)
     f.close()
   
-    checkpoint = torch.load('./saved_model/generate_latent_2/checkpoint.pt')
+    checkpoint = torch.load('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/checkpoint.pt')
     losses=np.array(checkpoint['losses'])
-    np.savetxt('./saved_model/generate_latent_2/losses.txt',np.array(losses))
+    np.savetxt('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/losses.txt',np.array(losses))
 
 
 

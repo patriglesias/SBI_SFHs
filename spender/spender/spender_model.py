@@ -332,7 +332,7 @@ class encoder_percentiles(Base_encoder_percentiles):
     """
     def __init__(self,
                  n_latent=10,
-                 n_out=10,
+                 n_out=9,
                  n_hidden=(16,16,16),
                  act=None,dropout_1=0,dropout_2=0
                 ):

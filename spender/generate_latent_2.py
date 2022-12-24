@@ -42,17 +42,19 @@ if generate:
     #generate spectra for the parametrized SFHs
     print('Step 4/4')
     wave,seds=generate_all_spectrums(t,ms,wave,data_extended)
-    np.savez('./saved_input/input.npz',x=t,y=percentiles,w=wave,z=seds)
+    np.save('./saved_input/t.npy')
+    np.save('./saved_input/percentiles.npy')
+    np.save('./saved_input/waves.npy')
+    np.save('./saved_input/seds.npy')
 
 
 else:
     #load data:
     print('Loading data...')
-    npzfile = np.load('./saved_input/input.npz')
-    t=npzfile['x']
-    percentiles=npzfile['y']
-    wave=npzfile['w']
-    seds=npzfile['z']
+    t = np.load('./saved_input/t.npy')
+    percentiles=np.load('./saved_input/percentiles.npy')
+    wave=np.load('./saved_input/waves.npy')
+    seds=np.load('./saved_input/seds.npy')
 
 
 class Dataset(torch.utils.data.Dataset):
@@ -113,9 +115,10 @@ y_val = percentiles[int(0.8*len(seds)):int(0.9*len(seds)),:] #percentiles
 x_test = seds[int(0.9*len(seds)):,:] #seds
 y_test = percentiles[int(0.9*len(seds)):,:] #percentiles
 
+n_latent=10
 
 
-def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=None, losses=None, verbose=False, lr=3e-4):
+def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, outfile=None, losses=None, verbose=False, lr=3e-4):
 
     optimizer = optim.Adam(model.parameters(), lr=lr)
     scheduler = optim.lr_scheduler.OneCycleLR(optimizer, lr, total_steps=n_epoch)
@@ -124,7 +127,7 @@ def train(model, trainloader, validloader, n_epoch=100, n_batch=None, outfile=No
     model,  trainloader, validloader, optimizer = accelerator.prepare(model,  trainloader, validloader, optimizer)
 
     if outfile is None:
-        outfile = "./saved_model/generate_latent_2/checkpoint.pt"
+        outfile = "./saved_model/generate_latent_2/latent_"+str(n_latent)+"/checkpoint.pt"
 
     epoch = 0
     if losses is None:
@@ -210,9 +213,9 @@ if training_mode:
 
     # define and train the model
     print('Model defined')
-    model = encoder_percentiles(n_latent=10,n_out=10,n_hidden=(16,32,64),act=None)
+    model = encoder_percentiles(n_latent=n_latent,n_out=9,n_hidden=(16,32,64),act=None)
 
-    train(model, trainloader, validloader, n_epoch=max_epochs, n_batch=batch_size, outfile=None, losses=None, lr=lr, verbose=True)
+    train(model, trainloader, validloader, n_latent,n_epoch=max_epochs, n_batch=batch_size, outfile=None, losses=None, lr=lr, verbose=True)
 
     print('Training has finished')
     print('Model saved')
@@ -242,7 +245,7 @@ testloader = accelerator.prepare(test_generator)
 
 if not training_mode:
     print('Loading model...')
-    model_file = "./saved_model/generate_latent_2/checkpoint.pt"
+    model_file = "./saved_model/generate_latent_2/latent_"+str(n_latent)+"/checkpoint.pt"
     model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32,64))
     model = accelerator.prepare(model)
         
@@ -264,6 +267,6 @@ with torch.no_grad():
     
     
 print('Saving latents and predicted percentiles...')
-np.save('./saved_model/generate_latent_2/y_test_pred.npy',ys_)#y_.cpu())
-np.save('./saved_model/generate_latent_2/latents.npy',ss) #s.cpu())
-np.save('./saved_model/generate_latent_2/y_test.npy', percentiles) #,percent.cpu())
+np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/y_test_pred.npy",ys_)#y_.cpu())
+np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/latents.npy',ss) #s.cpu())
+np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/y_test.npy', percentiles) #,percent.cpu())

@@ -49,7 +49,7 @@ def generate_weights_from_SFHs(SFR,mgal=10**10,tau=np.linspace(0.3,5,100),ti=np.
              percent=[]
              for j in range(len(mcurve)):
                 m.append(np.sum(mcurve[:j+1]))
-             for k in range(10):
+             for k in range(1,10):
                 ind=np.argmin(abs(np.array(m)-k/10))
                 percent.append(t[ind])
              percentiles.append(percent)  

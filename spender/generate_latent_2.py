@@ -90,8 +90,8 @@ n_latent=16
 
 
 # Datasets 
-#percentiles shape(1000, 10)
-#seds  shape (1000, 4300)
+#percentiles shape(10.000, 10)
+#seds  shape (10.000, 4300)
 
 training_mode=True
 

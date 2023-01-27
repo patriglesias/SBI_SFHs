@@ -2,8 +2,9 @@ import numpy as np
 #import torch
 import matplotlib.pyplot as plt
 
-"""
+
 ###  Inspect the checkpoint ###
+"""
 checkpoint = torch.load('./generate_latent_2/checkpoint.pt')
 losses=np.array(checkpoint['losses'])
 model_loaded=checkpoint['model']
@@ -11,8 +12,8 @@ np.savetxt('./generate_latent_2/losses.txt',np.array(losses))
 """
 
 
-"""
 
+"""
 ### Load and visualize losses ###
 losses=np.loadtxt('./generate_latent_2/latent_16/losses.txt')
 #plot losses
@@ -22,15 +23,17 @@ plt.plot(epochs[20:],losses[20:,1],label='Validation loss')
 plt.xlabel('Epochs')
 plt.title('Loss n_latent 16 ')
 plt.legend()
+plt.ylim(0,5)
 #plt.savefig('./generate_latent_2/latent_16/losses.png')
 plt.show()
-
 """
+
+
 ### load and visualize percentiles and latents###
 
 test_set=1000
 batch_size=1000
-n_latent=14
+n_latent=6
 
 percent_pred=np.load('./generate_latent_2/latent_'+str(n_latent)+'/y_test_pred.npy',allow_pickle=True)
 latents=np.load('./generate_latent_2/latent_'+str(n_latent)+'/latents.npy',allow_pickle=True)
@@ -57,7 +60,7 @@ for j in range(len(percent)):
 
 
 
-
+"""
 for j in np.arange(1,10): #percentiles go from 10% to 90%
     for i in range(test_set): 
         plt.plot(percent_arr[i,j-1],percent_pred_arr[i,j-1],'.')#,'k.')
@@ -67,8 +70,8 @@ for j in np.arange(1,10): #percentiles go from 10% to 90%
     plt.xlabel('Time percentile '+str(j*10)+' real (Gyrs)')
     plt.ylabel('Time percentile '+str(j*10)+' predicted (Gyrs)')
     plt.show()
+"""  
 
-"""
 
 for j in range(n_latent):
     plt.hist(latents_arr[:,j])
@@ -77,5 +80,4 @@ for j in range(n_latent):
     plt.ylabel('N')
     plt.show()
     
-"""
 

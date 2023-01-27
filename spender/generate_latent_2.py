@@ -86,7 +86,7 @@ lr=1e-4
 params = {'batch_size': batch_size,
           'shuffle': True}
 
-n_latent=16
+n_latent=43
 
 
 # Datasets 

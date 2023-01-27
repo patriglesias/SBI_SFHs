@@ -135,15 +135,17 @@ def plot_sed_sfh(ms,t,wave,seds,n_int):
 
 #TEST (linear exp parametrization - 1000 curves - BASTI,Mku1.30,Z=+0.06,BaseFe)
 
-"""
 
-t,ms,percentiles=generate_weights_from_SFHs(SFR=sfr_linear_exp,mgal=10**10,tau=np.linspace(0.3,5,100),ti=np.arange(0,5,0.5),tmin=0,tmax=14,step=0.01,percen=True)
 
-wave,data=get_data(dir_name='MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
-tbins=get_tbins(dir_name='MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
+#tau=np.linspace(0.3,5,100)
+#np.logspace(-0.5,0.7,100)
+t,ms,percentiles=generate_weights_from_SFHs(SFR=sfr_linear_exp,mgal=10**10,tau=np.logspace(-0.5,0.7,100),ti=np.arange(0,5,0.5),tmin=0,tmax=14,step=0.01,percen=True)
+
+wave,data=get_data(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
+tbins=get_tbins(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
 data_extended=interpolate(tbins,t,data)
 wave,seds=generate_all_spectrums(t,ms,wave,data_extended)
 
-plot_sed_sfh(ms,t,wave,seds,120)
+plot_sed_sfh(ms,t,wave,seds,1)
 
-"""
+

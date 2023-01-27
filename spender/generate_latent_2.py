@@ -82,7 +82,7 @@ class Dataset(torch.utils.data.Dataset):
 # Parameters
 batch_size=32
 max_epochs=100
-lr=0.5e-4
+lr=2e-4
 params = {'batch_size': batch_size,
           'shuffle': True}
 

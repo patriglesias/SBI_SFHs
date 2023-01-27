@@ -33,7 +33,7 @@ if generate:
     #generate parametrizations
     print('Step 1/4')
     #tau from 0.3 to 5 
-    t,ms,percentiles=generate_weights_from_SFHs(SFR=sfr_linear_exp,mgal=10**10,tau=np.logspace(-0.5,0.7,100,base=),ti=np.linspace(0,5,100),tmin=0,tmax=14,step=0.01,percen=True)
+    t,ms,percentiles=generate_weights_from_SFHs(SFR=sfr_linear_exp,mgal=10**10,tau=np.logspace(-0.5,0.7,100),ti=np.linspace(0,5,100),tmin=0,tmax=14,step=0.01,percen=True)
     #load MILES spectra and interpolate
     print('Step 2/4')
     wave,data=get_data(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')

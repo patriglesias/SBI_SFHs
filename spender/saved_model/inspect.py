@@ -65,7 +65,7 @@ for j in range(len(percent)):
 
 
 
-"""
+
 for j in np.arange(1,10): #percentiles go from 10% to 90%
     for i in range(test_set): 
         plt.plot(percent_arr[i,j-1],percent_pred_arr[i,j-1],'.')#,'k.')
@@ -87,4 +87,4 @@ for j in range(n_latent):
     plt.ylabel('N')
     plt.show()
 
-
+"""

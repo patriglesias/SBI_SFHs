@@ -11,7 +11,7 @@ model_loaded=checkpoint['model']
 np.savetxt('./generate_latent_2/losses.txt',np.array(losses))
 """
 
-n_latent=6
+n_latent=16
 
 
 ### Load and visualize losses ###
@@ -20,6 +20,7 @@ losses=np.loadtxt('./generate_latent_2/latent_'+str(n_latent)+'/losses.txt')
 
 print(np.min(losses[:,1]))
 
+"""
 #plot losses
 epochs=range(len(losses[:,0]))
 plt.plot(epochs[:],losses[:,0],label='Training loss')
@@ -30,7 +31,7 @@ plt.legend()
 #plt.ylim(0,5)
 #plt.savefig('./generate_latent_2/latent_16/losses.png')
 plt.show()
-
+"""
 
 
 ### load and visualize percentiles and latents###
@@ -74,8 +75,9 @@ for j in np.arange(1,10): #percentiles go from 10% to 90%
     plt.xlabel('Time percentile '+str(j*10)+' real (Gyrs)')
     plt.ylabel('Time percentile '+str(j*10)+' predicted (Gyrs)')
     plt.show()
+    
 """
-"""  
+ 
 
 
 for j in range(n_latent):
@@ -85,4 +87,4 @@ for j in range(n_latent):
     plt.ylabel('N')
     plt.show()
     
-"""
+

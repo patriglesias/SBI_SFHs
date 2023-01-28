@@ -292,7 +292,7 @@ class Base_encoder_percentiles(nn.Module):
         float or `torch.tensor`, shape (N,) of weighted MSE loss
         """
         s,y_ = self.forward(y, s=s) #predicted percentiles
-        return self._loss(y, y_, w=None, individual=individual)
+        return self._loss(y, y_)
 
     def _loss(self, y, y_ ):  #w not used
 

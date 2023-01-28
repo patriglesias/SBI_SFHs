@@ -305,11 +305,11 @@ class Base_encoder_percentiles(nn.Module):
 
         #L1 loss
         #loss_l1=nn.L1Loss(size_average=None, reduce=None, reduction='mean')
-        #loss_ind = loss_l1(y, y-)
+        #loss_ind = loss_l1(y, y_)
 
         #L2 loss
         loss_l2=nn.MSELoss(size_average=None, reduce=None, reduction='mean')
-        loss_ind = loss_l2(y, y-)
+        loss_ind = loss_l2(y, y_)
 
 
 

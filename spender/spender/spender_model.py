@@ -304,13 +304,13 @@ class Base_encoder_percentiles(nn.Module):
         #    loss_ind = torch.sum(0.5 *w* (y - y_).pow(2), dim=1) / y.shape[1]
 
         #L1 loss
-        loss_ind = torch.sum(0.5 * torch.abs(y - y_), dim=1) / y.shape[1]
+        #loss_ind = torch.sum(0.5 * torch.abs(y - y_), dim=1) / y.shape[1]
 
         #L2 loss
         #loss_ind = torch.sum(0.5 * (y - y_).pow(2), dim=1) / y.shape[1]
 
         #log cosh loss
-        #loss_ind = torch.mean(torch.log(torch.cosh(y - y_ + 1e-12)))
+        loss_ind = torch.mean(torch.log(torch.cosh(y - y_ + 1e-12)))
 
 
         

@@ -69,7 +69,7 @@ for j in np.arange(1,10): #percentiles go from 10% to 90%
     for i in range(test_set): 
         plt.plot(percent_arr[i,j-1],percent_pred_arr[i,j-1],'.')#,'k.')
     x=np.arange(np.min(percent_arr[:,j-1]),np.max(percent_arr[:,j-1]))
-    plt.plot(x,x)
+    #plt.plot(x,x)
     #plt.title('Percentiles ')
     plt.xlabel('Time percentile '+str(j*10)+' real (Gyrs)')
     plt.ylabel('Time percentile '+str(j*10)+' predicted (Gyrs)')

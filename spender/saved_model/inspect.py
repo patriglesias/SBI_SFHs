@@ -29,7 +29,7 @@ plt.xlabel('Epochs')
 plt.title('Loss n_latent '+ str(n_latent))
 plt.legend()
 #plt.ylim(0,5)
-plt.savefig('./generate_latent_2/latent_16/losses.png')
+#plt.savefig('./generate_latent_2/latent_16/losses.png')
 plt.show()
 
 
@@ -63,13 +63,13 @@ for j in range(len(percent)):
         percent_arr[batch_size*j+i,:]=x
         
 
-"""
+
 
 for j in np.arange(1,10): #percentiles go from 10% to 90%
     for i in range(test_set): 
         plt.plot(percent_arr[i,j-1],percent_pred_arr[i,j-1],'.')#,'k.')
     x=np.arange(np.min(percent_arr[:,j-1]),np.max(percent_arr[:,j-1]))
-    #plt.plot(x,x)
+    plt.plot(x,x)
     #plt.title('Percentiles ')
     plt.xlabel('Time percentile '+str(j*10)+' real (Gyrs)')
     plt.ylabel('Time percentile '+str(j*10)+' predicted (Gyrs)')
@@ -88,9 +88,11 @@ for j in np.arange(1,10): #percentiles go from 10% to 90%
         
         print('Mean real percentile '+str(j*10)+'% : '+str(np.mean(percent_arr[:,j-1])))
         print('Mean predicted percentile '+str(j*10)+'% : '+str(np.mean(percent_pred_arr[:,j-1])))
+        print('Median real percentile '+str(j*10)+'% : '+str(np.median(percent_arr[:,j-1])))
+        print('Median predicted percentile '+str(j*10)+'% : '+str(np.median(percent_pred_arr[:,j-1])))
     
 
-"""
+
 
 
 for j in range(n_latent):

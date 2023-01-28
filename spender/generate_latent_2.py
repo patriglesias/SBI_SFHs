@@ -217,7 +217,8 @@ if training_mode:
     # define and train the model
     print('Model defined')
     #(16,32,64)
-    model = encoder_percentiles(n_latent=n_latent,n_out=9,n_hidden=(16,16,16),act=None)
+    #(16,16,16)
+    model = encoder_percentiles(n_latent=n_latent,n_out=9,n_hidden=(16,32),act=None,dropout_2=None)
 
     train(model, trainloader, validloader, n_latent,n_epoch=max_epochs, n_batch=batch_size, outfile=None, losses=None, lr=lr, verbose=True)
 

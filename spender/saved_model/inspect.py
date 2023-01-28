@@ -75,7 +75,7 @@ for j in np.arange(1,10): #percentiles go from 10% to 90%
     plt.ylabel('Time percentile '+str(j*10)+' predicted (Gyrs)')
     plt.show()
     
-"""
+
     
 #histogram for percentiles and means
 for j in np.arange(1,10): #percentiles go from 10% to 90%
@@ -103,4 +103,4 @@ for j in range(n_latent):
     plt.show()
 
 
-"""
+

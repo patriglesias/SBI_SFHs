@@ -275,3 +275,17 @@ print('Saving latents and predicted percentiles...')
 np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/y_test_pred.npy",ys_)#y_.cpu())
 np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/latents.npy',ss) #s.cpu())
 np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/y_test.npy', percentiles) #,percent.cpu())
+
+plot=True
+
+if plot:
+    for index in [0,10,100]:
+        plt.plot(wave,x_test[:,index])
+        plt.xlabel('Wavelength $\\AA$')
+        plt.ylabel('Flux')
+        plt.show()
+        plt.plot(np.arange(10,100,10),y_test[:,index])
+        plt.plot(np.arange(10,100,10),ys_[:,index])
+        plt.xlabel('Percentiles %')
+        plt.ylabel('Time [Gyr]')
+        plt.show()

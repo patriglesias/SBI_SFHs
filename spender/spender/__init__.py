@@ -3,7 +3,7 @@ from .spender_model import MLP, SpectrumEncoder, encoder_percentiles
 
 
 #function tunned by Patricia
-def load_model(filename, device=None,n_latent=10,n_out=10,n_hidden=(16,16,16)):
+def load_model(filename, device=None,n_latent=16,n_out=9,n_hidden=(16,16,16)):
     """Load models from file
 
     Parameter

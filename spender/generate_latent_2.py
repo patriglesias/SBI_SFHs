@@ -82,7 +82,7 @@ class Dataset(torch.utils.data.Dataset):
 
 # Parameters
 batch_size=128
-max_epochs=100
+max_epochs=50
 lr=5e-4
 params = {'batch_size': batch_size,
           'shuffle': True}
@@ -91,10 +91,10 @@ n_latent=16
 
 
 # Datasets 
-#percentiles shape(10.000, 10)
+#percentiles shape(10.000, 9)
 #seds  shape (10.000, 4300)
 
-training_mode=True
+training_mode=False
 
 print('Creating datasets...')
 
@@ -251,7 +251,7 @@ testloader = accelerator.prepare(test_generator)
 if not training_mode:
     print('Loading model...')
     model_file = "./saved_model/generate_latent_2/latent_"+str(n_latent)+"/checkpoint.pt"
-    model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32,64))
+    model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32))
     model = accelerator.prepare(model)
         
 percentiles=[]
@@ -278,14 +278,24 @@ np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/y_test.npy', p
 
 plot=True
 
+print(np.shape(ys_),np.shape(y_test))
+
 if plot:
     for index in [0,10,100]:
-        plt.plot(wave,x_test[:,index])
+        print('Index '+str(index))
+        plt.plot(wave,x_test[index,:])
         plt.xlabel('Wavelength $\\AA$')
         plt.ylabel('Flux')
-        plt.show()
-        plt.plot(np.arange(10,100,10),y_test[:,index])
-        plt.plot(np.arange(10,100,10),ys_[:,index])
+        plt.savefig(str(index)+'spectra.png')
+        plt.plot(np.arange(10,100,10),y_test[index,:],label='real')
+        plt.plot(np.arange(10,100,10),ys_[0][index,:],label='predicted')
         plt.xlabel('Percentiles %')
         plt.ylabel('Time [Gyr]')
+        plt.legend()
+        plt.savefig(str(index)+'percentiles.png')
+        plt.plot(y_test[index,:],np.arange(10,100,10),label='real')
+        plt.plot(ys_[0][index,:],np.arange(10,100,10),label='predicted')
+        plt.xlabel('Percentiles %')
+        plt.ylabel('Time [Gyr]')
+        plt.legend()
         plt.show()

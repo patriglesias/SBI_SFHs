@@ -276,28 +276,7 @@ np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/y_test_pred.np
 np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/latents.npy',ss) #s.cpu())
 np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/y_test.npy', percentiles) #,percent.cpu())
 
-plot=True
+diagnosis=True
 
-print(np.shape(ys_),np.shape(y_test))
-
-if plot:
-    for index in [0]:
-        print('Index '+str(index))
-        plt.plot(wave,x_test[index,:])
-        plt.xlabel('Wavelength $\\AA$')
-        plt.ylabel('Flux')
-        plt.savefig("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/"+str(index)+'spectra.png')
-        
-        plt.plot(np.arange(10,100,10),y_test[index,:],label='real')
-        plt.plot(np.arange(10,100,10),ys_[0][index,:],label='predicted')
-        plt.xlabel('Percentiles %')
-        plt.ylabel('Time [Gyr]')
-        plt.legend()
-        plt.savefig("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/"+str(index)+'percentiles.png')
-
-        plt.plot(y_test[index,:],np.arange(10,100,10),label='real')
-        plt.plot(ys_[0][index,:],np.arange(10,100,10),label='predicted')
-        plt.xlabel('Percentiles %')
-        plt.ylabel('Time [Gyr]')
-        plt.legend()
-        plt.savefig("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/"+str(index)+'percentiles2.png')
+if diagnosis:
+    np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/seds_test.npy",x_test)

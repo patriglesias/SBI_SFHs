@@ -47,6 +47,7 @@ if generate:
     np.save('./saved_input/percentiles.npy',percentiles)
     np.save('./saved_input/waves.npy',wave)
     np.save('../../seds.npy',seds) #too large file for github
+    np.save('../../sfh.npy',ms) #too large file for github
 
 
 else:
@@ -55,8 +56,8 @@ else:
     t = np.load('./saved_input/t.npy')
     percentiles=np.load('./saved_input/percentiles.npy')
     wave=np.load('./saved_input/waves.npy')
-    seds=np.load('../../seds.npy') #too large file for github
-
+    seds=np.load('../../seds.npy')
+    #ms=np.load('../../sfh.npy')
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -280,3 +281,4 @@ diagnosis=True
 
 if diagnosis:
     np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/seds_test.npy",x_test)
+    #np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/sfh_test.npy",ms[int(0.9*len(seds)):,:])

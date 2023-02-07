@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 from torch import nn
+from torch.autograd import Variable
 #from torchinterp1d import Interp1d
 
 class MLP(nn.Sequential):
@@ -80,6 +81,10 @@ class SpectrumEncoder(nn.Module):
         self.instrument = instrument
         self.n_latent = n_latent
         self.n_aux = n_aux
+        
+        
+        #self._attention_grad='hi'
+        
 
         filters = [128, 256, 512]
         sizes = [5, 11, 21]
@@ -125,7 +130,6 @@ class SpectrumEncoder(nn.Module):
         C = x.shape[1] // 2
         # split half channels into attention value and key
         h, a = torch.split(x, [C, C], dim=1)
-
         return h, a
 
     def forward(self, y, aux=None):
@@ -145,14 +149,19 @@ class SpectrumEncoder(nn.Module):
         """
         # run through CNNs
         h, a = self._downsample(y)
+        
         # softmax attention
         a = self.softmax(a)
-
+        
+        print(a.grad)
+        print(a.grad_fn)
+        
         # attach hook to extract backward gradient of a scalar prediction
         # for Grad-FAM (Feature Activation Map)
+        
         if ~self.training and a.requires_grad == True:
             a.register_hook(self._attention_hook)
-
+            
         # apply attention
         x = torch.sum(h * a, dim=2)
 
@@ -179,7 +188,9 @@ class SpectrumEncoder(nn.Module):
         during training.
         """
         if hasattr(self, '_attention_grad'):
+            print('has attr')
             return self._attention_grad
+        
         else:
             return None
 
@@ -347,6 +358,7 @@ class encoder_percentiles(Base_encoder_percentiles):
                  act=None,dropout_1=0,dropout_2=0
                 ):
 
+        #instrument by the moment is always None
         encoder = SpectrumEncoder(None,n_latent,dropout=dropout_1)
 
         mlp = MLP(n_latent,n_out,n_hidden=n_hidden,act=act,dropout=dropout_2)

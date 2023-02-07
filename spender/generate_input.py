@@ -133,6 +133,7 @@ def plot_sed_sfh(ms,t,wave,seds,n_int):
     plt.title('Mstar norm non acummulative')
     plt.show()
 
+"""
 
 # TEST (linear exp parametrization - 1000 curves - BASTI,Mku1.30,Z=+0.06,BaseFe)
 
@@ -145,4 +146,4 @@ tbins=get_tbins(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs
 data_extended=interpolate(tbins,t,data)
 wave,seds=generate_all_spectrums(t,ms,wave,data_extended)
 
-plot_sed_sfh(ms,t,wave,seds,1)
+###plot_sed_sfh(ms,t,wave,seds,1) """

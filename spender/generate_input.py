@@ -7,11 +7,6 @@ from scipy import  integrate
 from scipy import interpolate
 import os
 from astropy.io import fits
-plt.rcParams["figure.figsize"] = (20,15)
-params = {'xtick.labelsize': 20, 'ytick.labelsize': 20}
-plt.rcParams.update(params)
-plt.rcParams.update({'font.size': 22})
-
 
 
 def escalon(t,ti):
@@ -134,6 +129,11 @@ def plot_sed_sfh(ms,t,wave,seds,n_int):
     plt.show()
 
 """
+
+plt.rcParams["figure.figsize"] = (20,15)
+params = {'xtick.labelsize': 20, 'ytick.labelsize': 20}
+plt.rcParams.update(params)
+plt.rcParams.update({'font.size': 22})
 
 # TEST (linear exp parametrization - 1000 curves - BASTI,Mku1.30,Z=+0.06,BaseFe)
 

@@ -83,8 +83,6 @@ class SpectrumEncoder(nn.Module):
         self.n_aux = n_aux
         
         
-        #self._attention_grad='hi'
-        
 
         filters = [128, 256, 512]
         sizes = [5, 11, 21]
@@ -152,16 +150,7 @@ class SpectrumEncoder(nn.Module):
         
         # softmax attention
         a = self.softmax(a)
-        
-        print(a.grad)
-        print(a.grad_fn)
-        
-        # attach hook to extract backward gradient of a scalar prediction
-        # for Grad-FAM (Feature Activation Map)
-        
-        if ~self.training and a.requires_grad == True:
-            a.register_hook(self._attention_hook)
-            
+             
         # apply attention
         x = torch.sum(h * a, dim=2)
 
@@ -184,7 +173,7 @@ class SpectrumEncoder(nn.Module):
         Factor to compute the importance of attention for Grad-FAM method.
 
         Requires a previous `loss.backward` call for any scalar loss function based on
-        outputs of this classes `forward` method. This functionality is switched off
+        outputs of this classes `forward` method, as well as a hook of the attention weights in the forward function. This functionality is switched off
         during training.
         """
         if hasattr(self, '_attention_grad'):
@@ -195,7 +184,7 @@ class SpectrumEncoder(nn.Module):
             return None
 
 
-#by Patricia, to generate latents optimized for getting percentiles
+#generate latents optimized for getting percentiles
 
 class Base_encoder_percentiles(nn.Module):
     """Base class for spectrum encoder optimized for obtaining percentiles

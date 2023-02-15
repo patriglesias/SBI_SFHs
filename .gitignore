@@ -6,3 +6,6 @@
 .DS_Store
 /spender/saved_input/input_10000.npz
 ./spender/saved_input/seds.npy
+SNPE/.ipynb_checkpoints/simple_posterior_estimation-checkpoint.ipynb
+spender/.ipynb_checkpoints
+spender/examples/.ipynb_checkpoints

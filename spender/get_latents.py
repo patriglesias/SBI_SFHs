@@ -12,8 +12,12 @@ from accelerate import Accelerator #to use pytorch
 from torch.utils.data import DataLoader
 from spender import SpectrumEncoder,MLP,encoder_percentiles,load_model
 
-
-
+# CUDA for PyTorch
+use_cuda = torch.cuda.is_available()
+#torch.cuda.set_device(1)
+device = torch.device("cuda:0" if use_cuda else "cpu")
+torch.backends.cudnn.benchmark = True
+print('CPU prepared')
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -35,15 +39,44 @@ class Dataset(torch.utils.data.Dataset):
         y=self.y[index,:]
         return x,y
 
+#generate or not the dataset 
+generate=True 
 
-#load data:
-print('Loading data')
-percentiles=np.load('./saved_input/percentiles.npy')
-wave=np.load('./saved_input/waves.npy')
-seds=np.load('../../seds.npy')
-#ms=np.load('../../sfh.npy') #s
+if generate:
+    #generate data:
+    print('Generating data...')
+    #generate parametrizations
+    print('Step 1/4')
+    #tau from 0.3 to 5 
+    t,ms,percentiles=generate_weights_from_SFHs(SFR=sfr_linear_exp,mgal=10**10,tau=np.logspace(-0.5,0.7,1000),ti=np.linspace(0,5,100),tmin=0,tmax=14,step=0.01,percen=True)
+    #load MILES spectra and interpolate
+    print('Step 2/4')
+    wave,data=get_data(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
+    tbins=get_tbins(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
+    print('Step 3/4')
+    data_extended=interpolate(tbins,t,data)
+    #generate spectra for the parametrized SFHs
+    print('Step 4/4')
+    wave,seds=generate_all_spectrums(t,ms,wave,data_extended)
+    np.save('./saved_input/t_'+str(len(percentiles[:,0]))+'.npy',t)
+    np.save('./saved_input/percentiles_'+str(len(percentiles[:,0]))+'.npy',percentiles)
+    np.save('./saved_input/waves_'+str(len(percentiles[:,0]))+'.npy',wave)
+    np.save('../../seds_'+str(len(percentiles[:,0]))+'.npy',seds) #too large file for github
+    np.save('../../sfh_'+str(len(percentiles[:,0]))+'.npy',ms) #too large file for github
 
-#create a dataset
+
+else:
+    #load data:
+    print('Loading data')
+    percentiles=np.load('./saved_input/percentiles.npy')
+    wave=np.load('./saved_input/waves.npy')
+    seds=np.load('../../seds.npy')
+    #ms=np.load('../../sfh.npy') #s
+
+n=len(percentiles[:,0])
+print(n)
+
+#create a pytorch dataset
 print('Creating dataset and calling accelerator')
 dataset = Dataset(seds, percentiles)
 print('Shape of the dataset: ',np.shape(seds))
@@ -77,10 +110,12 @@ with torch.no_grad():
     
 #save
 print('Saving spectra, percentiles, latents and predicted percentiles')
-np.save("../SNPE/input_dataset/y_test_pred.npy",ys_)
-np.save('../SNPE/input_dataset/latents.npy',ss)
-np.save("../SNPE/input_dataset/seds.npy",seds)
-np.save("../SNPE/input_dataset/percentiles.npy",percentiles)
+np.save("../SNPE/input_dataset/y_test_pred_"+str(n)+".npy",ys_)
+np.save('../SNPE/input_dataset/latents_'+str(n)+'.npy',ss)
+np.save("../SNPE/input_dataset/percentiles_"+str(n)+".npy",percentiles)
+
+#unneccesary at this step:
+#np.save("../SNPE/input_dataset/seds_"+str(n)+".npy",seds)
 #np.save("../SPNE/input_dataset/sfh.npy",ms)
 
 

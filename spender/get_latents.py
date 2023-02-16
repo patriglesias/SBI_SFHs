@@ -11,6 +11,7 @@ from torch import optim
 from accelerate import Accelerator #to use pytorch
 from torch.utils.data import DataLoader
 from spender import SpectrumEncoder,MLP,encoder_percentiles,load_model
+from generate_input import sfr_linear_exp,generate_weights_from_SFHs,get_data,get_tbins,interpolate,generate_all_spectrums
 
 # CUDA for PyTorch
 use_cuda = torch.cuda.is_available()
@@ -40,7 +41,9 @@ class Dataset(torch.utils.data.Dataset):
         return x,y
 
 #generate or not the dataset 
-generate=True 
+generate=False 
+
+n=100000
 
 if generate:
     #generate data:
@@ -58,23 +61,22 @@ if generate:
     #generate spectra for the parametrized SFHs
     print('Step 4/4')
     wave,seds=generate_all_spectrums(t,ms,wave,data_extended)
-    np.save('./saved_input/t_'+str(len(percentiles[:,0]))+'.npy',t)
-    np.save('./saved_input/percentiles_'+str(len(percentiles[:,0]))+'.npy',percentiles)
-    np.save('./saved_input/waves_'+str(len(percentiles[:,0]))+'.npy',wave)
-    np.save('../../seds_'+str(len(percentiles[:,0]))+'.npy',seds) #too large file for github
-    np.save('../../sfh_'+str(len(percentiles[:,0]))+'.npy',ms) #too large file for github
+    np.save('./saved_input/t_'+str(n)+'.npy',t)
+    np.save('./saved_input/percentiles_'+str(n)+'.npy',percentiles)
+    np.save('./saved_input/waves_'+str(n)+'.npy',wave)
+    np.save('../../seds_'+str(n)+'.npy',seds) #too large file for github
+    np.save('../../sfh_'+str(n)+'.npy',ms) #too large file for github
 
 
 else:
     #load data:
     print('Loading data')
-    percentiles=np.load('./saved_input/percentiles.npy')
-    wave=np.load('./saved_input/waves.npy')
-    seds=np.load('../../seds.npy')
+    percentiles=np.load('./saved_input/percentiles_100000.npy')
+    wave=np.load('./saved_input/waves_100000.npy')
+    seds=np.load('../../seds_100000.npy')
     #ms=np.load('../../sfh.npy') #s
 
-n=len(percentiles[:,0])
-print(n)
+
 
 #create a pytorch dataset
 print('Creating dataset and calling accelerator')

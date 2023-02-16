@@ -93,6 +93,10 @@ if __name__ == '__main__':
     # Just random numbers to generate a test plot
     x = np.random.rand(100)
     y = np.random.rand(100)
+    
+    ######
+
+    ######
 
     plot_with_median(x, y, ax, label='Test')
 
@@ -103,5 +107,6 @@ if __name__ == '__main__':
     # Put a legend to the right of the current axis
     ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize=10)
 
-    f.savefig('coverage.png')
+    #f.savefig('coverage.png')
+    plt.show()
     plt.close()

@@ -3,6 +3,7 @@ import math
 import matplotlib.pyplot as plt
 
 
+# +
 def get_coverage_probabilities(data_x, data_y, model):
     """
     Compute the coverage probabilities of the provided model
@@ -26,6 +27,28 @@ def get_coverage_probabilities(data_x, data_y, model):
 
     return x, y
 
+def get_coverage_probabilities_nomodel(y,y_pred,y_pred_std):
+    """
+    Compute the coverage probabilities on test dataset
+    
+    :param y:  The data true values
+    :param y_pred: The mean of the predicted distributions
+    :param y_pred_std: The standard deviation of the predicted distributions
+    :return: (x, y) a tuple of lists corresponding to a list of probability volumes
+    and the corresponding percentage of true values in that volume.
+    """
+    
+
+    errors = np.absolute(data_y - y_pred)
+    x, y = [], []
+    for sigma_times in np.arange(0, 3, 0.01):
+        how_many = np.count_nonzero(errors <= sigma_times * y_pred_std)
+        y.append(how_many / data_y.shape[0])
+        x.append(math.erf(sigma_times / math.sqrt(2)))
+    return x, y
+
+
+# -
 
 def plot_with_median(data_x, data_y, ax, label=None, percentiles=(16, 84), total_bins=20):
     """

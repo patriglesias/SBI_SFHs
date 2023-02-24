@@ -9,3 +9,5 @@
 SNPE/.ipynb_checkpoints/simple_posterior_estimation-checkpoint.ipynb
 spender/.ipynb_checkpoints
 spender/examples/.ipynb_checkpoints
+SNPE/recover_spectra/seds_from_percentiles_pred.npy
+SNPE/recover_spectra/seds_from_percentiles.npy

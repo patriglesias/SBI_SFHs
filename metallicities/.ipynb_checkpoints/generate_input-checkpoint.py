@@ -53,7 +53,7 @@ def generate_weights_from_SFHs(SFR,mgal=10**10,tau=np.linspace(0.3,5,100),ti=np.
     else:
         return t,ms
 
-
+# +
 def get_tbins(dir_name,strs_1,strs_2):
     library=os.listdir(dir_name)
     x,y=len(strs_1),len(strs_2)
@@ -86,7 +86,7 @@ def get_metallicities(dir_name,strs_1,strs_2):
 
 
 
-
+# +
 def get_data(dir_name,strs_1,strs_2):
     library=os.listdir(dir_name)
     x,y=len(strs_1),len(strs_2)
@@ -128,9 +128,11 @@ def get_data_met(dir_name,z=np.arange(-2.3,0.4,0.1)):
         data_met[:,:,i]=data_metallicities[i]
         
     data_extended_met=interpolate_z(metallicity_bins,z,data_met)
-    return wave,data_extended_met
+    return data_extended_met
 
+    
 
+# +
 def interpolate_z(metallicity_bins,z,data):
     #(53,4300,27)
     data_extended=np.zeros((len(data[:,0,0]),len(data[0,:,0]),len(z)))
@@ -149,6 +151,8 @@ def interpolate_t(tbins,t,data):
             data_extended[:,i,j]=x
     return data_extended
 
+
+# -
 
 def create_spectrum(t,m,wave,data): #only for a galaxy at a time
     spectrum=[]
@@ -192,12 +196,10 @@ if __name__ == '__main__':
     
     t,ms,percentiles=generate_weights_from_SFHs(SFR=sfr_linear_exp,mgal=10**10,tau=np.logspace(-0.5,0.7,10),ti=np.linspace(0,5,10),tmin=0,tmax=14,step=0.01,percen=True)
     tbins=get_tbins(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
-    wave,data_met=get_data_met(dir_name='../MILES_BASTI_KU_baseFe',z=[-2.3,0.06,0.4])
+    data_met=get_data_met(dir_name='../MILES_BASTI_KU_baseFe',z=np.arange(-2.3,0.4,0.1))
     data_extended=interpolate_t(tbins,t,data_met)
-    seds=np.zeros((100,4300,27))
+    seds=np.zeros((1000,4300,27))
 
-    #z=np.arange(-2.3,0.4,0.1)
-    z=[-2.3,0.06,0.4]
     for k,i in enumerate(z):
         wave,seds[:,:,k]=generate_all_spectrums(np.arange(0,14+0.01,0.01),ms,wave,data_extended[:,:,k])
         if k<3:

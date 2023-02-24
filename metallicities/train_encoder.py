@@ -12,7 +12,7 @@ from torch import optim
 from accelerate import Accelerator #to use pytorch
 from torch.utils.data import DataLoader
 from spender import SpectrumEncoder,MLP,encoder_percentiles,load_model
-from generate_input import sfr_linear_exp,generate_weights_from_SFHs,get_data,get_tbins,interpolate,generate_all_spectrums
+from generate_input import *
 
 
 print('Modules prepared')
@@ -25,7 +25,7 @@ device = torch.device("cuda:0" if use_cuda else "cpu")
 torch.backends.cudnn.benchmark = True
 print('CPU prepared')
 
-generate=False
+generate=True
 
 if generate:
     #generate data:
@@ -33,31 +33,41 @@ if generate:
     #generate parametrizations
     print('Step 1/4')
     #tau from 0.3 to 5 
-    t,ms,percentiles=generate_weights_from_SFHs(SFR=sfr_linear_exp,mgal=10**10,tau=np.logspace(-0.5,0.7,100),ti=np.linspace(0,5,100),tmin=0,tmax=14,step=0.01,percen=True)
+    t,ms,percentiles=generate_weights_from_SFHs(SFR=sfr_linear_exp,mgal=10**10,tau=np.logspace(-0.5,0.7,1000),ti=np.linspace(0,5,100),tmin=0,tmax=14,step=0.01,percen=True)
     #load MILES spectra and interpolate
     print('Step 2/4')
-    wave,data=get_data(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
     tbins=get_tbins(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
+    wave,data_met=get_data_met(dir_name='../MILES_BASTI_KU_baseFe',z=np.arange(-2.3,0.4,0.1))
     print('Step 3/4')
-    data_extended=interpolate(tbins,t,data)
+    data_extended=interpolate_t(tbins,t,data_met)
+
+    seds=np.zeros((270000,4300,27))
+    metallicity=np.zeros((270000))
+
     #generate spectra for the parametrized SFHs
     print('Step 4/4')
-    wave,seds=generate_all_spectrums(t,ms,wave,data_extended)
-    np.save('./saved_input/t.npy',t)
-    np.save('./saved_input/percentiles.npy',percentiles)
-    np.save('./saved_input/waves.npy',wave)
-    np.save('../../seds.npy',seds) #too large file for github
-    np.save('../../sfh.npy',ms) #too large file for github
+    z=np.arange(-2.3,0.4,0.1)
+    for k,i in enumerate(z):
+        print('z: ',i)
+        wave,seds[k*100000:(k+1)*100000,:]=generate_all_spectrums(np.arange(0,14+0.01,0.01),ms,wave,data_extended[:,:,k])
+        metalicity[k*100000:(k+1)*100000]=i
 
+    np.save('./saved_input/t_met.npy',t)
+    np.save('./saved_input/percentiles_met.npy',percentiles)
+    np.save('./saved_input/waves_met.npy',wave)
+    np.save('../../seds_met.npy',seds) #too large file for github
+    np.save('../../sfh_met.npy',ms) #too large file for github
+    np.save('./saved_input/met.npy',metallicity)
 
 else:
     #load data:
     print('Loading data...')
-    t = np.load('./saved_input/t.npy')
-    percentiles=np.load('./saved_input/percentiles.npy')
-    wave=np.load('./saved_input/waves.npy')
-    seds=np.load('../../seds.npy')
+    t = np.load('./saved_input/t_met.npy')
+    percentiles=np.load('./saved_input/percentiles_met.npy')
+    wave=np.load('./saved_input/waves_met.npy')
+    seds=np.load('../../seds_met.npy')
     #ms=np.load('../../sfh.npy')
+    metallicity=np.load('../../met.npy')
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -92,8 +102,10 @@ n_latent=16
 
 
 # Datasets 
-#percentiles shape(10.000, 9)
-#seds  shape (10.000, 4300)
+#percentiles shape(100.000, 9)
+#seds  shape (270.000, 4300)
+#metalicities (270.000,)
+
 
 training_mode=False
 
@@ -236,49 +248,50 @@ if training_mode:
     losses=np.array(checkpoint['losses'])
     np.savetxt('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/losses.txt',np.array(losses))
 
+test_mode=False
 
+if test_mode:
+    ### TESTING ###
+    test_set = Dataset(x_test, y_test)
+    print('Shape of the test set: ',np.shape(x_test))
+    params={'batch_size': len(x_test[:,0]) } #no minitbatches or 128
+    test_generator = torch.utils.data.DataLoader(test_set,**params) #without minibatches
 
-### TESTING ###
-test_set = Dataset(x_test, y_test)
-print('Shape of the test set: ',np.shape(x_test))
-params={'batch_size': len(x_test[:,0]) } #no minitbatches or 128
-test_generator = torch.utils.data.DataLoader(test_set,**params) #without minibatches
+    print('Calling accelerator...')
+    accelerator = Accelerator(mixed_precision='fp16')
+    print(accelerator.distributed_type)
+    testloader = accelerator.prepare(test_generator)
 
-print('Calling accelerator...')
-accelerator = Accelerator(mixed_precision='fp16')
-print(accelerator.distributed_type)
-testloader = accelerator.prepare(test_generator)
+    if not training_mode:
+        print('Loading model...')
+        model_file = "./saved_model/generate_latent_2/latent_"+str(n_latent)+"/checkpoint.pt"
+        model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32))
+        model = accelerator.prepare(model)
+            
+    percentiles=[]
+    ss=[]
+    ys_=[]
 
-if not training_mode:
-    print('Loading model...')
-    model_file = "./saved_model/generate_latent_2/latent_"+str(n_latent)+"/checkpoint.pt"
-    model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32))
-    model = accelerator.prepare(model)
+    with torch.no_grad():
+        model.eval()
+        print('Testing starts now...')
+        for k, batch in enumerate(testloader):
+                    batch_size = len(batch[0])
+                    spec,percent= batch[0].float(),batch[1].float()
+                    s,y_ = model._forward(spec)
+                    percentiles.append(percent.cpu().numpy())
+                    ss.append(s.cpu().numpy())
+                    ys_.append(y_.cpu().numpy())
         
-percentiles=[]
-ss=[]
-ys_=[]
+        
+        
+    print('Saving latents and predicted percentiles...')
+    np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/y_test_pred.npy",ys_)#y_.cpu())
+    np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/latents.npy',ss) #s.cpu())
+    np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/y_test.npy', percentiles) #,percent.cpu())
 
-with torch.no_grad():
-    model.eval()
-    print('Testing starts now...')
-    for k, batch in enumerate(testloader):
-                batch_size = len(batch[0])
-                spec,percent= batch[0].float(),batch[1].float()
-                s,y_ = model._forward(spec)
-                percentiles.append(percent.cpu().numpy())
-                ss.append(s.cpu().numpy())
-                ys_.append(y_.cpu().numpy())
-    
-    
-    
-print('Saving latents and predicted percentiles...')
-np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/y_test_pred.npy",ys_)#y_.cpu())
-np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/latents.npy',ss) #s.cpu())
-np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/y_test.npy', percentiles) #,percent.cpu())
+    diagnosis=False
 
-diagnosis=True
-
-if diagnosis:
-    np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/seds_test.npy",x_test)
-    #np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/sfh_test.npy",ms[int(0.9*len(seds)):,:])
+    if diagnosis:
+        np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/seds_test.npy",x_test)
+        #np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/sfh_test.npy",ms[int(0.9*len(seds)):,:])

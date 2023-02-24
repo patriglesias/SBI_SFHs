@@ -3,7 +3,8 @@ import math
 import matplotlib.pyplot as plt
 
 
-# +
+# source https://en.wikipedia.org/wiki/68–95–99.7_rule
+
 def get_coverage_probabilities(data_x, data_y, model):
     """
     Compute the coverage probabilities of the provided model

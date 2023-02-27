@@ -310,7 +310,7 @@ if test_mode:
     np.save('./saved_model/latent_'+str(n_latent)+'/latents.npy',ss) #s.cpu())
     np.save('./saved_model/latent_'+str(n_latent)+'/y_test.npy', ys) #,percent.cpu())
 
-    diagnosis=False
+    diagnosis=True
 
     if diagnosis:
         np.save("./saved_model/latent_"+str(n_latent)+"/seds_test.npy",x_test)

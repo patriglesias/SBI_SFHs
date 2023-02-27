@@ -1,4 +1,4 @@
-### Load model and get a dataset of spectra - latents - percentiles #
+# ## Load model and get a dataset of spectra - latents - percentiles #
 
 print('Loading modules')
 
@@ -95,7 +95,7 @@ print('Loading module trained with latents of ', str(n_latent), ' components')
 model_file = "./saved_model/generate_latent_2/latent_"+str(n_latent)+"/checkpoint.pt"
 model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32))
 model = accelerator.prepare(model)
-        
+
 ss=[]
 ys_=[]
 
@@ -109,15 +109,15 @@ with torch.no_grad():
                 s,y_ = model._forward(spec)
                 ss.append(s.cpu().numpy())
                 ys_.append(y_.cpu().numpy())
-    
+
 #save
 print('Saving spectra, percentiles, latents and predicted percentiles')
 np.save("../SNPE/input_dataset/y_test_pred_"+str(n)+".npy",ys_)
 np.save('../SNPE/input_dataset/latents_'+str(n)+'.npy',ss)
 np.save("../SNPE/input_dataset/percentiles_"+str(n)+".npy",percentiles)
 
-#unneccesary at this step:
-#np.save("../SNPE/input_dataset/seds_"+str(n)+".npy",seds)
-#np.save("../SPNE/input_dataset/sfh.npy",ms)
+# unneccesary at this step:
+# np.save("../SNPE/input_dataset/seds_"+str(n)+".npy",seds)
+# np.save("../SPNE/input_dataset/sfh.npy",ms)
 
 

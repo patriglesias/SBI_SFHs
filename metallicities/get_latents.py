@@ -43,7 +43,7 @@ class Dataset(torch.utils.data.Dataset):
 #generate or not the dataset 
 generate=False 
 
-n=100000
+n=270000
 
 if generate:
     #generate data:
@@ -71,16 +71,16 @@ if generate:
 else:
     #load data:
     print('Loading data')
-    percentiles=np.load('./saved_input/percentiles_100000.npy')
-    wave=np.load('./saved_input/waves_100000.npy')
-    seds=np.load('../../seds_100000.npy')
+    y=np.load('./saved_input/y.npy')
+    wave=np.load('./saved_input/waves_met.npy')
+    seds=np.load('../../seds_large/seds_met.npy')
     #ms=np.load('../../sfh.npy') #s
 
 
 
 #create a pytorch dataset
 print('Creating dataset and calling accelerator')
-dataset = Dataset(seds, percentiles)
+dataset = Dataset(seds, y)
 print('Shape of the dataset: ',np.shape(seds))
 params={'batch_size': 512 } 
 generator = torch.utils.data.DataLoader(dataset,**params) #with minibatches
@@ -92,8 +92,8 @@ loader = accelerator.prepare(generator)
 #load model
 n_latent=16
 print('Loading module trained with latents of ', str(n_latent), ' components')
-model_file = "./saved_model/generate_latent_2/latent_"+str(n_latent)+"/checkpoint.pt"
-model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32))
+model_file = "./saved_model/latent_"+str(n_latent)+"/checkpoint.pt"
+model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32),n_out=10)
 model = accelerator.prepare(model)
         
 ss=[]
@@ -114,10 +114,7 @@ with torch.no_grad():
 print('Saving spectra, percentiles, latents and predicted percentiles')
 np.save("../SNPE/input_dataset/y_test_pred_"+str(n)+".npy",ys_)
 np.save('../SNPE/input_dataset/latents_'+str(n)+'.npy',ss)
-np.save("../SNPE/input_dataset/percentiles_"+str(n)+".npy",percentiles)
+np.save("../SNPE/input_dataset/y_"+str(n)+".npy",y)
 
-#unneccesary at this step:
-#np.save("../SNPE/input_dataset/seds_"+str(n)+".npy",seds)
-#np.save("../SPNE/input_dataset/sfh.npy",ms)
 
 

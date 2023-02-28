@@ -17,7 +17,7 @@ def sfr_linear_exp(t,tau,ti,mgal):
     A=mgal/i[0]
     return A*(t-ti)*np.e**(-(t-ti)/tau)*escalon(t,ti) #units are Msun/Gyr
 
-def generate_weights_from_SFHs(SFR,mgal=10**10,tau=np.linspace(0.3,5,100),ti=np.arange(0,5,0.5),tmin=0,tmax=14,step=0.01,percen=True):
+def generate_weights_from_SFHs(SFR,mgal=10**10,tau=np.logspace(-0.5,0.7,1000),ti=np.arange(0,5,0.5),tmin=0,tmax=14,step=0.01,percen=True):
     curves=[]
     t=np.arange(tmin,tmax+step,step) 
     for i in tau:

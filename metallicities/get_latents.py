@@ -115,9 +115,6 @@ print('Saving spectra, percentiles, latents and predicted percentiles')
 np.save("../SNPE/input_dataset/y_test_pred_"+str(n)+".npy",ys_)
 np.save('../SNPE/input_dataset/latents_'+str(n)+'.npy',ss)
 np.save("../SNPE/input_dataset/y_"+str(n)+".npy",y)
-<<<<<<< HEAD
 
 
 
-=======
->>>>>>> b2b77e5231aa8f0579c2797b2df696b88d237331

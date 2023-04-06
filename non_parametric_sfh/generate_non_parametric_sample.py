@@ -6,12 +6,13 @@ from scipy import  integrate
 from scipy import interpolate
 import os
 from astropy.io import fits
+from tqdm import tqdm,trange
 
 def generate_weights_from_SFHs_non_param(n,logMstar=10.0,z=0.0,percen=True):
     priors = db.Priors()
     curves=[]
     times=[] #not needed because if we fix z all rand_time are exactly the same
-    for i in range(n):
+    for i in trange(n):
         rand_sfh_tuple=priors.sample_sfh_tuple()
         rand_sfh_tuple[0]=logMstar #logMstar at selected z (in this case z=0)
         rand_sfh, rand_time = db.tuple_to_sfh(rand_sfh_tuple, zval = z) 
@@ -20,7 +21,7 @@ def generate_weights_from_SFHs_non_param(n,logMstar=10.0,z=0.0,percen=True):
     
     ms=[]
     #non accumulative mass curves, we save it cause we will use it later
-    for index,curve in enumerate(curves):        
+    for index,curve in tqdm(enumerate(curves)):        
         sfr_0=curve
         m=[]
         t=times[index]
@@ -33,7 +34,7 @@ def generate_weights_from_SFHs_non_param(n,logMstar=10.0,z=0.0,percen=True):
     if percen:
         #compute percentiles
         percentiles=[]
-        for i,curve in enumerate(curves):
+        for i,curve in tqdm(enumerate(curves)):
              mcurve=ms[i]
              m=[]
              percent=[]
@@ -72,17 +73,28 @@ def get_data(dir_name,strs_1,strs_2):
     lib_n=np.array(lib_n)
     data=[]
     
-    for j in range(len(lib_n)):
+    #old
+    """
+        for j in range(len(lib_n)):
         globals() ['hdul'+str(j)]=fits.open(dir_name+'/'+strs_1+lib[j]+strs_2)
         data.append(np.array(globals()['hdul'+str(j)][0].data))
+    """
+    
+    #new
+    for j in range(len(lib_n)):
+        hdul=fits.open(dir_name+'/'+strs_1+lib[j]+strs_2)
+        data.append(np.array(hdul[0].data))
+        if j != range(len(lib_n))[-1]:
+            hdul.close()
 
-    hdr=hdul0[0].header
+    hdr=hdul[0].header
     wave = hdr['CRVAL1'] + np.arange(hdr['NAXIS1'])*hdr['CDELT1']
     
     ind_sorted=np.argsort(lib_n)
     data=np.array(data,ndmin=2)
     data=data[ind_sorted,:]
     lib_n=lib_n[ind_sorted]
+    hdul.close()
     return wave,data
 
 def interpolate(tbins,t,data,nwave=4300):
@@ -103,7 +115,7 @@ def create_spectrum(t,m,wave,data): #only for a galaxy at a time
 
 def generate_all_spectrums(t,ms,wave,data_extended):
     seds=[]
-    for i,m in enumerate(ms[:]):
+    for m in tqdm(ms[:]):
         wave,sed=create_spectrum(t,m,wave,data_extended)
         seds.append(sed)
     return np.array(wave),np.array(seds)
@@ -115,9 +127,8 @@ def plot_sed_sfh(ms,t,wave,seds,n_int):
     plt.title('Artificial spectrum')    
     plt.show()
     t_back=t[::-1]
-    for i,m in enumerate(ms[::n_int]):
-      print(np.sum(m))  
-      plt.plot(t_back,m,'-')
+    for i,m in enumerate(ms[::n_int]):  
+        plt.plot(t_back,m,'-')
     plt.xlim(14,0)
     plt.ylim(0.0,0.005)
     plt.xlabel('Lookback time [Gyr]')
@@ -131,26 +142,32 @@ if __name__ == '__main__':
     # TEST 
 
     save=True
+    plot=True
     
-    t,ms,percentiles=generate_weights_from_SFHs_non_param(100000)
-
+    print('Step 1/4...')
+    t,ms,percentiles=generate_weights_from_SFHs_non_param(1000)
+    print('Step 2/4...')
     wave,data=get_data(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
     tbins=get_tbins(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
+    print('Step 3/4...')
     data_extended=interpolate(tbins,t[0],data)
+    print('Step 4/4...')
     wave,seds=generate_all_spectrums(t[0],ms,wave,data_extended)
-
-    #plot_sed_sfh(ms,t[0],wave,seds,10) 
+    
+    if plot:  
+        plot_sed_sfh(ms,t[0],wave,seds,1) 
     if save:
-        np.save('seds_1e5_non_par.npy',seds)
-        np.save('wave_1e5_non_par.npy',wave)
-        np.save('t_1e5_non_par.npy',t[0])
-        np.save('ms_1e5_non_par.npy',ms)
-        np.save('percent_1e5_non_par.npy',percentiles)
+        print('Saving...')
+        np.save('seds_150_non_par.npy',seds)
+        np.save('wave_150_non_par.npy',wave)
+        np.save('t_150_non_par.npy',t[0])
+        np.save('ms_150_non_par.npy',ms)
+        np.save('percent_150_non_par.npy',percentiles)
 
     
+
     
+
     
-    
-    
-    
+
     

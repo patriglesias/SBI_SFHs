@@ -33,7 +33,7 @@ percentiles=np.reshape(percentiles,(450000,9))
 zs=np.reshape(zs,(450000,))
 alpha_fes=np.reshape(alpha_fes,(450000,))
 
-np.save('../../large_files/alpha_fe/seds_non_par_alpha_reshaped.npy',seds)
+np.save('../../seds_large/alpha_fe/seds_non_par_alpha_reshaped.npy',seds)
     
 y=np.zeros((len(seds[:,0]),11))
 

@@ -21,8 +21,8 @@ print('CPU prepared')
 #load data:
 print('Loading data...')
 wave=np.load('./saved_input/wave_non_par_alpha.npy')
-seds=np.load('../../large_files/alpha_fe/seds_non_par_alpha.npy')
-percent=np.load('./saved_input/percentiles_non_par_alpha.npy')
+seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha.npy')
+percentiles=np.load('./saved_input/percent_non_par_alpha.npy')
 zs = np.load('./saved_input/zs_non_par_alpha.npy')
 alpha_fes= np.load('./saved_input/alpha_fes_non_par_alpha.npy')
 

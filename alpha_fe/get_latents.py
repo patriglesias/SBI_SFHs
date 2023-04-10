@@ -17,7 +17,7 @@ use_cuda = torch.cuda.is_available()
 #torch.cuda.set_device(1)
 device = torch.device("cuda:0" if use_cuda else "cpu")
 torch.backends.cudnn.benchmark = True
-print('CPU prepared')
+print(device,' prepared')
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -47,11 +47,15 @@ n=450000
 #load data:
 print('Loading data...')
 wave=np.load('./saved_input/wave_non_par_alpha.npy')
-seds=np.load('./saved_input/seds_non_par_alpha.npy')
-percentiles=np.load('./saved_input/percent_non_par_alpha.npy')
-zs = np.load('./saved_input/zs_non_par_alpha.npy')
-alpha_fes= np.load('./saved_input/alpha_fes_non_par_alpha.npy')
+seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha_reshaped.npy')
+y=np.load('./saved_input/y_non_par_alpha_reshaped.npy')
+#zs = np.load('./saved_input/zs_non_par_alpha.npy')
+#alpha_fes= np.load('./saved_input/alpha_fes_non_par_alpha.npy')
 
+
+
+
+"""
 #Reshape
 print('Reshaping...')
 seds=np.reshape(seds,(450000,4300))
@@ -59,22 +63,23 @@ percentiles=np.reshape(percentiles,(450000,9))
 zs=np.reshape(zs,(450000,))
 alpha_fes=np.reshape(alpha_fes,(450000,))
     
+reshape if not done already
 y=np.zeros((len(seds[:,0]),11))
+
+
 
 for i in range(len(seds[:,0])):
     y[i,:9]=percentiles[i,:]
     y[i,-2]=zs[i]
     y[i,-1]=alpha_fes[i]
 
-
+"""
 
 
 ind_sh=np.load('./ind_sh_non_par_alpha.npy')
 
 seds=seds[ind_sh,:]
 y=y[ind_sh,:]
-zs=zs[ind_sh]
-alpha_fes=alpha_fes[ind_sh]
 
 
 #create a pytorch dataset

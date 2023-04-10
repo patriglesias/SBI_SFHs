@@ -17,8 +17,8 @@ n_latent=16
 ### Load and visualize losses ###
 losses=np.loadtxt('./losses.txt')
 
-"""
-print(np.min(losses[:,1]))
+
+#print(np.min(losses[:,1]))
 
 
 #plot losses
@@ -101,5 +101,5 @@ for j in range(n_latent):
     plt.xlabel('Value')
     plt.ylabel('N')
     plt.show()
-
+"""
 

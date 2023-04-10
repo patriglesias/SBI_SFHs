@@ -4,13 +4,8 @@
 /.vscode/
 /.DS_Store/
 .DS_Store
-/spender/saved_input/input_10000.npz
-./spender/saved_input/seds.npy
-SNPE/.ipynb_checkpoints/simple_posterior_estimation-checkpoint.ipynb
 spender/.ipynb_checkpoints
 spender/examples/.ipynb_checkpoints
-SNPE/recover_spectra/seds_from_percentiles_pred.npy
-SNPE/recover_spectra/seds_from_percentiles.npy
 alpha_fe/.ipynb_checkpoints
 metallicities/.ipynb_checkpoints
 non_parametric_sfh/.ipynb_checkpoints

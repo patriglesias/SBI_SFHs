@@ -24,16 +24,14 @@ print("GPU" if use_cuda else "CPU",' prepared')
 #dataset has been generated before, here we just load it
 print('Loading data...')
 wave=np.load('./saved_input/wave_non_par_alpha.npy')
-seds=np.load('../../large_files/alpha_fe/seds_non_par_alpha.npy')
-t=np.load('./saved_input/t_non_par_alpha.npy')
-ms=np.load('../../large_files/alpha_fe/ms_non_par_alpha.npy')
+seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha_reshaped.npy')
 percentiles=np.load('./saved_input/percent_non_par_alpha.npy')
 zs = np.load('./saved_input/zs_non_par_alpha.npy')
 alpha_fes= np.load('./saved_input/alpha_fes_non_par_alpha.npy')
 
 #Reshape
 print('Reshaping...')
-seds=np.reshape(seds,(450000,4300))
+#seds=np.reshape(seds,(450000,4300))
 percentiles=np.reshape(percentiles,(450000,9))
 zs=np.reshape(zs,(450000,))
 alpha_fes=np.reshape(alpha_fes,(450000,))
@@ -69,8 +67,8 @@ n_latent=16
 
 
 # Datasets 
-#percentiles shape(420.000, 9)
-#seds  shape (420.000, 4300)
+#percentiles+[m/h]+[alpha/fe] shape(450.000, 11)
+#seds  shape (450.000, 4300)
 
 
 
@@ -93,7 +91,7 @@ for i in range(len(seds[:,0])):
 #np.random.shuffle(ind_sh)
 #np.save('./ind_sh_non_par_alpha.npy',ind_sh)
 
-ind_sh=np.load('./ind_sh_non_par_alpha.npy')
+ind_sh=np.load('./saved_models/ind_sh_non_par_alpha.npy')
 
 seds=seds[ind_sh,:]
 y=y[ind_sh,:]

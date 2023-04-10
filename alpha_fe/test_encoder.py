@@ -15,26 +15,24 @@ use_cuda = torch.cuda.is_available()
 #torch.cuda.set_device(1)
 device = torch.device("cuda:0" if use_cuda else "cpu")
 torch.backends.cudnn.benchmark = True
-print('CPU prepared')
+print(device,' prepared')
 
 
 #load data:
 print('Loading data...')
 wave=np.load('./saved_input/wave_non_par_alpha.npy')
-seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha.npy')
+seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha_reshaped.npy')
 percentiles=np.load('./saved_input/percent_non_par_alpha.npy')
 zs = np.load('./saved_input/zs_non_par_alpha.npy')
 alpha_fes= np.load('./saved_input/alpha_fes_non_par_alpha.npy')
 
 #Reshape, comment if done already
 print('Reshaping...')
-seds=np.reshape(seds,(450000,4300))
+#seds=np.reshape(seds,(450000,4300))
 percentiles=np.reshape(percentiles,(450000,9))
 zs=np.reshape(zs,(450000,))
 alpha_fes=np.reshape(alpha_fes,(450000,))
 
-np.save('../../seds_large/alpha_fe/seds_non_par_alpha_reshaped.npy',seds)
-    
 y=np.zeros((len(seds[:,0]),11))
 
 for i in range(len(seds[:,0])):
@@ -46,7 +44,7 @@ np.save('./saved_input/y_non_par_alpha_reshaped.npy',y)
 
 print('Shuffling...')
 
-ind_sh=np.load('./ind_sh_non_par_alpha.npy')
+ind_sh=np.load('./saved_models/ind_sh_non_par_alpha.npy')
 
 seds=seds[ind_sh,:]
 y=y[ind_sh,:]

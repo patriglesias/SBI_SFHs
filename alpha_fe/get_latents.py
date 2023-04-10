@@ -76,10 +76,10 @@ for i in range(len(seds[:,0])):
 """
 
 
-ind_sh=np.load('./ind_sh_non_par_alpha.npy')
+#ind_sh=np.load('./ind_sh_non_par_alpha.npy')
 
-seds=seds[ind_sh,:]
-y=y[ind_sh,:]
+#seds=seds[ind_sh,:]
+#y=y[ind_sh,:]
 
 
 #create a pytorch dataset

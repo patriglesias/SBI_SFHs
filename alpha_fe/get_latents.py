@@ -47,39 +47,8 @@ n=450000
 #load data:
 print('Loading data...')
 wave=np.load('./saved_input/wave_non_par_alpha.npy')
-seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha_reshaped.npy')
-y=np.load('./saved_input/y_non_par_alpha_reshaped.npy')
-#zs = np.load('./saved_input/zs_non_par_alpha.npy')
-#alpha_fes= np.load('./saved_input/alpha_fes_non_par_alpha.npy')
-
-
-
-
-"""
-#Reshape
-print('Reshaping...')
-seds=np.reshape(seds,(450000,4300))
-percentiles=np.reshape(percentiles,(450000,9))
-zs=np.reshape(zs,(450000,))
-alpha_fes=np.reshape(alpha_fes,(450000,))
-    
-reshape if not done already
-y=np.zeros((len(seds[:,0]),11))
-
-
-
-for i in range(len(seds[:,0])):
-    y[i,:9]=percentiles[i,:]
-    y[i,-2]=zs[i]
-    y[i,-1]=alpha_fes[i]
-
-"""
-
-
-#ind_sh=np.load('./ind_sh_non_par_alpha.npy')
-
-#seds=seds[ind_sh,:]
-#y=y[ind_sh,:]
+seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha.npy')
+y=np.load('./saved_input/y_non_par_alpha.npy')
 
 
 #create a pytorch dataset
@@ -116,9 +85,9 @@ with torch.no_grad():
 
 #save
 print('Saving spectra, percentiles, latents and predicted percentiles')
-np.save("y_test_pred_"+str(n)+".npy",ys_)
-np.save('latents_'+str(n)+'.npy',ss)
-np.save("y_"+str(n)+".npy",y)
+np.save("./saved_models/y_test_pred_"+str(n)+".npy",ys_)
+np.save('./saved_models/latents_'+str(n)+'.npy',ss)
+np.save("./saved_models/y_"+str(n)+".npy",y)
 
 
 

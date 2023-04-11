@@ -21,26 +21,8 @@ print(device,' prepared')
 #load data:
 print('Loading data...')
 wave=np.load('./saved_input/wave_non_par_alpha.npy')
-seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha_reshaped.npy')
-percentiles=np.load('./saved_input/percent_non_par_alpha.npy')
-zs = np.load('./saved_input/zs_non_par_alpha.npy')
-alpha_fes= np.load('./saved_input/alpha_fes_non_par_alpha.npy')
-
-#Reshape, comment if done already
-print('Reshaping...')
-#seds=np.reshape(seds,(450000,4300))
-percentiles=np.reshape(percentiles,(450000,9))
-zs=np.reshape(zs,(450000,))
-alpha_fes=np.reshape(alpha_fes,(450000,))
-
-y=np.zeros((len(seds[:,0]),11))
-
-for i in range(len(seds[:,0])):
-    y[i,:9]=percentiles[i,:]
-    y[i,-2]=zs[i]
-    y[i,-1]=alpha_fes[i]
-    
-np.save('./saved_input/y_non_par_alpha_reshaped.npy',y)
+seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha.npy')
+y=np.load('./saved_input/y_non_par_alpha.npy')
 
 print('Shuffling...')
 

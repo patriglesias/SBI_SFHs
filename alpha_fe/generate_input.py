@@ -204,45 +204,96 @@ if __name__ == '__main__':
 
     z= np.arange(-2.3,0.6,0.2)
     alpha_fe=[0,0.2,0.4]
-    
-    print('Loading MILES spectra and interpolating in metallicity and [alpha/Fe] : ')
-    tbins=get_tbins(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
-    wave,data_met_alpha=get_data_met_alpha(dir_name='../MILES_BASTI_KU',z=z,alpha_fe=alpha_fe)
 
-    seds=[]
-    percentiles=[]
-    ms=[]
-    zs=[]
-    alpha_fes=[]
-    
-    n=10000 #number of SFHs for each pair Z, [alpha/Fe]
-    
-    print('Generating 10.000 SFHs and their corresponding spectra for each pair Z, [alpha/Fe] :')
-    for k,i in tqdm(enumerate(z)):
-        for w,j in enumerate(alpha_fe):
-            print('z= ',k,', alpha= ',w)
-            t,m,per=generate_weights_from_SFHs_non_param(n)
-            data_extended=interpolate_t(tbins,t[0],data_met_alpha[:,:,k,w])
-            wave,sed=generate_all_spectrums(t[0],m,wave,data_extended)
+    different=False
 
-            seds.append(sed)
-            percentiles.append(per)
-            ms.append(m)
-            zs.append(np.ones((n,))*i)
-            alpha_fes.append(np.ones((n,))*j)
+    if different:
+   
+        #10.000 different SFH for each pair z-[alpha/fe]
+        print('Loading MILES spectra and interpolating in metallicity and [alpha/Fe] : ')
+        tbins=get_tbins(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
+        wave,data_met_alpha=get_data_met_alpha(dir_name='../MILES_BASTI_KU',z=z,alpha_fe=alpha_fe)
 
-            
+        seds=[]
+        percentiles=[]
+        ms=[]
+        zs=[]
+        alpha_fes=[]
+    
+        n=10000 #number of SFHs for each pair Z, [alpha/Fe]
+    
+        print('Generating 10.000 SFHs and their corresponding spectra for each pair Z, [alpha/Fe] :')
+        for k,i in tqdm(enumerate(z)):
+            for w,j in enumerate(alpha_fe):
+                print('z= ',k,', alpha= ',w)
+                t,m,per=generate_weights_from_SFHs_non_param(n)
+                data_extended=interpolate_t(tbins,t[0],data_met_alpha[:,:,k,w])
+                wave,sed=generate_all_spectrums(t[0],m,wave,data_extended)
+
+                seds.append(sed)
+                percentiles.append(per)
+                ms.append(m)
+                zs.append(np.ones((n,))*i)
+                alpha_fes.append(np.ones((n,))*j)
+
+    
+    else:
+        #10.000 equal SFHs for each pair
+        print('Loading MILES spectra and interpolating in metallicity and [alpha/Fe] : ')
+        tbins=get_tbins(dir_name='../MILES/MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
+        wave,data_met_alpha=get_data_met_alpha(dir_name='../MILES/MILES_BASTI_KU',z=z,alpha_fe=alpha_fe)
+        
+        n=10000 #number of SFHs for each pair Z, [alpha/Fe]
+        t,m,per=generate_weights_from_SFHs_non_param(n)
+
+        seds=[]
+        percentiles=[]
+        ms=[]
+        zs=[]
+        alpha_fes=[]
+
+        print('Generating 10.000 SFHs and their corresponding spectra for each pair Z, [alpha/Fe] :')
+        for k,i in tqdm(enumerate(z)):
+            for w,j in enumerate(alpha_fe):
+                print('z= ',k,', alpha= ',w)
+                data_extended=interpolate_t(tbins,t[0],data_met_alpha[:,:,k,w])
+                wave,sed=generate_all_spectrums(t[0],m,wave,data_extended)
+
+                seds.append(sed)
+                percentiles.append(per)
+                ms.append(m)
+                zs.append(np.ones((n,))*i)
+                alpha_fes.append(np.ones((n,))*j)
+
+    
+    reshape=True
+
+    if reshape:
+        print('Reshaping...')
+        seds=np.reshape(seds,(450000,4300))
+        percentiles=np.reshape(percentiles,(450000,9))
+        zs=np.reshape(zs,(450000,))
+        alpha_fes=np.reshape(alpha_fes,(450000,))
+
+        y=np.zeros((len(seds[:,0]),11))
+
+        for i in range(len(seds[:,0])):
+            y[i,:9]=percentiles[i,:]
+            y[i,-2]=zs[i]
+            y[i,-1]=alpha_fes[i]
+    
+        np.save('./saved_input/y_non_par_alpha.npy',y) 
+    
     save=True
-
 
     if save:
         print('Saving...')
-        np.save('seds_non_par_alpha.npy',seds)
-        np.save('wave_non_par_alpha.npy',wave)
-        np.save('t_non_par_alpha.npy',t[0])
-        np.save('ms_non_par_alpha.npy',ms)
-        np.save('percent_non_par_alpha.npy',percentiles)
-        np.save('zs_non_par_alpha.npy',zs)
-        np.save('alpha_fes_non_par_alpha.npy',alpha_fes)
+        np.save('./saved_input/seds_non_par_alpha.npy',seds)
+        np.save('./saved_input/wave_non_par_alpha.npy',wave)
+        np.save('./saved_input/t_non_par_alpha.npy',t[0])
+        np.save('./saved_input/ms_non_par_alpha.npy',ms)
+        np.save('./saved_input/percent_non_par_alpha.npy',percentiles)
+        np.save('./saved_input/zs_non_par_alpha.npy',zs)
+        np.save('./saved_input/alpha_fes_non_par_alpha.npy',alpha_fes)
 
     

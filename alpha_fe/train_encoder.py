@@ -24,17 +24,8 @@ print("GPU" if use_cuda else "CPU",' prepared')
 #dataset has been generated before, here we just load it
 print('Loading data...')
 wave=np.load('./saved_input/wave_non_par_alpha.npy')
-seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha_reshaped.npy')
-percentiles=np.load('./saved_input/percent_non_par_alpha.npy')
-zs = np.load('./saved_input/zs_non_par_alpha.npy')
-alpha_fes= np.load('./saved_input/alpha_fes_non_par_alpha.npy')
-
-#Reshape
-print('Reshaping...')
-#seds=np.reshape(seds,(450000,4300))
-percentiles=np.reshape(percentiles,(450000,9))
-zs=np.reshape(zs,(450000,))
-alpha_fes=np.reshape(alpha_fes,(450000,))
+seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha.npy')
+y=np.load('./saved_input/y_non_par_alpha.npy')
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -59,7 +50,7 @@ class Dataset(torch.utils.data.Dataset):
 
 # Parameters
 batch_size=128
-max_epochs=50
+max_epochs=250
 lr=5e-4
 params = {'batch_size': batch_size,
           'shuffle': True}
@@ -74,30 +65,18 @@ n_latent=16
 
 print('Creating datasets...')
 
-    
-y=np.zeros((len(seds[:,0]),11))
-
-for i in range(len(seds[:,0])):
-    y[i,:9]=percentiles[i,:]
-    y[i,-2]=zs[i]
-    y[i,-1]=alpha_fes[i]
-
-
 
 #shuffling (indices are saved for the case of just testing)
 
 
-#ind_sh=np.arange(len(seds[:,0]))
-#np.random.shuffle(ind_sh)
-#np.save('./ind_sh_non_par_alpha.npy',ind_sh)
+ind_sh=np.arange(len(seds[:,0]))
+np.random.shuffle(ind_sh)
+np.save('./saved_models/ind_sh_non_par_alpha.npy',ind_sh)
 
-ind_sh=np.load('./saved_models/ind_sh_non_par_alpha.npy')
+#ind_sh=np.load('./saved_models/ind_sh_non_par_alpha.npy')
 
 seds=seds[ind_sh,:]
 y=y[ind_sh,:]
-zs=zs[ind_sh]
-alpha_fes=alpha_fes[ind_sh]
-
 
 #80% training, 10% validation, 10% test
 

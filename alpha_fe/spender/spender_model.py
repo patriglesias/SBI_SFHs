@@ -101,7 +101,7 @@ class SpectrumEncoder(nn.Module):
         self.mlp = MLP(self.n_feature + n_aux, self.n_latent, n_hidden=n_hidden, act=act, dropout=dropout)
 
 
-    def _conv_blocks(self, filters, sizes, dropout=0):
+    def _conv_blocks_bad(self, filters, sizes, dropout=0):
         convs = []
         for i in range(len(filters)):
             f_in = 1 if i == 0 else filters[i-1]
@@ -120,6 +120,32 @@ class SpectrumEncoder(nn.Module):
 
             convs.append(nn.Sequential(conv, act, drop))
         return tuple(convs)
+
+    def _conv_blocks(self, filters, sizes, dropout=0):
+        convs = []
+        for i in range(len(filters)):
+            f_in = 1 if i == 0 else filters[i-1]
+            f = filters[i]
+            s = sizes[i]
+            p = s // 2
+            conv = nn.Conv1d(in_channels=f_in,
+                             out_channels=f,
+                             kernel_size=s,
+                             padding=p,
+                            )
+            try:
+                norm = nn.InstanceNorm1d(f)
+                act = nn.PReLU(f)
+                drop = nn.Dropout(p=dropout)
+                convs.append(nn.Sequential(conv, norm, act, drop))
+            #invented by you
+            except:
+                act = nn.PReLU(f)
+                drop = nn.Dropout(p=dropout)
+                convs.append(nn.Sequential(conv, act, drop))
+
+        return tuple(convs)
+    
 
     def _downsample(self, x):
         # compression

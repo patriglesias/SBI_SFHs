@@ -23,9 +23,9 @@ print("GPU" if use_cuda else "CPU",' prepared')
 
 #dataset has been generated before, here we just load it
 print('Loading data...')
-wave=np.load('./saved_input/wave_non_par_alpha.npy')
-seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha.npy')
-y=np.load('./saved_input/y_non_par_alpha.npy')
+wave=np.load('./saved_input/wave_non_par_alpha_fix.npy')
+seds=np.load('../../seds_large/seds_non_par_alpha_fix.npy')
+y=np.load('./saved_input/y_non_par_alpha_fix.npy')
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -71,7 +71,7 @@ print('Creating datasets...')
 
 ind_sh=np.arange(len(seds[:,0]))
 np.random.shuffle(ind_sh)
-np.save('./saved_models/ind_sh_non_par_alpha.npy',ind_sh)
+np.save('./saved_models/ind_sh_non_par_alpha_fix.npy',ind_sh)
 
 #ind_sh=np.load('./saved_models/ind_sh_non_par_alpha.npy')
 
@@ -103,7 +103,7 @@ def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, 
     model,  trainloader, validloader, optimizer = accelerator.prepare(model,  trainloader, validloader, optimizer)
 
     if outfile is None:
-        outfile = "./saved_models/checkpoint.pt"
+        outfile = "./saved_models/checkpoint_fix.pt"
 
     epoch = 0
     if losses is None:
@@ -205,9 +205,9 @@ f=open('./saved_models/description.txt', "w")
 f.write(description)
 f.close()
   
-checkpoint = torch.load('./saved_models/checkpoint.pt')
+checkpoint = torch.load('./saved_models/checkpoint_fix.pt')
 losses=np.array(checkpoint['losses'])
-np.savetxt('./saved_models/losses.txt',np.array(losses))
+np.savetxt('./saved_models/losses_fix.txt',np.array(losses))
 
 
 

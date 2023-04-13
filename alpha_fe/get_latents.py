@@ -41,14 +41,14 @@ class Dataset(torch.utils.data.Dataset):
 
 
 
-n=450000
+n=400000
 
 
 #load data:
 print('Loading data...')
-wave=np.load('./saved_input/wave_non_par_alpha.npy')
-seds=np.load('../../seds_large/alpha_fe/seds_non_par_alpha.npy')
-y=np.load('./saved_input/y_non_par_alpha.npy')
+wave=np.load('./saved_input/wave_non_par_alpha_fix.npy')
+seds=np.load('../../seds_large/seds_non_par_alpha_fix.npy')
+y=np.load('./saved_input/y_non_par_alpha_fix.npy')
 
 
 #create a pytorch dataset
@@ -65,7 +65,7 @@ loader = accelerator.prepare(generator)
 #load model
 n_latent=16
 print('Loading module trained with latents of ', str(n_latent), ' components')
-model_file = "./saved_models/checkpoint.pt"
+model_file = "./saved_models/checkpoint_fix.pt"
 model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32),n_out=11)
 model = accelerator.prepare(model)
 

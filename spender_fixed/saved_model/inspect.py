@@ -3,19 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-###  Inspect the checkpoint ###
-"""
-checkpoint = torch.load('./generate_latent_2/checkpoint.pt')
-losses=np.array(checkpoint['losses'])
-model_loaded=checkpoint['model']
-np.savetxt('./generate_latent_2/losses.txt',np.array(losses))
-"""
-
-n_latent=10
+n_latent=16
 
 
 ### Load and visualize losses ###
-losses=np.loadtxt('./generate_latent_2/latent_'+str(n_latent)+'/losses.txt')
+losses=np.loadtxt('./losses.txt')
 
 
 print(np.min(losses[:,1]))
@@ -28,12 +20,11 @@ plt.plot(epochs[:],losses[:,1],label='Validation loss')
 plt.xlabel('Epochs')
 plt.title('Loss n_latent '+ str(n_latent))
 plt.legend()
-#plt.ylim(0,5)
-#plt.savefig('./generate_latent_2/latent_16/losses.png')
+#plt.savefig('./losses.png')
 plt.show()
 
 
-
+"""
 ### load and visualize percentiles and latents###
 
 test_set=1000
@@ -104,3 +95,4 @@ for j in range(n_latent):
 
 
 
+"""

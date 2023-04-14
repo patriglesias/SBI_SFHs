@@ -93,7 +93,7 @@ n_latent=16
 #percentiles shape(10.000, 9)
 #seds  shape (10.000, 4300)
 
-training_mode=True
+training_mode=False
 
 print('Creating datasets...')
 
@@ -234,13 +234,13 @@ if training_mode:
     losses=np.array(checkpoint['losses'])
     np.savetxt('./saved_model/losses.txt',np.array(losses))
 
-test=False
+test=True
 if test:
 
     ### TESTING ###
     test_set = Dataset(x_test, y_test)
     print('Shape of the test set: ',np.shape(x_test))
-    params={'batch_size': len(x_test[:,0]) } #no minitbatches or 128
+    params={'batch_size': 128 } #no minitbatches or 128
     test_generator = torch.utils.data.DataLoader(test_set,**params) #without minibatches
 
     print('Calling accelerator...')

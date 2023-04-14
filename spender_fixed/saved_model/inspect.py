@@ -5,13 +5,11 @@ import matplotlib.pyplot as plt
 
 n_latent=16
 
-
+"""
 ### Load and visualize losses ###
 losses=np.loadtxt('./losses.txt')
 
-
 print(np.min(losses[:,1]))
-
 
 #plot losses
 epochs=range(len(losses[:,0]))
@@ -22,18 +20,18 @@ plt.title('Loss n_latent '+ str(n_latent))
 plt.legend()
 #plt.savefig('./losses.png')
 plt.show()
-
-
 """
+
+
 ### load and visualize percentiles and latents###
 
 test_set=1000
-batch_size=1000
+batch_size=128
 
 
-percent_pred=np.load('./generate_latent_2/latent_'+str(n_latent)+'/y_test_pred.npy',allow_pickle=True)
-latents=np.load('./generate_latent_2/latent_'+str(n_latent)+'/latents.npy',allow_pickle=True)
-percent=np.load('./generate_latent_2/latent_'+str(n_latent)+'/y_test.npy',allow_pickle=True)
+percent_pred=np.load('./y_test_pred.npy',allow_pickle=True)
+latents=np.load('./latents.npy',allow_pickle=True)
+percent=np.load('./y_test.npy',allow_pickle=True)
 
 
 percent_pred_arr=np.zeros((test_set,9))
@@ -95,4 +93,3 @@ for j in range(n_latent):
 
 
 
-"""

@@ -210,12 +210,5 @@ losses=np.array(checkpoint['losses'])
 np.savetxt('./saved_models/losses_try.txt',np.array(losses))
 
 
-from torchview import draw_graph
-
-
-batch_size = 128
-# device='meta' -> no memory is consumed for visualization
-model_graph = draw_graph(model, input_size=(batch_size, 4300), device='meta')
-model_graph.visual_graph.render("attached", format="png")
 
 

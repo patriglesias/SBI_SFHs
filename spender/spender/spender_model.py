@@ -113,10 +113,11 @@ class SpectrumEncoder(nn.Module):
                              kernel_size=s,
                              padding=p,
                             )
-            norm = nn.InstanceNorm1d(f)
+            #norm = nn.InstanceNorm1d(f)
             act = nn.PReLU(f)
             drop = nn.Dropout(p=dropout)
-            convs.append(nn.Sequential(conv, norm, act, drop))
+            #convs.append(nn.Sequential(conv, norm, act, drop))
+            convs.append(nn.Sequential(conv, act, drop))
         return tuple(convs)
 
     def _downsample(self, x):

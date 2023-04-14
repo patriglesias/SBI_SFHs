@@ -83,7 +83,7 @@ class Dataset(torch.utils.data.Dataset):
 
 # Parameters
 batch_size=128
-max_epochs=50
+max_epochs=3
 lr=5e-4
 params = {'batch_size': batch_size,
           'shuffle': True}
@@ -151,6 +151,7 @@ def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, 
         train_loss = 0.
         n_sample = 0
         for k, batch in enumerate(trainloader):
+            #print(np.shape(batch),np.shape(batch[0]),np.shape(batch[1]))
             batch_size = len(batch[0])
             spec,percent = batch[0].float(),batch[1].float()
             loss = model.loss(percent)
@@ -283,3 +284,12 @@ diagnosis=False
 if diagnosis:
     np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/seds_test.npy",x_test)
     #np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/sfh_test.npy",ms[int(0.9*len(seds)):,:])
+
+
+#from torchview import draw_graph
+
+
+#batch_size = 128
+#device='meta' -> no memory is consumed for visualization
+#model_graph = draw_graph(model, input_size=(batch_size, 4300), device='meta')
+#model_graph.visual_graph.render("attached", format="png")

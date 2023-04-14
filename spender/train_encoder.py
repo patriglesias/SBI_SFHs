@@ -56,7 +56,7 @@ else:
     t = np.load('./saved_input/t.npy')
     percentiles=np.load('./saved_input/percentiles.npy')
     wave=np.load('./saved_input/waves.npy')
-    seds=np.load('../../seds.npy')
+    seds=np.load('../../seds_large/seds_10000.npy')
     #ms=np.load('../../sfh.npy')
 
 class Dataset(torch.utils.data.Dataset):
@@ -95,17 +95,17 @@ n_latent=16
 #percentiles shape(10.000, 9)
 #seds  shape (10.000, 4300)
 
-training_mode=False
+training_mode=True
 
 print('Creating datasets...')
 
 #shuffling (indices are saved for the case of just testing)
-if training_mode:
-    ind_sh=np.arange(len(seds[:,0]))
-    np.random.shuffle(ind_sh)
-    np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/ind_sh.npy',ind_sh)
-else:
-    ind_sh=np.load('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/ind_sh.npy')
+#if training_mode:
+#    ind_sh=np.arange(len(seds[:,0]))
+#    np.random.shuffle(ind_sh)
+#    np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/ind_sh.npy',ind_sh)
+#else:
+ind_sh=np.load('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/ind_sh.npy')
 
 seds=seds[ind_sh,:]
 percentiles=percentiles[ind_sh,:]
@@ -221,48 +221,49 @@ if training_mode:
     #(16,16,16)
     model = encoder_percentiles(n_latent=n_latent,n_out=9,n_hidden=(16,32),act=None,dropout_2=0.0)
 
-    train(model, trainloader, validloader, n_latent,n_epoch=max_epochs, n_batch=batch_size, outfile=None, losses=None, lr=lr, verbose=True)
+    train(model, trainloader, validloader, n_latent,n_epoch=max_epochs, n_batch=batch_size, outfile='train_works.pt', losses=None, lr=lr, verbose=True)
 
     print('Training has finished')
     print('Model saved')
 
     description='n_epochs: %d, batch_size: %d, lr: %.e'%(max_epochs,batch_size,lr)
     print(description)
-    f=open('./saved_model/generate_latent_2/description.txt', "w")
-    f.write(description)
-    f.close()
+    #f=open('./saved_model/generate_latent_2/description.txt', "w")
+    #f.write(description)
+    #f.close()
   
-    checkpoint = torch.load('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/checkpoint.pt')
-    losses=np.array(checkpoint['losses'])
-    np.savetxt('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/losses.txt',np.array(losses))
+    #checkpoint = torch.load('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/checkpoint.pt')
+    #losses=np.array(checkpoint['losses'])
+    #np.savetxt('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/losses.txt',np.array(losses))
 
+test=False
+if test:
 
+    ### TESTING ###
+    test_set = Dataset(x_test, y_test)
+    print('Shape of the test set: ',np.shape(x_test))
+    params={'batch_size': len(x_test[:,0]) } #no minitbatches or 128
+    test_generator = torch.utils.data.DataLoader(test_set,**params) #without minibatches
 
-### TESTING ###
-test_set = Dataset(x_test, y_test)
-print('Shape of the test set: ',np.shape(x_test))
-params={'batch_size': len(x_test[:,0]) } #no minitbatches or 128
-test_generator = torch.utils.data.DataLoader(test_set,**params) #without minibatches
+    print('Calling accelerator...')
+    accelerator = Accelerator(mixed_precision='fp16')
+    print(accelerator.distributed_type)
+    testloader = accelerator.prepare(test_generator)
 
-print('Calling accelerator...')
-accelerator = Accelerator(mixed_precision='fp16')
-print(accelerator.distributed_type)
-testloader = accelerator.prepare(test_generator)
-
-if not training_mode:
-    print('Loading model...')
-    model_file = "./saved_model/generate_latent_2/latent_"+str(n_latent)+"/checkpoint.pt"
-    model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32))
-    model = accelerator.prepare(model)
+    if not training_mode:
+        print('Loading model...')
+        model_file = "./saved_model/generate_latent_2/latent_"+str(n_latent)+"/checkpoint.pt"
+        model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32))
+        model = accelerator.prepare(model)
         
-percentiles=[]
-ss=[]
-ys_=[]
+    percentiles=[]
+    ss=[]
+    ys_=[]
 
-with torch.no_grad():
-    model.eval()
-    print('Testing starts now...')
-    for k, batch in enumerate(testloader):
+    with torch.no_grad():
+        model.eval()
+        print('Testing starts now...')
+        for k, batch in enumerate(testloader):
                 batch_size = len(batch[0])
                 spec,percent= batch[0].float(),batch[1].float()
                 s,y_ = model._forward(spec)
@@ -272,12 +273,12 @@ with torch.no_grad():
     
     
     
-print('Saving latents and predicted percentiles...')
-np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/y_test_pred.npy",ys_)#y_.cpu())
-np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/latents.npy',ss) #s.cpu())
-np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/y_test.npy', percentiles) #,percent.cpu())
+    print('Saving latents and predicted percentiles...')
+    np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/y_test_pred.npy",ys_)#y_.cpu())
+    np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/latents.npy',ss) #s.cpu())
+    np.save('./saved_model/generate_latent_2/latent_'+str(n_latent)+'/y_test.npy', percentiles) #,percent.cpu())
 
-diagnosis=True
+diagnosis=False
 
 if diagnosis:
     np.save("./saved_model/generate_latent_2/latent_"+str(n_latent)+"/seds_test.npy",x_test)

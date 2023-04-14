@@ -21,11 +21,11 @@ print("cuda:0" if use_cuda else "cpu",' prepared')
 
 
 #dataset has been generated before, here we just load it
-wave=np.load('wave_1e5_non_par.npy')
-seds=np.load('seds_1e5_non_par.npy')
-t=np.load('t_1e5_non_par.npy')
-ms=np.load('ms_1e5_non_par.npy')
-percentiles=np.load('percent_1e5_non_par.npy')
+wave=np.load('./input/wave_1e5_non_par.npy')
+seds=np.load('../../seds_large/non_parametric_sfh/seds_1e5_non_par.npy')
+t=np.load('./input/t_1e5_non_par.npy')
+ms=np.load('../../seds_large/non_parametric_sfh/ms_1e5_non_par.npy')
+percentiles=np.load('./input/percent_1e5_non_par.npy')
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -67,11 +67,12 @@ print('Creating datasets...')
 
 #shuffling (indices are saved for the case of just testing)
 
-
+"""
 ind_sh=np.arange(len(seds[:,0]))
 np.random.shuffle(ind_sh)
 np.save('./ind_sh_1e5.npy',ind_sh)
-
+"""
+ind_sh=np.load('./input/ind_sh_1e5.npy')
     
 
 seds=seds[ind_sh,:]
@@ -102,7 +103,7 @@ def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, 
     model,  trainloader, validloader, optimizer = accelerator.prepare(model,  trainloader, validloader, optimizer)
 
     if outfile is None:
-        outfile = "./saved_models/checkpoint.pt"
+        outfile = "./saved_models/checkpoint_try.pt"
 
     epoch = 0
     if losses is None:
@@ -200,14 +201,21 @@ print('Model saved')
 
 description='n_epochs: %d, batch_size: %d, lr: %.e'%(max_epochs,batch_size,lr)
 print(description)
-f=open('./saved_models/description.txt', "w")
+f=open('./saved_models/description_try.txt', "w")
 f.write(description)
 f.close()
   
-checkpoint = torch.load('./saved_models/checkpoint.pt')
+checkpoint = torch.load('./saved_models/checkpoint_try.pt')
 losses=np.array(checkpoint['losses'])
-np.savetxt('./saved_models/losses.txt',np.array(losses))
+np.savetxt('./saved_models/losses_try.txt',np.array(losses))
 
 
+from torchview import draw_graph
+
+
+batch_size = 128
+# device='meta' -> no memory is consumed for visualization
+model_graph = draw_graph(model, input_size=(batch_size, 4300), device='meta')
+model_graph.visual_graph.render("attached", format="png")
 
 

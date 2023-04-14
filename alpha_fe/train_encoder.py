@@ -125,8 +125,8 @@ def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, 
         
         for k, batch in enumerate(trainloader):
             batch_size = len(batch[0])
-            spec,percent = batch[0].float(),batch[1].float()
-            loss = model.loss(percent)
+            spec,percent = batch
+            loss = model.loss(percent.float())
             accelerator.backward(loss)
             train_loss += loss.item()
             n_sample += batch_size
@@ -144,8 +144,8 @@ def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, 
             n_sample = 0
             for k, batch in enumerate(validloader):
                 batch_size = len(batch[0])
-                spec,percent= batch[0].float(),batch[1].float()
-                loss = model.loss(percent)
+                spec,percent= batch
+                loss = model.loss(percent.float())
                 valid_loss += loss.item()
                 n_sample += batch_size
                 # stop after n_batch

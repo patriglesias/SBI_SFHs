@@ -87,7 +87,12 @@ class SpectrumEncoder(nn.Module):
         filters = [128, 256, 512]
         sizes = [5, 11, 21]
 
-        self.conv1, self.conv2, self.conv3 = self._conv_blocks(filters, sizes, dropout=dropout)
+        #try:
+        #   self.conv1,self.conv2,self.conv3= self._conv_blocks(filters, sizes, dropout=dropout)
+        
+        #self.conv1,self.conv2,self.conv3= self._conv_blocks(filters, sizes, dropout=dropout,norm=False)
+        
+        
         self.n_feature = filters[-1] // 2
 
         # pools and softmax work for spectra and weights
@@ -103,7 +108,7 @@ class SpectrumEncoder(nn.Module):
         self.mlp = MLP(self.n_feature + n_aux, self.n_latent, n_hidden=n_hidden, act=act, dropout=dropout)
 
 
-    def _conv_blocks(self, filters, sizes, dropout=0):
+    def _conv_blocks(self, filters, sizes, dropout=0,norm=True):
         convs = []
         for i in range(len(filters)):
             f_in = 1 if i == 0 else filters[i-1]
@@ -115,17 +120,15 @@ class SpectrumEncoder(nn.Module):
                              kernel_size=s,
                              padding=p,
                             )
-            try:
+            if norm:
                 norm = nn.InstanceNorm1d(f)
                 act = nn.PReLU(f)
                 drop = nn.Dropout(p=dropout)
                 convs.append(nn.Sequential(conv, norm, act, drop))
-            #invented by you
-            except:
+            else:
                 act = nn.PReLU(f)
                 drop = nn.Dropout(p=dropout)
                 convs.append(nn.Sequential(conv, act, drop))
-
         return tuple(convs)
 
     def _downsample(self, x):

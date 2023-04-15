@@ -1,0 +1,11 @@
+Metals: mass fraction of all elements heavier than He
+▸ Solar metallicity: Z☉=0.020
+▸ Metallicity is usually represented as an abundance:
+▸ [Z/H]=log(Z/H)-log(Z☉/H☉)=log(Z/0.020)
+▸ It is common to approach [Z/H] with the abundance one element (usually Fe): [Fe/H]
+
+You are training with values of [Z/H] from -2.3 to 0.26 (it should be to 0.40 but you can change it later)
+
+Zmin=0.020 * 10**(-2.3)= 0.0001
+Zmax=0.020 * 10**(0.26)= 0.0364
+Zmax=0.020 * 10**(0.40)= 0.0502

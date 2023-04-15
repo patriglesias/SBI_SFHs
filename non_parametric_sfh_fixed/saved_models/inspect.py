@@ -20,7 +20,7 @@ losses=np.loadtxt('./losses.txt')
 
 #print(np.min(losses[:,1]))
 
-
+"""
 #plot losses
 epochs=range(len(losses[:,0]))
 plt.plot(epochs[:],losses[:,0],label='Training loss')
@@ -31,9 +31,9 @@ plt.legend()
 #plt.ylim(0,5)
 #plt.savefig('./generate_latent_2/latent_16/losses.png')
 plt.show()
-
-
 """
+
+
 ### load and visualize percentiles and latents###
 
 test_set=10000
@@ -101,5 +101,5 @@ for j in range(n_latent):
     plt.xlabel('Value')
     plt.ylabel('N')
     plt.show()
-"""
+
 

@@ -47,7 +47,7 @@ n=150
 print('Loading data')
 
 percentiles=np.load('./saved_input/percent_1e5_non_par.npy')
-seds=np.load('../../seds_large/seds_1e5_non_par.npy')
+seds=np.load('../../seds_large/non_parametric_sfh/seds_1e5_non_par.npy')
 
 #create a pytorch dataset
 print('Creating dataset and calling accelerator')

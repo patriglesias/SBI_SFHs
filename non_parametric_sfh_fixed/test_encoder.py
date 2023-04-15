@@ -19,7 +19,7 @@ print('CPU prepared')
 
 
 #dataset has been generated before, here we just load it
-seds=np.load('../../seds_large/non_parametric_sfhs/seds_1e5_non_par.npy')
+seds=np.load('../../seds_large/non_parametric_sfh/seds_1e5_non_par.npy')
 percentiles=np.load('./saved_input/percent_1e5_non_par.npy')
 
 

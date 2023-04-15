@@ -64,13 +64,11 @@ n_latent=16
 print('Creating datasets...')
 
 #shuffling (indices are saved for the case of just testing)
-
-"""
 ind_sh=np.arange(len(seds[:,0]))
 np.random.shuffle(ind_sh)
 np.save('./saved_models/ind_sh_1e5.npy',ind_sh)
-"""
-ind_sh=np.load('./saved_models/ind_sh_1e5.npy')
+
+#ind_sh=np.load('./saved_models/ind_sh_1e5.npy')
     
 
 seds=seds[ind_sh,:]
@@ -124,7 +122,7 @@ def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, 
         for k, batch in enumerate(trainloader):
             batch_size = len(batch[0])
             spec,percent = batch[0].float(),batch[1].float()
-            loss = model.loss(percent)
+            loss = model.loss(spec,percent)
             accelerator.backward(loss)
             train_loss += loss.item()
             n_sample += batch_size
@@ -143,7 +141,7 @@ def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, 
             for k, batch in enumerate(validloader):
                 batch_size = len(batch[0])
                 spec,percent= batch[0].float(),batch[1].float()
-                loss = model.loss(percent)
+                loss = model.loss(spec,percent)
                 valid_loss += loss.item()
                 n_sample += batch_size
                 # stop after n_batch
@@ -204,7 +202,7 @@ f.close()
   
 checkpoint = torch.load('./saved_models/checkpoint.pt')
 losses=np.array(checkpoint['losses'])
-np.savetxt('./saved_models/losses_try.txt',np.array(losses))
+np.savetxt('./saved_models/losses.txt',np.array(losses))
 
 
 

@@ -11,7 +11,7 @@ from torch import optim
 from accelerate import Accelerator #to use pytorch
 from torch.utils.data import DataLoader
 from spender import SpectrumEncoder,MLP,encoder_percentiles,load_model
-from generate_input import *
+#from generate_input import *
 # CUDA for PyTorch
 use_cuda = torch.cuda.is_available()
 #torch.cuda.set_device(1)

@@ -1,0 +1,140 @@
+nohup: ignoring input
+/opt/python/python3.8/lib/python3.8/site-packages/torch/cuda/__init__.py:546: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /scratch/pin/sfh/BNN_SFHs/alpha_fe_fixed/./get_latents.py:82 in <module>     │
+│                                                                              │
+│   79 │   for k, batch in enumerate(loader):                                  │
+│   80 │   │   │   │   batch_size = len(batch[0])                              │
+│   81 │   │   │   │   spec,percent= batch[0].float(),batch[1].float()         │
+│ ❱ 82 │   │   │   │   s,y_ = model._forward(spec)                             │
+│   83 │   │   │   │   ss.append(s.cpu().numpy())                              │
+│   84 │   │   │   │   ys_.append(y_.cpu().numpy())                            │
+│   85                                                                         │
+│                                                                              │
+│ /scratch/pin/sfh/BNN_SFHs/alpha_fe_fixed/spender/spender_model.py:226 in     │
+│ _forward                                                                     │
+│                                                                              │
+│   223 │   │   │   Batch of predicted percentiles                             │
+│   224 │   │   """                                                            │
+│   225 │   │                                                                  │
+│ ❱ 226 │   │   s = self.encode(x)                                             │
+│   227 │   │   y_ = self._mlp(s)                                              │
+│   228 │   │   return s, y_                                                   │
+│   229                                                                        │
+│                                                                              │
+│ /scratch/pin/sfh/BNN_SFHs/alpha_fe_fixed/spender/spender_model.py:193 in     │
+│ encode                                                                       │
+│                                                                              │
+│   190 │   │   s: `torch.tensor`, shape (N, n_latent)                         │
+│   191 │   │   │   Batch of latents that encode `spectra`                     │
+│   192 │   │   """                                                            │
+│ ❱ 193 │   │   return self.encoder(y)                                         │
+│   194 │                                                                      │
+│   195 │   def _mlp(self, s):                                                 │
+│   196 │   │   """From latents to percentiles                                 │
+│                                                                              │
+│ /opt/python/python3.8/lib/python3.8/site-packages/torch/nn/modules/module.py │
+│ :1501 in _call_impl                                                          │
+│                                                                              │
+│   1498 │   │   if not (self._backward_hooks or self._backward_pre_hooks or s │
+│   1499 │   │   │   │   or _global_backward_pre_hooks or _global_backward_hoo │
+│   1500 │   │   │   │   or _global_forward_hooks or _global_forward_pre_hooks │
+│ ❱ 1501 │   │   │   return forward_call(*args, **kwargs)                      │
+│   1502 │   │   # Do not call functions when jit is used                      │
+│   1503 │   │   full_backward_hooks, non_full_backward_hooks = [], []         │
+│   1504 │   │   backward_pre_hooks = []                                       │
+│                                                                              │
+│ /scratch/pin/sfh/BNN_SFHs/alpha_fe_fixed/spender/spender_model.py:139 in     │
+│ forward                                                                      │
+│                                                                              │
+│   136 │   │   │   Batch of latents that encode `spectra`                     │
+│   137 │   │   """                                                            │
+│   138 │   │   # run through CNNs                                             │
+│ ❱ 139 │   │   h, a = self._downsample(x)                                     │
+│   140 │   │                                                                  │
+│   141 │   │   # softmax attention                                            │
+│   142 │   │   a = self.softmax(a)                                            │
+│                                                                              │
+│ /scratch/pin/sfh/BNN_SFHs/alpha_fe_fixed/spender/spender_model.py:117 in     │
+│ _downsample                                                                  │
+│                                                                              │
+│   114 │   def _downsample(self, x):                                          │
+│   115 │   │   # compression                                                  │
+│   116 │   │   x = x.unsqueeze(1)                                             │
+│ ❱ 117 │   │   x = self.pool1(self.conv1(x))                                  │
+│   118 │   │   x = self.pool2(self.conv2(x))                                  │
+│   119 │   │   x = self.conv3(x)                                              │
+│   120 │   │   C = x.shape[1] // 2                                            │
+│                                                                              │
+│ /opt/python/python3.8/lib/python3.8/site-packages/torch/nn/modules/module.py │
+│ :1501 in _call_impl                                                          │
+│                                                                              │
+│   1498 │   │   if not (self._backward_hooks or self._backward_pre_hooks or s │
+│   1499 │   │   │   │   or _global_backward_pre_hooks or _global_backward_hoo │
+│   1500 │   │   │   │   or _global_forward_hooks or _global_forward_pre_hooks │
+│ ❱ 1501 │   │   │   return forward_call(*args, **kwargs)                      │
+│   1502 │   │   # Do not call functions when jit is used                      │
+│   1503 │   │   full_backward_hooks, non_full_backward_hooks = [], []         │
+│   1504 │   │   backward_pre_hooks = []                                       │
+│                                                                              │
+│ /opt/python/python3.8/lib/python3.8/site-packages/torch/nn/modules/container │
+│ .py:217 in forward                                                           │
+│                                                                              │
+│   214 │   # with Any as TorchScript expects a more precise type              │
+│   215 │   def forward(self, input):                                          │
+│   216 │   │   for module in self:                                            │
+│ ❱ 217 │   │   │   input = module(input)                                      │
+│   218 │   │   return input                                                   │
+│   219 │                                                                      │
+│   220 │   def append(self, module: Module) -> 'Sequential':                  │
+│                                                                              │
+│ /opt/python/python3.8/lib/python3.8/site-packages/torch/nn/modules/module.py │
+│ :1501 in _call_impl                                                          │
+│                                                                              │
+│   1498 │   │   if not (self._backward_hooks or self._backward_pre_hooks or s │
+│   1499 │   │   │   │   or _global_backward_pre_hooks or _global_backward_hoo │
+│   1500 │   │   │   │   or _global_forward_hooks or _global_forward_pre_hooks │
+│ ❱ 1501 │   │   │   return forward_call(*args, **kwargs)                      │
+│   1502 │   │   # Do not call functions when jit is used                      │
+│   1503 │   │   full_backward_hooks, non_full_backward_hooks = [], []         │
+│   1504 │   │   backward_pre_hooks = []                                       │
+│                                                                              │
+│ /opt/python/python3.8/lib/python3.8/site-packages/torch/nn/modules/instancen │
+│ orm.py:74 in forward                                                         │
+│                                                                              │
+│    71 │   │   if input.dim() == self._get_no_batch_dim():                    │
+│    72 │   │   │   return self._handle_no_batch_input(input)                  │
+│    73 │   │                                                                  │
+│ ❱  74 │   │   return self._apply_instance_norm(input)                        │
+│    75                                                                        │
+│    76                                                                        │
+│    77 class InstanceNorm1d(_InstanceNorm):                                   │
+│                                                                              │
+│ /opt/python/python3.8/lib/python3.8/site-packages/torch/nn/modules/instancen │
+│ orm.py:34 in _apply_instance_norm                                            │
+│                                                                              │
+│    31 │   │   return self._apply_instance_norm(input.unsqueeze(0)).squeeze(0 │
+│    32 │                                                                      │
+│    33 │   def _apply_instance_norm(self, input):                             │
+│ ❱  34 │   │   return F.instance_norm(                                        │
+│    35 │   │   │   input, self.running_mean, self.running_var, self.weight, s │
+│    36 │   │   │   self.training or not self.track_running_stats, self.moment │
+│    37                                                                        │
+│                                                                              │
+│ /opt/python/python3.8/lib/python3.8/site-packages/torch/nn/functional.py:249 │
+│ 5 in instance_norm                                                           │
+│                                                                              │
+│   2492 │   │   )                                                             │
+│   2493 │   if use_input_stats:                                               │
+│   2494 │   │   _verify_spatial_size(input.size())                            │
+│ ❱ 2495 │   return torch.instance_norm(                                       │
+│   2496 │   │   input, weight, bias, running_mean, running_var, use_input_sta │
+│   2497 │   )                                                                 │
+│   2498                                                                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+OutOfMemoryError: CUDA out of memory. Tried to allocate 1.05 GiB (GPU 0; 11.91 
+GiB total capacity; 1.10 GiB already allocated; 808.75 MiB free; 2.14 GiB 
+reserved in total by PyTorch) If reserved memory is >> allocated memory try 
+setting max_split_size_mb to avoid fragmentation.  See documentation for Memory 
+Management and PYTORCH_CUDA_ALLOC_CONF

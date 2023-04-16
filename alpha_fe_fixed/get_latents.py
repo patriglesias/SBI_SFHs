@@ -55,7 +55,7 @@ y=np.load('./saved_input/y_non_par_alpha.npy')
 print('Creating dataset and calling accelerator')
 dataset = Dataset(seds, y)
 print('Shape of the dataset: ',np.shape(seds))
-params={'batch_size': 512 } 
+params={'batch_size': 128 } 
 generator = torch.utils.data.DataLoader(dataset,**params) #with minibatches
 
 #call accelerator

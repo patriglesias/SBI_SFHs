@@ -25,8 +25,8 @@ Parameters:
 - $[\alpha/Fe]$ $\in$ $[0.00,0.40]$
 
 ![Different Ages](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/spectra_different_ages.jpeg)
-![Different Metallicities](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/spectra_different_metallicities.jpeg)
-![Different alpha/Fe](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/spectra_different_alpha.jpeg)
+![Different Metallicities](https://github.com/patriglesias/BNN_SFHs/blob/081c28819d10c26ac434ef7fef87c076e18f6b5c/img_readme/spectra_different_metallicities.jpeg)
+![Different alpha/Fe](https://github.com/patriglesias/BNN_SFHs/blob/081c28819d10c26ac434ef7fef87c076e18f6b5c/img_readme/spectra_different_alpha.jpeg)
 
 ### 1.2 Generate SFHs
 
@@ -103,10 +103,11 @@ We employ Bayesian inference (Amortized Neural Posterior Estimation) to estimate
 
 We use the remaining $10$% of the samples to evaluate the performance of the model, by getting from their latent vectors probability distributions for the values of each of the $9$ percentiles + $[M/H]$ + $[\alpha/Fe]$ and comparing them with the actual true values.
 
-The general performance is obtained by plotting the mean value of each posterior vs the ground truth, while the uncertainty prediction is checked studying the coverage probabilities (our model is too conservative or too confident?)
+The general performance is obtained by plotting the mean value of each posterior vs the ground truth, while the uncertainty prediction is checked studying the coverage probabilities (our model is too conservative or too confident?). We also do a Corner plot.
 
 ![Examples percentile prediction](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/examples_predictions_non_par/examples_percent.jpg)
 ![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/pred_vs_true/mean_vs_true.jpg)
+![Corner plot](https://github.com/patriglesias/BNN_SFHs/blob/081c28819d10c26ac434ef7fef87c076e18f6b5c/img_readme/corner_page-0001.jpg)
 ![Coverage probabilities](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/prob_example_70.jpeg)
 
 

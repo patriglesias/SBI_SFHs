@@ -26,7 +26,7 @@ Parameters:
 
 ![Different Ages](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/spectra_different_ages.jpeg)
 ![Different Metallicities](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/spectra_different_metallicities.jpeg)
-![Different alpha/Fe](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/spectra_different_metallicities.jpeg)
+![Different alpha/Fe](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/spectra_different_alpha.jpeg)
 
 ### 1.2 Generate SFHs
 
@@ -118,8 +118,8 @@ Once the model (encoder + ANPE) is trained, we estimate how much time it takes t
 
 When working with real galaxy observations, we will not be able to compare the predicted values with the ground truth. To evaluate the performance of the model in these situations we can try to recover the spectra by repeating the forward model with the predicted values (mean of the posteriors), taking into acount that $\frac{\partial  \text{percentiles}}{\partial t} =$ SFH, and check how good is the reconstruction (residuals between real and reconstructed spectra).
 
-![Examples recover spectra from real](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/REAL_ORIGINAL.png)
-![Examples recover spectra from predicted](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/PRED_ORIGINAL.png)
+![Examples recover spectra from real](https://github.com/patriglesias/BNN_SFHs/blob/86a315595071d93ce62a4f5382a7e3df948d0ed3/img_readme/recover_spectra.jpg)
+![Examples recover spectra from predicted](https://github.com/patriglesias/BNN_SFHs/blob/86a315595071d93ce62a4f5382a7e3df948d0ed3/img_readme/recover_spectra_pred.jpg)
 
 ## 8. Test with observations
 

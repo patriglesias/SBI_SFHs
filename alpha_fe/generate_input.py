@@ -11,13 +11,14 @@ from tqdm import tqdm,trange
 import dense_basis as db
 
 
-def generate_weights_from_SFHs_non_param(n,logMstar=10.0,z=0.0,percen=True):
+def generate_weights_from_SFHs_non_param(n,mfix=False,logMstar=10.0,z=0.0,percen=True):
     priors = db.Priors()
     curves=[]
     times=[] #not needed because if we fix z all rand_time are exactly the same
     for i in range(n):
         rand_sfh_tuple=priors.sample_sfh_tuple()
-        rand_sfh_tuple[0]=logMstar #logMstar at selected z (in this case z=0)
+        if mfix:
+            rand_sfh_tuple[0]=logMstar #logMstar at selected z (in this case z=0)
         rand_sfh, rand_time = db.tuple_to_sfh(rand_sfh_tuple, zval = z) 
         curves.append(rand_sfh*1e-9) #conversion from Msun/yr to Msun/Gyr
         times.append(rand_time)
@@ -97,8 +98,9 @@ def get_data(dir_name,strs_1,strs_2):
     data=[]
     
     for j in range(len(lib_n)):
-        globals() ['hdul'+str(j)]=fits.open(dir_name+'/'+strs_1+lib[j]+strs_2)
-        data.append(np.array(globals()['hdul'+str(j)][0].data))
+        if j==0:
+            hdul0=fits.open(dir_name+'/'+strs_1+lib[j]+strs_2)
+        data.append(fits.open(dir_name+'/'+strs_1+lib[j]+strs_2)[0].data)
 
     hdr=hdul0[0].header
     wave = hdr['CRVAL1'] + np.arange(hdr['NAXIS1'])*hdr['CDELT1']
@@ -205,7 +207,7 @@ if __name__ == '__main__':
     z= np.arange(-2.3,0.6,0.2)
     alpha_fe=[0,0.2,0.4]
 
-    different=False
+    different=True
 
     if different:
    
@@ -282,18 +284,18 @@ if __name__ == '__main__':
             y[i,-2]=zs[i]
             y[i,-1]=alpha_fes[i]
     
-        np.save('./saved_input/y_non_par_alpha.npy',y) 
+        np.save('./saved_input/y_balanced.npy',y) 
     
     save=True
 
     if save:
         print('Saving...')
-        np.save('./saved_input/seds_non_par_alpha.npy',seds)
-        np.save('./saved_input/wave_non_par_alpha.npy',wave)
-        np.save('./saved_input/t_non_par_alpha.npy',t[0])
-        np.save('./saved_input/ms_non_par_alpha.npy',ms)
-        np.save('./saved_input/percent_non_par_alpha.npy',percentiles)
-        np.save('./saved_input/zs_non_par_alpha.npy',zs)
-        np.save('./saved_input/alpha_fes_non_par_alpha.npy',alpha_fes)
+        np.save('../../seds_large/alpha_fe/seds_balanced.npy',seds)
+        np.save('./saved_input/wave_balanced.npy',wave)
+        np.save('./saved_input/t_balanced.npy',t[0])
+        np.save('../../seds_large/alpha_fe/ms_balanced.npy',ms)
+        np.save('./saved_input/percent_balanced.npy',percentiles)
+        np.save('./saved_input/zs_balanced.npy',zs)
+        np.save('./saved_input/alpha_fes_balanced.npy',alpha_fes)
 
     

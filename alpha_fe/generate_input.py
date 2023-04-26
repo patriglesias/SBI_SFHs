@@ -213,8 +213,8 @@ if __name__ == '__main__':
    
         #10.000 different SFH for each pair z-[alpha/fe]
         print('Loading MILES spectra and interpolating in metallicity and [alpha/Fe] : ')
-        tbins=get_tbins(dir_name='../MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
-        wave,data_met_alpha=get_data_met_alpha(dir_name='../MILES_BASTI_KU',z=z,alpha_fe=alpha_fe)
+        tbins=get_tbins(dir_name='../MILES/MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
+        wave,data_met_alpha=get_data_met_alpha(dir_name='../MILES/MILES_BASTI_KU',z=z,alpha_fe=alpha_fe)
 
         seds=[]
         percentiles=[]

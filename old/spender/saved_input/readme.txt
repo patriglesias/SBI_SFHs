@@ -1,1 +1,0 @@
-GitHub doesn't allow files larger than 100 MB, so large input files (like input_10000.npz) are just stored in Deimos, by adding them into the .gitignore file

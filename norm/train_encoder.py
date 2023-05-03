@@ -23,8 +23,8 @@ print("GPU" if use_cuda else "CPU",' prepared')
 
 #dataset has been generated before, here we just load it
 print('Loading data...')
-seds=np.load('../../seds_large/alpha_fe/seds_balanced.npy')
-y=np.load('./saved_input/y_balanced.npy')
+seds=np.load('../../seds_large/norm/seds.npy')
+y=np.load('./saved_input/y.npy')
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -57,8 +57,8 @@ n_latent=16
 
 
 # Datasets 
-#percentiles+[m/h]+[alpha/fe] shape(450.000, 11)
-#seds  shape (450.000, 4300)
+#percentiles+[m/h shape(150.000, 10)
+#seds  shape (150.000, 4300)
 
 
 
@@ -70,7 +70,7 @@ print('Creating datasets...')
 
 ind_sh=np.arange(len(seds[:,0]))
 np.random.shuffle(ind_sh)
-np.save('./saved_models/ind_sh_balanced.npy',ind_sh)
+np.save('./saved_models/ind_sh.npy',ind_sh)
 
 #ind_sh=np.load('./saved_models/ind_sh_non_par_alpha.npy')
 
@@ -102,7 +102,7 @@ def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, 
     model,  trainloader, validloader, optimizer = accelerator.prepare(model,  trainloader, validloader, optimizer)
 
     if outfile is None:
-        outfile = "./saved_models/checkpoint_b.pt"
+        outfile = "./saved_models/checkpoint.pt"
 
     epoch = 0
     if losses is None:
@@ -189,7 +189,7 @@ print('Training starts now...')
 
 # define and train the model
 print('Model defined')
-model = encoder_percentiles(n_latent=n_latent,n_out=11,n_hidden=(16,32),act=None,dropout_2=0.0)
+model = encoder_percentiles(n_latent=n_latent,n_out=10,n_hidden=(16,32),act=None,dropout_2=0.0)
 
 train(model, trainloader, validloader, n_latent,n_epoch=max_epochs, n_batch=batch_size, outfile=None, losses=None, lr=lr, verbose=True)
 
@@ -198,13 +198,13 @@ print('Model saved')
 
 description='n_epochs: %d, batch_size: %d, lr: %.e'%(max_epochs,batch_size,lr)
 print(description)
-f=open('./saved_models/description_b.txt', "w")
+f=open('./saved_models/description.txt', "w")
 f.write(description)
 f.close()
   
-checkpoint = torch.load('./saved_models/checkpoint_b.pt')
+checkpoint = torch.load('./saved_models/checkpoint.pt')
 losses=np.array(checkpoint['losses'])
-np.savetxt('./saved_models/losses_b.txt',np.array(losses))
+np.savetxt('./saved_models/losses.txt',np.array(losses))
 
 
 

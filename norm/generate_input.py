@@ -160,8 +160,8 @@ def create_spectrum(t,m,wave,data): #only for a galaxy at a time
         spectrum.append(m[l]*data[-l]) #multiply by the weights
     #data is normalized!! we do normalize the flux
     spectrum=np.array(spectrum)
-    sed=np.sum(spectrum,axis=0)/np.median(spectrum) #we add the terms of the linear combination and normalize
-    return wave,sed
+    sed=np.sum(spectrum,axis=0) #we add the terms of the linear combination and normalize
+    return wave,sed/np.median(sed)
 
 def generate_all_spectrums(t,ms,wave,data_extended):
     seds=[]

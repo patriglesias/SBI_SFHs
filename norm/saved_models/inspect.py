@@ -16,7 +16,7 @@ n_latent=16
 
 
 ### Load and visualize losses ###
-losses=np.loadtxt('./losses_fix.txt')
+losses=np.loadtxt('./losses.txt')
 
 
 #plot losses
@@ -34,19 +34,19 @@ plt.show()
 
 ### load and visualize percentiles and latents###
 
-test_set=40000
+test_set=150000
 batch_size=128
 
 
-percent_pred=np.load('./y_test_pred_fix.npy',allow_pickle=True)
-latents=np.load('./latents_fix.npy',allow_pickle=True)
-percent=np.load('./y_test_fix.npy',allow_pickle=True)
+percent_pred=np.load('./y_test_pred.npy',allow_pickle=True)
+latents=np.load('./latents.npy',allow_pickle=True)
+percent=np.load('./y_test.npy',allow_pickle=True)
 
 
 
-percent_pred_arr=np.zeros((test_set,11))
+percent_pred_arr=np.zeros((test_set,10))
 latents_arr=np.zeros((test_set,n_latent))
-percent_arr=np.zeros((test_set,11))
+percent_arr=np.zeros((test_set,10))
 
 
 for j in tqdm(range(len(percent_pred))):
@@ -61,8 +61,8 @@ for j in tqdm(range(len(percent))):
     for i,x in enumerate(percent[j]):
         percent_arr[batch_size*j+i,:]=x
         
-"""
-for j in tqdm(np.arange(1,11)): #percentiles go from 10% to 90%
+
+for j in tqdm(np.arange(1,10)): #percentiles go from 10% to 90%
     print('j')    
     for i in range(test_set)[::10]: 
         plt.plot(percent_arr[i,j-1],percent_pred_arr[i,j-1],'.')#,'k.')
@@ -73,11 +73,11 @@ for j in tqdm(np.arange(1,11)): #percentiles go from 10% to 90%
     plt.xlabel('Time percentile '+str(j*10)+' real (Gyrs)')
     plt.ylabel('Time percentile '+str(j*10)+' predicted (Gyrs)')
     plt.show()
- """
 
 
-"""#histogram for percentiles and means
-for j in np.arange(1,12): #percentiles go from 10% to 90%
+
+#histogram for percentiles and means
+for j in np.arange(1,11): #percentiles go from 10% to 90%
         plt.hist(percent_arr[:,j-1],color='r',label='Real')
         plt.hist(percent_pred_arr[:,j-1],color='b',label='Predicted')#,'k.')
         plt.ylabel('N')
@@ -92,7 +92,7 @@ for j in np.arange(1,12): #percentiles go from 10% to 90%
     
 
 
-"""
+
 
 for j in range(n_latent):
     plt.hist(latents_arr[:,j])

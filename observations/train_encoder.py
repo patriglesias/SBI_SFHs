@@ -18,12 +18,14 @@ use_cuda = torch.cuda.is_available()
 device = torch.device("cuda:0" if use_cuda else "cpu")
 torch.backends.cudnn.benchmark = True
 print("GPU" if use_cuda else "CPU",' prepared')
+torch.backends.cudnn.enabled = False
 
-
+#print(torch.version.cuda)
+#print(torch.backends.cudnn.version())
 
 #dataset has been generated before, here we just load it
 print('Loading data...')
-seds=np.load('../../seds_large/norm/seds.npy')
+seds=np.load('../../seds_large/obs/seds.npy')
 y=np.load('./saved_input/y.npy')
 
 class Dataset(torch.utils.data.Dataset):
@@ -58,7 +60,7 @@ n_latent=16
 
 # Datasets 
 #percentiles+[m/h shape(150.000, 10)
-#seds  shape (150.000, 4300)
+#seds  shape (150.000, 19xx)
 
 
 

@@ -21,7 +21,7 @@ print(device,' prepared')
 #load data:
 print('Loading data...')
 
-seds=np.load('../../seds_large/norm/seds.npy')
+seds=np.load('../../seds_large/obs/seds.npy')
 y=np.load('./saved_input/y.npy')
 
 print('Shuffling...')

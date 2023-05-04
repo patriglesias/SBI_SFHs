@@ -47,7 +47,7 @@ n=150000
 #load data:
 print('Loading data...')
 
-seds=np.load('../../seds_large/norm/seds.npy')
+seds=np.load('../../seds_large/obs/seds.npy')
 y=np.load('./saved_input/y.npy')
 
 
@@ -85,9 +85,9 @@ with torch.no_grad():
 
 #save
 print('Saving spectra, percentiles, latents and predicted percentiles')
-np.save("./saved_models/y_test_pred.npy",ys_)
-np.save('./saved_models/latents.npy',ss)
-np.save("./saved_models/y.npy",y)
+#np.save("./saved_models/y_test_pred.npy",ys_)
+np.save('./saved_models/latents_all.npy',ss)
+#np.save("./saved_models/y.npy",y)
 
 
 

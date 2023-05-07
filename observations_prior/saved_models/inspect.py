@@ -34,7 +34,7 @@ plt.show()
 
 ### load and visualize percentiles and latents###
 
-test_set=15000
+test_set=20000
 batch_size=128
 
 

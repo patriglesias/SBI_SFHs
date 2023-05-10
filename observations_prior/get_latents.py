@@ -41,7 +41,7 @@ class Dataset(torch.utils.data.Dataset):
 
 
 
-n=200000
+n=180000
 
 
 #load data:

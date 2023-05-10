@@ -102,7 +102,7 @@ def generate_weights_from_SFHs_non_param_several(n,logMstar=[12,14,16],z=[0.0,0.
     curves=[]
     times=[] #not needed because if we fix z all rand_time are exactly the same
     nx=int(n/(len(z)*len(logMstar)))
-    a=0
+    
     for j in range(len(z)):
         for k in range(len(logMstar)):
             for i in range(nx):
@@ -111,8 +111,8 @@ def generate_weights_from_SFHs_non_param_several(n,logMstar=[12,14,16],z=[0.0,0.
                 rand_sfh, rand_time = db.tuple_to_sfh(rand_sfh_tuple, zval = z[j]) 
                 curves.append(rand_sfh*1e-9) #conversion from Msun/yr to Msun/Gyr
                 times.append(rand_time)
-                a+=1
-                print(a)
+                
+                
     
     ms=[]
     #non accumulative mass curves, we save it cause we will use it later
@@ -325,7 +325,7 @@ def interpolate_t(tbins,t,data):
 
 def create_spectrum(t,m,wave,data): #only for a galaxy at a time
     spectrum=[]
-    for l in range(len(t)):  #we append older first
+    for l in range(len(m)):  #we append older first
         spectrum.append(m[l]*data[-l]) #multiply by the weights
     #data is normalized!! we do normalize the flux
     spectrum=np.array(spectrum)
@@ -382,7 +382,7 @@ if __name__ == '__main__':
         print('Generating 10.000 SFHs and their corresponding spectra for each Z:')
         for k,i in tqdm(enumerate(z)):
                 print('z= ',k)
-                t,m,per=generate_weights_from_SFHs_non_param(n,mfix=True,logMstar=14)
+                t,m,per=generate_weights_from_SFHs_non_param_several(n)
                 data_extended=interpolate_t(tbins,t[0],data_met[:,:,k])
                 wave,sed=generate_all_spectrums(t[0],m,wave,data_extended)
 
@@ -419,6 +419,7 @@ if __name__ == '__main__':
 
     
     reshape=True
+    save=True
 
     if reshape:
         print('Reshaping...')
@@ -431,10 +432,10 @@ if __name__ == '__main__':
         for i in range(len(seds[:,0])):
             y[i,:9]=percentiles[i,:]
             y[i,-1]=zs[i]
+        if save:
+            np.save('./saved_input/y.npy',y) 
     
-        np.save('./saved_input/y.npy',y) 
     
-    save=True
 
     if save:
         print('Saving...')

@@ -53,6 +53,95 @@ def generate_weights_from_SFHs_non_param(n,mfix=False,logMstar=10.0,z=0.0,percen
     else:
         return np.array(times),np.array(ms)
 
+def generate_weights_from_SFHs_non_param(n,mfix=False,logMstar=10.0,z=0.0,percen=True):
+    priors = db.Priors()
+    curves=[]
+    times=[] #not needed because if we fix z all rand_time are exactly the same
+    for i in range(n):
+        rand_sfh_tuple=priors.sample_sfh_tuple()
+        if mfix:
+            rand_sfh_tuple[0]=logMstar #logMstar at selected z (in this case z=0)
+        rand_sfh, rand_time = db.tuple_to_sfh(rand_sfh_tuple, zval = z) 
+        curves.append(rand_sfh*1e-9) #conversion from Msun/yr to Msun/Gyr
+        times.append(rand_time)
+    
+    ms=[]
+    #non accumulative mass curves, we save it cause we will use it later
+    for index,curve in enumerate(curves):        
+        sfr_0=curve
+        m=[]
+        t=times[index]
+        step=t[1]-t[0]
+        for i,tx in enumerate(t):  
+             m_t=sfr_0[i]*step #this gives directly the mass curve (non accumulative)
+             m.append(m_t)
+        ms.append(m/np.sum(m)) #normalized (weigths!!)
+
+    if percen:
+        #compute percentiles
+        percentiles=[]
+        for i,curve in enumerate(curves):
+             mcurve=ms[i]
+             m=[]
+             percent=[]
+             for j in range(len(mcurve)):
+                m.append(np.sum(mcurve[:j+1]))
+             for k in range(1,10):
+                ind=np.argmin(abs(np.array(m)-k/10))
+                percent.append(t[ind])
+             percentiles.append(percent)  
+        return np.array(times),np.array(ms),np.array(percentiles)
+    else:
+        return np.array(times),np.array(ms)
+
+
+
+
+def generate_weights_from_SFHs_non_param_several(n,logMstar=[12,14,16],z=[0.0,0.25,0.5],percen=True):
+    priors = db.Priors()
+    curves=[]
+    times=[] #not needed because if we fix z all rand_time are exactly the same
+    nx=int(n/(len(z)*len(logMstar)))
+    a=0
+    for j in range(len(z)):
+        for k in range(len(logMstar)):
+            for i in range(nx):
+                rand_sfh_tuple=priors.sample_sfh_tuple()
+                rand_sfh_tuple[0]=logMstar[k] #logMstar at selected z (in this case z=0)
+                rand_sfh, rand_time = db.tuple_to_sfh(rand_sfh_tuple, zval = z[j]) 
+                curves.append(rand_sfh*1e-9) #conversion from Msun/yr to Msun/Gyr
+                times.append(rand_time)
+                a+=1
+                print(a)
+    
+    ms=[]
+    #non accumulative mass curves, we save it cause we will use it later
+    for index,curve in enumerate(curves):        
+        sfr_0=curve
+        m=[]
+        t=times[index]
+        step=t[1]-t[0]
+        for i,tx in enumerate(t):  
+             m_t=sfr_0[i]*step #this gives directly the mass curve (non accumulative)
+             m.append(m_t)
+        ms.append(m/np.sum(m)) #normalized (weigths!!)
+
+    if percen:
+        #compute percentiles
+        percentiles=[]
+        for i,curve in enumerate(curves):
+             mcurve=ms[i]
+             m=[]
+             percent=[]
+             for j in range(len(mcurve)):
+                m.append(np.sum(mcurve[:j+1]))
+             for k in range(1,10):
+                ind=np.argmin(abs(np.array(m)-k/10))
+                percent.append(times[i][ind])
+             percentiles.append(percent)  
+        return np.array(times),np.array(ms),np.array(percentiles)
+    else:
+        return np.array(times),np.array(ms)
 
 def get_tbins(dir_name,strs_1,strs_2):
     library=os.listdir(dir_name)
@@ -288,7 +377,7 @@ if __name__ == '__main__':
         ms=[]
         zs=[]
         
-        n=10000 #number of SFHs for each z
+        n=9000 #number of SFHs for each z
         #n=5
         print('Generating 10.000 SFHs and their corresponding spectra for each Z:')
         for k,i in tqdm(enumerate(z)):
@@ -309,8 +398,8 @@ if __name__ == '__main__':
         tbins=get_tbins(dir_name='../MILES/MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
         wave,data_met=get_data_met(dir_name='../MILES/MILES_BASTI_KU_baseFe',z=z)
         
-        n=10000 #number of SFHs for each Z
-        t,m,per=generate_weights_from_SFHs_non_param(n,mfix=True,logMstar=14) #prior on the mass
+        n=9000 #number of SFHs for each Z
+        t,m,per=generate_weights_from_SFHs_non_param_several(n) #prior on the mass
 
         seds=[]
         percentiles=[]
@@ -333,9 +422,9 @@ if __name__ == '__main__':
 
     if reshape:
         print('Reshaping...')
-        seds=np.reshape(seds,(200000,1978))
-        percentiles=np.reshape(percentiles,(200000,9))
-        zs=np.reshape(zs,(200000,))
+        seds=np.reshape(seds,(180000,1978))
+        percentiles=np.reshape(percentiles,(180000,9))
+        zs=np.reshape(zs,(180000,))
         
         y=np.zeros((len(seds[:,0]),10))
 

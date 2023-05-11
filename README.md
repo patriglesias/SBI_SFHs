@@ -66,7 +66,7 @@ For example, for the non-parametric sample,  we get $10.000$ SFHs for each pair 
 
 ## 2. Encode spectra (encoding architecture by SPENDER [Melchior22])
 
-We want to encode $4300$-components vectors (the spectra) into $16$-components latent vectors to extract the most important features, so it is easier for the bayesian model to learn (skip unuseful information to accelerate training) and reconstruct SFHs, as well as metallicity and $\alpha$-enhancement.
+We want to encode $4300$-components vectors (the spectra) into $16$-components latent vectors to extract the most important features, so it is easier for the bayesian model to learn (skip useless information to accelerate training) and reconstruct SFHs, as well as metallicity and $\alpha$-enhancement.
 
 The network consists on a $3$-layers CNN (moving to wider kernels and including max-pooling) + an attention module (dot-product) + extra-CNN to optimize encoding for our goal (obtain $9$ percentiles and a value for $[M/H]$ and $[\alpha/Fe]$, incorporating a convenient loss function).
 

@@ -11,7 +11,7 @@ We build a Bayesian Neural Network framework to estimate the SFHs of galaxies fr
 
 Parameters:
 **************
-- FWMH $=$ $2.51$ Å
+- FWHm $=$ $2.51$ Å
 - IMF $=$ KU ($1.3$)
 - BaSTI isochrones
 - $\lambda$ $\in$ $[3540.5,7409.6]$ Å

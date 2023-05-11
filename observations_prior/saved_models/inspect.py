@@ -26,7 +26,7 @@ plt.plot(epochs[:],losses[:,1],label='Validation loss')
 plt.xlabel('Epochs')
 plt.title('Loss n_latent '+ str(n_latent))
 plt.legend()
-plt.ylim(0,0.005)
+plt.ylim(0,0.01)
 #plt.savefig('./generate_latent_2/latent_16/losses.png')
 plt.show()
 
@@ -34,7 +34,7 @@ plt.show()
 
 ### load and visualize percentiles and latents###
 
-test_set=20000
+test_set=18000
 batch_size=128
 
 

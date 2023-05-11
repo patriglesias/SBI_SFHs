@@ -41,14 +41,14 @@ class Dataset(torch.utils.data.Dataset):
 
 
 
-n=180000
+n=200000
 
 
 #load data:
 print('Loading data...')
 
-seds=np.load('../../seds_large/obs/seds.npy')
-y=np.load('./saved_input/y.npy')
+seds=np.load('../../seds_large/obs/seds_m16.npy')
+y=np.load('./saved_input/y_m16.npy')
 
 
 #create a pytorch dataset
@@ -86,7 +86,7 @@ with torch.no_grad():
 #save
 print('Saving spectra, percentiles, latents and predicted percentiles')
 #np.save("./saved_models/y_test_pred.npy",ys_)
-np.save('./saved_models/latents_all.npy',ss)
+np.save('./saved_models/latents_all_m16.npy',ss)
 #np.save("./saved_models/y.npy",y)
 
 

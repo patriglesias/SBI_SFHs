@@ -65,7 +65,7 @@ loader = accelerator.prepare(generator)
 #load model
 n_latent=16
 print('Loading module trained with latents of ', str(n_latent), ' components')
-model_file = "./saved_models/checkpoint.pt"
+model_file = "./saved_models/checkpoint_m16.pt"
 model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32),n_out=10)
 model = accelerator.prepare(model)
 

@@ -382,7 +382,7 @@ if __name__ == '__main__':
         print('Generating 10.000 SFHs and their corresponding spectra for each Z:')
         for k,i in tqdm(enumerate(z)):
                 print('z= ',k)
-                t,m,per=generate_weights_from_SFHs_non_param(n,mfix=False,logMstar=16.0)
+                t,m,per=generate_weights_from_SFHs_non_param(n,mfix=True,logMstar=16.0)
                 data_extended=interpolate_t(tbins,t[0],data_met[:,:,k])
                 wave,sed=generate_all_spectrums(t[0],m,wave,data_extended)
 

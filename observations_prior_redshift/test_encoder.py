@@ -21,12 +21,12 @@ print(device,' prepared')
 #load data:
 print('Loading data...')
 
-seds=np.load('../../seds_large/obs/seds_m14_z05.npy')
-y=np.load('./saved_input/y_m14_z05.npy')
+seds=np.load('../../seds_large/obs/seds_m14_z15.npy')
+y=np.load('./saved_input/y_m14_z15.npy')
 
 print('Shuffling...')
 
-ind_sh=np.load('./saved_models/ind_sh_m14_z05.npy')
+ind_sh=np.load('./saved_models/ind_sh_m14_z15.npy')
 
 seds=seds[ind_sh,:]
 y=y[ind_sh,:]
@@ -82,7 +82,7 @@ testloader = accelerator.prepare(test_generator)
 
 
 print('Loading model...')
-model_file = "./saved_models/checkpoint_m14_z05.pt"
+model_file = "./saved_models/checkpoint_m14_z15.pt"
 model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32),n_out=10)
 model = accelerator.prepare(model)
         
@@ -104,6 +104,6 @@ with torch.no_grad():
     
     
 print('Saving latents and predicted percentiles...')
-np.save("./saved_models/y_test_pred_m14_z05.npy",ys_)#y_.cpu())
-np.save('./saved_models/latents_m14_z05.npy',ss) #s.cpu())
-np.save('./saved_models/y_test_m14_z05.npy', percentiles) #,percent.cpu())
+np.save("./saved_models/y_test_pred_m14_z15.npy",ys_)#y_.cpu())
+np.save('./saved_models/latents_m14_z15.npy',ss) #s.cpu())
+np.save('./saved_models/y_test_m14_z15.npy', percentiles) #,percent.cpu())

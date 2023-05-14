@@ -3,6 +3,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
+import matplotlib as mpl
+
+mpl.rcParams['font.family'] = 'serif'
+mpl.rcParams['axes.linewidth'] = 1.5
+mpl.rcParams['xtick.labelsize'] = 'medium'
+mpl.rcParams['xtick.major.size'] = 5
+mpl.rcParams['xtick.major.width'] = 1.5
+mpl.rcParams['ytick.labelsize'] = 'medium'
+mpl.rcParams['ytick.major.size'] = 5
+mpl.rcParams['ytick.major.width'] = 1.5
+mpl.rcParams['legend.frameon'] = True
+mpl.rcParams['font.size'] = 30
+mpl.rcParams["figure.figsize"] = (15,10)
+
 
 ###  Inspect the checkpoint ###
 """
@@ -16,7 +30,7 @@ n_latent=16
 
 
 ### Load and visualize losses ###
-losses=np.loadtxt('./losses.txt')
+losses=np.loadtxt('./losses_m14.txt')
 
 
 #plot losses
@@ -34,13 +48,13 @@ plt.show()
 
 ### load and visualize percentiles and latents###
 
-test_set=18000
+test_set=20000
 batch_size=128
 
 
-percent_pred=np.load('./y_test_pred.npy',allow_pickle=True)
-latents=np.load('./latents.npy',allow_pickle=True)
-percent=np.load('./y_test.npy',allow_pickle=True)
+percent_pred=np.load('./y_test_pred_m14.npy',allow_pickle=True)
+latents=np.load('./latents_m14.npy',allow_pickle=True)
+percent=np.load('./y_test_m14.npy',allow_pickle=True)
 
 
 

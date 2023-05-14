@@ -47,8 +47,8 @@ n=200000
 #load data:
 print('Loading data...')
 
-seds=np.load('../../seds_large/obs/seds_m14_z05.npy')
-y=np.load('./saved_input/y_m14_z05.npy')
+seds=np.load('../../seds_large/obs/seds_m14_z15.npy')
+y=np.load('./saved_input/y_m14_z15.npy')
 
 
 #create a pytorch dataset
@@ -65,7 +65,7 @@ loader = accelerator.prepare(generator)
 #load model
 n_latent=16
 print('Loading module trained with latents of ', str(n_latent), ' components')
-model_file = "./saved_models/checkpoint_m14_z05.pt"
+model_file = "./saved_models/checkpoint_m14_z15.pt"
 model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32),n_out=10)
 model = accelerator.prepare(model)
 
@@ -86,7 +86,7 @@ with torch.no_grad():
 #save
 print('Saving spectra, percentiles, latents and predicted percentiles')
 #np.save("./saved_models/y_test_pred.npy",ys_)
-np.save('./saved_models/latents_all_m14_z05.npy',ss)
+np.save('./saved_models/latents_all_m14_z15.npy',ss)
 #np.save("./saved_models/y.npy",y)
 
 

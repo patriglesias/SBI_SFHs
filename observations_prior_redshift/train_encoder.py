@@ -25,8 +25,8 @@ torch.backends.cudnn.enabled = False
 
 #dataset has been generated before, here we just load it
 print('Loading data...')
-seds=np.load('../../seds_large/obs/seds_m14_z15.npy')
-y=np.load('./saved_input/y_m14_z15.npy')
+seds=np.load('../../seds_large/obs/seds_m14_z20.npy')
+y=np.load('./saved_input/y_m14_z20.npy')
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -72,7 +72,7 @@ print('Creating datasets...')
 
 ind_sh=np.arange(len(seds[:,0]))
 np.random.shuffle(ind_sh)
-np.save('./saved_models/ind_sh_m14_z15.npy',ind_sh)
+np.save('./saved_models/ind_sh_m14_z20.npy',ind_sh)
 
 #ind_sh=np.load('./saved_models/ind_sh.npy')
 
@@ -104,7 +104,7 @@ def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, 
     model,  trainloader, validloader, optimizer = accelerator.prepare(model,  trainloader, validloader, optimizer)
 
     if outfile is None:
-        outfile = "./saved_models/checkpoint_m14_z15.pt"
+        outfile = "./saved_models/checkpoint_m14_z20.pt"
 
     epoch = 0
     if losses is None:
@@ -200,13 +200,13 @@ print('Model saved')
 
 description='n_epochs: %d, batch_size: %d, lr: %.e'%(max_epochs,batch_size,lr)
 print(description)
-f=open('./saved_models/description_m14_z15.txt', "w")
+f=open('./saved_models/description_m14_z20.txt', "w")
 f.write(description)
 f.close()
   
-checkpoint = torch.load('./saved_models/checkpoint_m14_z15.pt')
+checkpoint = torch.load('./saved_models/checkpoint_m14_z20.pt')
 losses=np.array(checkpoint['losses'])
-np.savetxt('./saved_models/losses_m14_z15.txt',np.array(losses))
+np.savetxt('./saved_models/losses_m14_z20.txt',np.array(losses))
 
 
 

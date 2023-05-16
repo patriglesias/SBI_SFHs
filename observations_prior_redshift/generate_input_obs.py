@@ -382,7 +382,7 @@ if __name__ == '__main__':
         print('Generating 10.000 SFHs and their corresponding spectra for each Z:')
         for k,i in tqdm(enumerate(z)):
                 print('z= ',k)
-                t,m,per=generate_weights_from_SFHs_non_param(n,mfix=True,logMstar=14.0,z=1.5)
+                t,m,per=generate_weights_from_SFHs_non_param(n,mfix=True,logMstar=14.0,z=2.0)
                 data_extended=interpolate_t(tbins,t[0],data_met[:,:,k])
                 wave,sed=generate_all_spectrums(t[0],m,wave,data_extended)
 
@@ -433,17 +433,17 @@ if __name__ == '__main__':
             y[i,:9]=percentiles[i,:]
             y[i,-1]=zs[i]
         if save:
-            np.save('./saved_input/y_m14_z15.npy',y) 
+            np.save('./saved_input/y_m14_z20.npy',y) 
     
     
 
     if save:
         print('Saving...')
-        np.save('../../seds_large/obs/seds_m14_z15.npy',seds)
-        np.save('./saved_input/wave_m14_z15.npy',wave)
-        np.save('./saved_input/t_m14_z15.npy',t[0])
-        np.save('../../seds_large/obs/ms_m14_z15.npy',ms)
-        np.save('./saved_input/percent_m14_z15.npy',percentiles)
-        np.save('./saved_input/zs_m14_z15.npy',zs)
+        np.save('../../seds_large/obs/seds_m14_z20.npy',seds)
+        np.save('./saved_input/wave_m14_z20.npy',wave)
+        np.save('./saved_input/t_m14_z20.npy',t[0])
+        np.save('../../seds_large/obs/ms_m14_z20.npy',ms)
+        np.save('./saved_input/percent_m14_z20.npy',percentiles)
+        np.save('./saved_input/zs_m14_z20.npy',zs)
         
     

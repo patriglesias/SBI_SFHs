@@ -29,7 +29,7 @@ n_latent=16
 
 
 ### Load and visualize losses ###
-losses=np.loadtxt('./losses_m14_z05.txt')
+losses=np.loadtxt('./losses_m14_z15.txt')
 
 
 #plot losses
@@ -51,9 +51,9 @@ test_set=20000
 batch_size=128
 
 
-percent_pred=np.load('./y_test_pred_m14_z05.npy',allow_pickle=True)
-latents=np.load('./latents_m14_z05.npy',allow_pickle=True)
-percent=np.load('./y_test_m14_z05.npy',allow_pickle=True)
+percent_pred=np.load('./y_test_pred_m14_z15.npy',allow_pickle=True)
+latents=np.load('./latents_m14_z15.npy',allow_pickle=True)
+percent=np.load('./y_test_m14_z15.npy',allow_pickle=True)
 
 
 

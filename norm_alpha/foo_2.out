@@ -1,0 +1,8 @@
+Loading modules
+cuda:0  prepared
+Loading data...
+Creating dataset and calling accelerator
+Shape of the dataset:  (450000, 4300)
+Loading module trained with latents of  16  components
+Getting latent vectors and predicted percentiles
+Saving spectra, percentiles, latents and predicted percentiles

@@ -245,8 +245,8 @@ if __name__ == '__main__':
         zs=[]
         alpha_fes=[]
         
-        #n=10000 #number of SFHs for each z
-        n=2
+        n=10000 #number of SFHs for each z
+        
         print('Generating 10.000 SFHs and their corresponding spectra for each Z:')
         for k,i in tqdm(enumerate(z)):
             for w,j in enumerate(alpha_fe):

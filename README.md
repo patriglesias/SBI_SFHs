@@ -76,19 +76,24 @@ The network consists on a $3$-layer CNN (moving to wider kernels and including m
 
 As the input of the bayesian network, we need to be sure the latent vectors contain relevant information. However, due to its high dimensionality, they are difficult to  interpretate. We carry out the following steps:
 
-- Study of the distribution of the $16$ components.
+
 - Study of the correlation of the $16$ components between them.
 - Study of the correlation of the $16$ components with the spectral regions (wavelengths).
 - UMAPs: another encoding of the $16$ components into a plane ($2$ components) using colormaps according to the flux in specific spectral regions ($H_{\alpha}$, $H_{\beta}$...), to the percentiles or to the metallicity / $\alpha$-enhancement.
 
-![Correlation latents with spectral regions](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/spectra_corr/Slide1.jpg)
-![Halpha](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/umap_non_par/halpha.jpeg)
-![UMAP Halpha](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/umap_non_par/umap_halpha.jpeg)
-![UMAP percentile 10%](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/umap_non_par/umap_10.jpeg)
-![UMAP percentile 90%](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/umap_non_par/umap_90.jpeg)
-![UMAP metallicity](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/umap_alpha/umap_z.jpeg)
-![UMAP alpha/fe](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/umap_alpha/umap_alpha.jpeg)
+![Correlation latents](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/plots_latent_diagnosis_norm/correlation.jpg)
 
+![Correlation latents with spectral regions](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/plots_latent_diagnosis_norm/corr_spectra_0.jpg)
+![Correlation latents with spectral regions](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/plots_latent_diagnosis_norm/corr_spectra_7.jpg)
+![Correlation latents with spectral regions](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/plots_latent_diagnosis_norm/corr_spectra_15.jpg)
+
+![UMAP Hbeta](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/plots_latent_diagnosis_norm/UMAP_Hbeta_o.jpg)
+
+![UMAP Mgb177](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/plots_latent_diagnosis_norm/UMAP_Mgb5177.jpg)
+
+![UMAP percentile 10%](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/plots_latent_diagnosis_norm/UMAP_10.jpg)
+![UMAP percentile 90%](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/plots_latent_diagnosis_norm/UMAP_90.jpg)
+![UMAP metallicity](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/plots_latent_diagnosis_norm/UMAP_met.jpg)
 
 ## 4. Use ANPE to obtain posteriors - backward model
 
@@ -103,9 +108,24 @@ We use the remaining $10$% of the samples to evaluate the performance of the mod
 
 The general performance is obtained by plotting the mean value of each posterior vs the ground truth, while the uncertainty prediction is checked studying the coverage probabilities (our model is too conservative or too confident?). We also do a Corner plot.
 
-![Examples percentile prediction](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/examples_predictions_non_par/examples_percent.jpg)
-![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/pred_vs_true/mean_vs_true.jpg)
-![Corner plot](https://github.com/patriglesias/BNN_SFHs/blob/081c28819d10c26ac434ef7fef87c076e18f6b5c/img_readme/corner_page-0001.jpg)
+![Examples percentile prediction](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/per1.png)
+![Examples percentile prediction](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/per2.png)
+![Examples percentile prediction](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/per5.png)
+![Examples percentile prediction](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/per4.png)
+
+
+![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/sns_mean_true_0.jpg)
+![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/sns_mean_true_1.jpg)
+![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/sns_mean_true_2.jpg)
+![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/sns_mean_true_3.jpg)
+![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/sns_mean_true_4.jpg)
+![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/sns_mean_true_5.jpg)
+![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/sns_mean_true_6.jpg)
+![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/sns_mean_true_7.jpg)
+![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/sns_mean_true_8.jpg)
+![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/sns_mean_true_9.jpg)
+
+![Corner plot](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/posterior_norm/corner.png)
 ![Coverage probabilities](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/prob_example_70.jpeg)
 
 
@@ -127,6 +147,12 @@ We use the model trained with synthetic spectra and non-parametric SFHs to predi
 First, we convolve all the observations to emulate the maximum velocity dispersion of the dataset: $\sigma=300$ Km/s (convolve with $\sigma^2=\sigma_{300}^2+\sigma_{\text{sdss}}^2 - (\sigma_{v_{i}}^2+\sigma_{\text{sdss}}^2)=\sigma_{300}^2-\sigma_{v_{i}}^2$). Then, we limit the wavelength range to $[4023,5500]$ Å. On the other hand, we process the MILES spectra in order to simulate the conditions of the observations: we convolve with a kernel of size $\sigma^2=\sigma_{300}^2+\sigma_{\text{sdss}}^2 -\sigma_{\text{MILES}}$, we interpolate to get $\Delta \lambda = 1$ Å as in the observations, and we clip the spectra to $[4023,5500]$ Å too. Once we have all with the same resolution and wavelength range, we repeat the training with these MILES spectra (maybe putting a prior of massive galaxies in the non-parametric SFHs we generate, like $M_{*}>10^{11} M_{\odot}$), testing again its performance, and checking how the resolution and the wavelength range affect to it. Eventually, we get the posteriors for the observations and analyze them, obtaining a SFH, a metallicity and an $[\alpha/Fe]$ value for each observed galaxy.
 
 
-![Predictions for observations](https://github.com/patriglesias/BNN_SFHs/blob/e650c7560bde3716f2e69b6b6752f40defc51c5b/img_readme/prediction_0.jpg)
+![Predictions for observations](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/obs/m14_z15/pred_gal_105.jpg)
+![Predictions for observations](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/obs/m14_z15/pred_gal_205.jpg)
+![Predictions for observations](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/obs/m14_z15/pred_gal_300.jpg)
+![Predictions for observations](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/obs/m14_z15/pred_gal_full.jpg)
 
-![Mass curve for observations](https://github.com/patriglesias/BNN_SFHs/blob/e650c7560bde3716f2e69b6b6752f40defc51c5b/img_readme/mass_curve_0.jpg)
+![Mass curve for observations](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/obs/m14_z15/mass_gal_105.jpg)
+![Mass curve for observations](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/obs/m14_z15/mass_gal_205.jpg)
+![Mass curve for observations](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/obs/m14_z15/mass_gal_300.jpg)
+![Mass curve for observations](https://github.com/patriglesias/BNN_SFHs/blob/162680aeac7e09f1e4e7972747aa4c1daec20a66/img_readme/obs/m14_z15/mass_gal_full.jpg)

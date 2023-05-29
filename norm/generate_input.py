@@ -112,7 +112,7 @@ def get_data(dir_name,strs_1,strs_2):
     return wave,data
 
 
-def get_data_met(dir_name,z=np.arange(-2.3,0.6,0.2)):
+def get_data_met(dir_name,interpolate=True,z=np.arange(-2.3,0.6,0.2)):
 
     data_met=np.zeros((53,4300,len(z)))
 
@@ -129,9 +129,11 @@ def get_data_met(dir_name,z=np.arange(-2.3,0.6,0.2)):
     for i in range(len(metallicity_bins)):
         data_met[:,:,i]=data_metallicities[i]
 
-    data_extended_met=interpolate_z(metallicity_bins,z,data_met)
+    if interpolate:
+        data_extended_met=interpolate_z(metallicity_bins,z,data_met)
+    else:
+        data_extended_met=data_met
 
-        
     return wave,data_extended_met
 
 
@@ -190,9 +192,8 @@ def plot_sed_sfh(ms,t,wave,seds,n_int):
 if __name__ == '__main__':
 
 
-    z= np.arange(-2.3,0.6,0.2)
-
-
+    #z= np.arange(-2.3,0.6,0.2)
+    
     different=True
 
     if different:
@@ -200,7 +201,7 @@ if __name__ == '__main__':
         #10.000 different SFH for each z
         print('Loading MILES spectra and interpolating in metallicity: ')
         tbins=get_tbins(dir_name='../MILES/MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
-        wave,data_met=get_data_met(dir_name='../MILES/MILES_BASTI_KU',z=z)
+        wave,data_met=get_data_met(dir_name='../MILES/MILES_BASTI_KU',interpolate=False)#z=z)
 
         seds=[]
         percentiles=[]
@@ -252,9 +253,9 @@ if __name__ == '__main__':
 
     if reshape:
         print('Reshaping...')
-        seds=np.reshape(seds,(150000,4300))
-        percentiles=np.reshape(percentiles,(150000,9))
-        zs=np.reshape(zs,(150000,))
+        seds=np.reshape(seds,(120000,4300))
+        percentiles=np.reshape(percentiles,(120000,9))
+        zs=np.reshape(zs,(120000,))
         
         y=np.zeros((len(seds[:,0]),10))
 
@@ -262,17 +263,17 @@ if __name__ == '__main__':
             y[i,:9]=percentiles[i,:]
             y[i,-1]=zs[i]
     
-        np.save('./saved_input/y.npy',y) 
+        np.save('./saved_input/y_12.npy',y) 
     
     save=True
 
     if save:
         print('Saving...')
-        np.save('../../seds_large/norm/seds.npy',seds)
-        np.save('./saved_input/wave.npy',wave)
-        np.save('./saved_input/t.npy',t[0])
-        np.save('../../seds_large/norm/ms.npy',ms)
-        np.save('./saved_input/percent.npy',percentiles)
-        np.save('./saved_input/zs.npy',zs)
+        np.save('../../seds_large/norm/seds_12.npy',seds)
+        np.save('./saved_input/wave_12.npy',wave)
+        np.save('./saved_input/t_12.npy',t[0])
+        np.save('../../seds_large/norm/ms_12.npy',ms)
+        np.save('./saved_input/percent_12.npy',percentiles)
+        np.save('./saved_input/zs_12.npy',zs)
         
     

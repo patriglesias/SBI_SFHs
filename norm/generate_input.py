@@ -202,6 +202,8 @@ if __name__ == '__main__':
         print('Loading MILES spectra and interpolating in metallicity: ')
         tbins=get_tbins(dir_name='../MILES/MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
         wave,data_met=get_data_met(dir_name='../MILES/MILES_BASTI_KU',interpolate=False)#z=z)
+        a='0.00_baseFe'
+        names,z=get_metallicities(dir_name='../MILES/MILES_BASTI_KU_baseFe',strs_1='Mku1.30Z',strs_2='T00.0300_iTp'+a+'.fits')
 
         seds=[]
         percentiles=[]

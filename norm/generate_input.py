@@ -192,7 +192,7 @@ def plot_sed_sfh(ms,t,wave,seds,n_int):
 if __name__ == '__main__':
 
 
-    #z= np.arange(-2.3,0.6,0.2)
+    z= np.linspace(-2.3,0.4,15)
     
     different=True
 
@@ -201,9 +201,8 @@ if __name__ == '__main__':
         #10.000 different SFH for each z
         print('Loading MILES spectra and interpolating in metallicity: ')
         tbins=get_tbins(dir_name='../MILES/MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
-        wave,data_met=get_data_met(dir_name='../MILES/MILES_BASTI_KU',interpolate=False)#z=z)
-        a='0.00_baseFe'
-        names,z=get_metallicities(dir_name='../MILES/MILES_BASTI_KU_baseFe',strs_1='Mku1.30Z',strs_2='T00.0300_iTp'+a+'.fits')
+        wave,data_met=get_data_met(dir_name='../MILES/MILES_BASTI_KU',interpolate=True,z=z)
+        
 
         seds=[]
         percentiles=[]

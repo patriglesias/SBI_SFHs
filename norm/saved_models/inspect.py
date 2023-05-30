@@ -31,7 +31,7 @@ n_latent=16
 
 
 ### Load and visualize losses ###
-losses=np.loadtxt('./losses.txt')
+losses=np.loadtxt('./losses_12.txt')
 
 
 #plot losses
@@ -47,22 +47,22 @@ plt.text(92,1.25e-2,'Log(cosh(y\'- y))')
 plt.tight_layout()
 plt.legend()
 #plt.ylim(0,5)
-plt.savefig('./losses.jpg')
+plt.savefig('./losses_12.jpg')
 plt.show()
 
 
-sys.exit()
+#sys.exit()
 ### load and visualize percentiles and latents###
 
-test_set=150000 #here we had a problem because with saved
+test_set=120000 #here we had a problem because with saved
 #with the same name all the predictions (not only test set)
 batch_size=128
 
 
-ind_sh=np.load('./ind_sh.npy',allow_pickle=True)
-percent_pred=np.load('./y_test_pred.npy',allow_pickle=True)
-latents=np.load('./latents.npy',allow_pickle=True)
-percent=np.load('./y_test.npy',allow_pickle=True)
+ind_sh=np.load('./ind_sh_12.npy',allow_pickle=True)
+percent_pred=np.load('./y_test_pred_12.npy',allow_pickle=True)
+latents=np.load('./latents_12.npy',allow_pickle=True)
+percent=np.load('./y_test_12.npy',allow_pickle=True)
 
 
 

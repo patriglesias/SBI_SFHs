@@ -254,9 +254,9 @@ if __name__ == '__main__':
 
     if reshape:
         print('Reshaping...')
-        seds=np.reshape(seds,(120000,4300))
-        percentiles=np.reshape(percentiles,(120000,9))
-        zs=np.reshape(zs,(120000,))
+        seds=np.reshape(seds,(150000,4300))
+        percentiles=np.reshape(percentiles,(150000,9))
+        zs=np.reshape(zs,(150000,))
         
         y=np.zeros((len(seds[:,0]),10))
 

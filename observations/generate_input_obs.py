@@ -10,19 +10,57 @@ import os
 from astropy.io import fits
 from tqdm import tqdm,trange
 import dense_basis as db
+import astropy.units as u
+from astropy.cosmology import  Planck13,z_at_value
 
 
-def generate_weights_from_SFHs_non_param(n,mfix=False,logMstar=10.0,z=0.0,percen=True):
+
+def z_cosmic(t):
+    #receives cosmic time, returns redshit
+    return z_at_value(Planck13.age,t*u.Gyr).value
+def t_cosmic(z):
+    #receives redsfit, returns cosmic time
+    return (Planck13.age(0)-Planck13.lookback_time(z)).value
+
+
+def sample_z_prior(zmin,zmax,size=1):
+        #if uniform, like in dense_basis, not uniformly_distributed in time
+        #zval = np.random.uniform(size=size)*(z_max-z_min) + z_min
+        tmax=t_cosmic(zmax)
+        tmin=t_cosmic(zmin)
+        tval=np.random.uniform(size=size)*(tmax-tmin) + tmin
+        zval=z_cosmic(tval)
+        return zval
+
+
+def generate_weights_from_SFHs_non_param(n,percen=True,zfix=True,mfix=False,logMstar=10.0):
     priors = db.Priors()
+    #priors.z_min=0.0
+    #priors.z_max=8.0
     curves=[]
-    times=[] #not needed because if we fix z all rand_time are exactly the same
+    times=[] #needed because rand_time length and step depends on the redshift
+
+    priors.mass_max = 18.0
+    priors.mass_min = 10.0
+
+    if zfix==False:
+        #z=priors.sample_z_prior(size=n) not recommended because samples uniformly in z, not in t
+        z=sample_z_prior(zmin=0,zmax=z_cosmic(1),size=n) #uniformly distributed in cosmic time, we set zmax as 1 gyr (form all the stellar mass before 1 gyr)
+    else:
+        z=np.zeros((n,)) #present time
+
+    r=np.random.rand(n)
     for i in range(n):
         rand_sfh_tuple=priors.sample_sfh_tuple()
         if mfix:
-            rand_sfh_tuple[0]=logMstar #logMstar at selected z (in this case z=0)
-        rand_sfh, rand_time = db.tuple_to_sfh(rand_sfh_tuple, zval = z) 
-        curves.append(rand_sfh*1e-9) #conversion from Msun/yr to Msun/Gyr
+            rand_sfh_tuple[0]=logMstar #logMstar at selected z
+        rand_sfh, rand_time = db.tuple_to_sfh(rand_sfh_tuple, zval = z[i]) 
+        if r[i]<0.5:
+            rand_sfh=rand_sfh[::-1]
+
+        curves.append(rand_sfh*1e9) #conversion from Msun/yr to Msun/Gyr
         times.append(rand_time)
+
     
     ms=[]
     #non accumulative mass curves, we save it cause we will use it later
@@ -30,7 +68,9 @@ def generate_weights_from_SFHs_non_param(n,mfix=False,logMstar=10.0,z=0.0,percen
         sfr_0=curve
         m=[]
         t=times[index]
+        #print(t)
         step=t[1]-t[0]
+        #print(step)
         for i,tx in enumerate(t):  
              m_t=sfr_0[i]*step #this gives directly the mass curve (non accumulative)
              m.append(m_t)
@@ -47,7 +87,7 @@ def generate_weights_from_SFHs_non_param(n,mfix=False,logMstar=10.0,z=0.0,percen
                 m.append(np.sum(mcurve[:j+1]))
              for k in range(1,10):
                 ind=np.argmin(abs(np.array(m)-k/10))
-                percent.append(t[ind])
+                percent.append(times[i][ind])
              percentiles.append(percent)  
         return np.array(times),np.array(ms),np.array(percentiles)
     else:
@@ -157,11 +197,6 @@ def prepare_data(w,f):
     return np.arange(4023,6001,1), fluxes_MILES #notice here the flux is not normalized yet
 
 
-
-
-
-
-
 def get_data(dir_name,strs_1,strs_2):
     library=os.listdir(dir_name)
     x,y=len(strs_1),len(strs_2)
@@ -269,66 +304,32 @@ def plot_sed_sfh(ms,t,wave,seds,n_int):
 
 if __name__ == '__main__':
 
+    z= np.linspace(-2.3,0.4,15)
 
-    z= np.arange(-2.3,0.6,0.2)
-    #z=[-0.1,0.1]
+    #10.000 different SFH for each z
+    print('Loading MILES convolved spectra and interpolating in metallicity: ')
+    tbins=get_tbins(dir_name='../MILES/MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
+    wave,data_met=get_data_met(dir_name='../MILES/MILES_BASTI_KU',z=z)
 
-
-    different=True
-
-    if different:
-   
-        #10.000 different SFH for each z
-        print('Loading MILES convolved spectra and interpolating in metallicity: ')
-        tbins=get_tbins(dir_name='../MILES/MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
-        wave,data_met=get_data_met(dir_name='../MILES/MILES_BASTI_KU',z=z)
-
-        seds=[]
-        percentiles=[]
-        ms=[]
-        zs=[]
-        
-        n=10000 #number of SFHs for each z
-        #n=5
-        print('Generating 10.000 SFHs and their corresponding spectra for each Z:')
-        for k,i in tqdm(enumerate(z)):
-                print('z= ',k)
-                t,m,per=generate_weights_from_SFHs_non_param(n)
-                data_extended=interpolate_t(tbins,t[0],data_met[:,:,k])
-                wave,sed=generate_all_spectrums(t[0],m,wave,data_extended)
-
-                seds.append(sed)
-                percentiles.append(per)
-                ms.append(m)
-                zs.append(np.ones((n,))*i)
-
+    seds=[]
+    percentiles=[]
+    ms=[]
+    zs=[]
     
-    else:
-        #10.000 equal SFHs for each Z
-        print('Loading MILES spectra and interpolating in metallicity: ')
-        tbins=get_tbins(dir_name='../MILES/MILES_BASTI_KU_baseFe',strs_1='Mku1.30Zp0.06T',strs_2='_iTp0.00_baseFe.fits')
-        wave,data_met=get_data_met(dir_name='../MILES/MILES_BASTI_KU_baseFe',z=z)
-        
-        n=10000 #number of SFHs for each Z
-        t,m,per=generate_weights_from_SFHs_non_param(n)
+    n=10000 #number of SFHs for each z
+    #n=5
+    print('Generating 10.000 SFHs and their corresponding spectra for each Z:')
+    for k,i in tqdm(enumerate(z)):
+            print('z= ',k)
+            t,m,per=generate_weights_from_SFHs_non_param(n)
+            data_extended=interpolate_t(tbins,t[0],data_met[:,:,k])
+            wave,sed=generate_all_spectrums(t[0],m,wave,data_extended)
 
-        seds=[]
-        percentiles=[]
-        ms=[]
-        zs=[]
+            seds.append(sed)
+            percentiles.append(per)
+            ms.append(m)
+            zs.append(np.ones((n,))*i)
 
-        print('Generating 10.000 SFHs and their corresponding spectra for each Z:')
-        for k,i in tqdm(enumerate(z)):
-                print('z= ',k)
-                data_extended=interpolate_t(tbins,t[0],data_met[:,:,k])
-                wave,sed=generate_all_spectrums(t[0],m,wave,data_extended)
-
-                seds.append(sed)
-                percentiles.append(per)
-                ms.append(m)
-                zs.append(np.ones((n,))*i)
-
-    
     reshape=True
 
     if reshape:

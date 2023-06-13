@@ -54,7 +54,9 @@ upper_bounds[-1]=0.6
 bounds = Ut.BoxUniform(low=lower_bounds, high=upper_bounds, device='cpu')
 
 #Build and train Normalizing Flows
+
 print('training...')
+
 nhidden = 128 
 nblocks = 5
 maf_model = Ut.posterior_nn('maf', hidden_features=nhidden, num_transforms=nblocks)
@@ -80,6 +82,7 @@ with open(file, "wb") as handle:
     pickle.dump(qphi, handle)
 
 handle.close()
+
 print('model saved')
 #Get means and stds for the test sample
 
@@ -89,14 +92,13 @@ index_list=np.arange(135000,150000)
 
 stds=[]
 means=[]
-print('computing medians and stds...')
+print('computings median and stds...')
 for k,j in tqdm(enumerate(index_list)):
     Xobs=latents[j,:]
     posterior_samples= np.array(qphi.sample((n_samples,), x=torch.as_tensor(np.array([Xobs]).astype(np.float32)).to('cpu'), show_progress_bars=False).detach().to('cpu'))
     stds.append(np.std(posterior_samples,axis=0))
     means.append(np.median(posterior_samples,axis=0))
     
+print('medians and stds saved')
 np.save('./saved_models/means.npy',means)
 np.save('./saved_models/stds.npy',stds)
-
-print('medians and stds saved')

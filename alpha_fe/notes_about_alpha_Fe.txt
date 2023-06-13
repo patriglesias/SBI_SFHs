@@ -1,5 +1,0 @@
-[alpha/Fe] from MILES: 0.00,0.40 
-
-There is also the base model which adopts empirical [alpha/Fe], we do not use it here (but we did it in the previous trainings).
-
-We interpolate to get 3 possible values for [alpha/Fe]: 0.00,0.20,0.40

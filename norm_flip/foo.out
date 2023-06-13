@@ -1,0 +1,302 @@
+Starting dense_basis. Failed to load FSPS, only GP-SFH module will be available.
+Loading MILES spectra and interpolating in metallicity: 
+Generating 10.000 SFHs and their corresponding spectra for each Z:
+z=  0
+z=  1
+z=  2
+z=  3
+z=  4
+z=  5
+z=  6
+z=  7
+z=  8
+z=  9
+z=  10
+z=  11
+z=  12
+z=  13
+z=  14
+Reshaping...
+Saving...
+Modules prepared
+GPU  prepared
+Loading data...
+Creating datasets...
+16 components selected for the latent vectors
+Calling accelerator...
+DistributedType.NO
+Training starts now...
+Model defined
+====> Epoch: 0 TRAINING Loss: 3.158e-02  VALIDATION Loss: 3.132e-02
+====> Epoch: 1 TRAINING Loss: 2.991e-02  VALIDATION Loss: 2.872e-02
+====> Epoch: 2 TRAINING Loss: 2.578e-02  VALIDATION Loss: 2.318e-02
+====> Epoch: 3 TRAINING Loss: 1.981e-02  VALIDATION Loss: 1.687e-02
+====> Epoch: 4 TRAINING Loss: 1.446e-02  VALIDATION Loss: 1.238e-02
+====> Epoch: 5 TRAINING Loss: 1.137e-02  VALIDATION Loss: 1.130e-02
+====> Epoch: 6 TRAINING Loss: 1.115e-02  VALIDATION Loss: 1.113e-02
+====> Epoch: 7 TRAINING Loss: 1.102e-02  VALIDATION Loss: 1.098e-02
+====> Epoch: 8 TRAINING Loss: 1.082e-02  VALIDATION Loss: 1.079e-02
+====> Epoch: 9 TRAINING Loss: 1.068e-02  VALIDATION Loss: 1.065e-02
+====> Epoch: 10 TRAINING Loss: 9.140e-03  VALIDATION Loss: 6.038e-03
+====> Epoch: 11 TRAINING Loss: 3.662e-03  VALIDATION Loss: 3.298e-03
+====> Epoch: 12 TRAINING Loss: 3.233e-03  VALIDATION Loss: 3.225e-03
+====> Epoch: 13 TRAINING Loss: 3.188e-03  VALIDATION Loss: 3.170e-03
+====> Epoch: 14 TRAINING Loss: 3.142e-03  VALIDATION Loss: 3.159e-03
+====> Epoch: 15 TRAINING Loss: 3.155e-03  VALIDATION Loss: 3.070e-03
+====> Epoch: 16 TRAINING Loss: 3.091e-03  VALIDATION Loss: 3.057e-03
+====> Epoch: 17 TRAINING Loss: 3.066e-03  VALIDATION Loss: 2.995e-03
+====> Epoch: 18 TRAINING Loss: 3.034e-03  VALIDATION Loss: 3.049e-03
+====> Epoch: 19 TRAINING Loss: 3.008e-03  VALIDATION Loss: 3.013e-03
+====> Epoch: 20 TRAINING Loss: 3.002e-03  VALIDATION Loss: 2.935e-03
+====> Epoch: 21 TRAINING Loss: 2.896e-03  VALIDATION Loss: 2.906e-03
+====> Epoch: 22 TRAINING Loss: 2.908e-03  VALIDATION Loss: 2.902e-03
+====> Epoch: 23 TRAINING Loss: 2.924e-03  VALIDATION Loss: 2.908e-03
+====> Epoch: 24 TRAINING Loss: 2.872e-03  VALIDATION Loss: 2.873e-03
+====> Epoch: 25 TRAINING Loss: 2.853e-03  VALIDATION Loss: 2.806e-03
+====> Epoch: 26 TRAINING Loss: 2.832e-03  VALIDATION Loss: 2.798e-03
+====> Epoch: 27 TRAINING Loss: 2.827e-03  VALIDATION Loss: 2.794e-03
+====> Epoch: 28 TRAINING Loss: 2.860e-03  VALIDATION Loss: 2.863e-03
+====> Epoch: 29 TRAINING Loss: 2.780e-03  VALIDATION Loss: 3.102e-03
+====> Epoch: 30 TRAINING Loss: 2.780e-03  VALIDATION Loss: 2.704e-03
+====> Epoch: 31 TRAINING Loss: 2.807e-03  VALIDATION Loss: 3.037e-03
+====> Epoch: 32 TRAINING Loss: 2.798e-03  VALIDATION Loss: 2.852e-03
+====> Epoch: 33 TRAINING Loss: 2.726e-03  VALIDATION Loss: 2.725e-03
+====> Epoch: 34 TRAINING Loss: 2.808e-03  VALIDATION Loss: 2.741e-03
+====> Epoch: 35 TRAINING Loss: 2.755e-03  VALIDATION Loss: 2.672e-03
+====> Epoch: 36 TRAINING Loss: 2.728e-03  VALIDATION Loss: 2.657e-03
+====> Epoch: 37 TRAINING Loss: 2.763e-03  VALIDATION Loss: 2.652e-03
+====> Epoch: 38 TRAINING Loss: 2.746e-03  VALIDATION Loss: 2.719e-03
+====> Epoch: 39 TRAINING Loss: 2.688e-03  VALIDATION Loss: 2.720e-03
+====> Epoch: 40 TRAINING Loss: 2.667e-03  VALIDATION Loss: 2.643e-03
+====> Epoch: 41 TRAINING Loss: 2.715e-03  VALIDATION Loss: 2.606e-03
+====> Epoch: 42 TRAINING Loss: 2.697e-03  VALIDATION Loss: 2.750e-03
+====> Epoch: 43 TRAINING Loss: 2.712e-03  VALIDATION Loss: 2.584e-03
+====> Epoch: 44 TRAINING Loss: 2.671e-03  VALIDATION Loss: 2.698e-03
+====> Epoch: 45 TRAINING Loss: 2.620e-03  VALIDATION Loss: 2.698e-03
+====> Epoch: 46 TRAINING Loss: 2.683e-03  VALIDATION Loss: 2.484e-03
+====> Epoch: 47 TRAINING Loss: 2.628e-03  VALIDATION Loss: 2.718e-03
+====> Epoch: 48 TRAINING Loss: 2.676e-03  VALIDATION Loss: 2.661e-03
+====> Epoch: 49 TRAINING Loss: 2.670e-03  VALIDATION Loss: 2.515e-03
+====> Epoch: 50 TRAINING Loss: 2.650e-03  VALIDATION Loss: 2.674e-03
+====> Epoch: 51 TRAINING Loss: 2.618e-03  VALIDATION Loss: 2.503e-03
+====> Epoch: 52 TRAINING Loss: 2.560e-03  VALIDATION Loss: 2.462e-03
+====> Epoch: 53 TRAINING Loss: 2.617e-03  VALIDATION Loss: 2.634e-03
+====> Epoch: 54 TRAINING Loss: 2.617e-03  VALIDATION Loss: 2.496e-03
+====> Epoch: 55 TRAINING Loss: 2.553e-03  VALIDATION Loss: 2.955e-03
+====> Epoch: 56 TRAINING Loss: 2.552e-03  VALIDATION Loss: 2.559e-03
+====> Epoch: 57 TRAINING Loss: 2.562e-03  VALIDATION Loss: 2.387e-03
+====> Epoch: 58 TRAINING Loss: 2.571e-03  VALIDATION Loss: 2.550e-03
+====> Epoch: 59 TRAINING Loss: 2.508e-03  VALIDATION Loss: 2.404e-03
+====> Epoch: 60 TRAINING Loss: 2.508e-03  VALIDATION Loss: 2.523e-03
+====> Epoch: 61 TRAINING Loss: 2.466e-03  VALIDATION Loss: 2.484e-03
+====> Epoch: 62 TRAINING Loss: 2.460e-03  VALIDATION Loss: 2.424e-03
+====> Epoch: 63 TRAINING Loss: 2.434e-03  VALIDATION Loss: 2.307e-03
+====> Epoch: 64 TRAINING Loss: 2.435e-03  VALIDATION Loss: 2.407e-03
+====> Epoch: 65 TRAINING Loss: 2.369e-03  VALIDATION Loss: 2.329e-03
+====> Epoch: 66 TRAINING Loss: 2.421e-03  VALIDATION Loss: 2.275e-03
+====> Epoch: 67 TRAINING Loss: 2.347e-03  VALIDATION Loss: 2.307e-03
+====> Epoch: 68 TRAINING Loss: 2.314e-03  VALIDATION Loss: 2.498e-03
+====> Epoch: 69 TRAINING Loss: 2.313e-03  VALIDATION Loss: 2.373e-03
+====> Epoch: 70 TRAINING Loss: 2.319e-03  VALIDATION Loss: 2.309e-03
+====> Epoch: 71 TRAINING Loss: 2.309e-03  VALIDATION Loss: 2.171e-03
+====> Epoch: 72 TRAINING Loss: 2.331e-03  VALIDATION Loss: 2.223e-03
+====> Epoch: 73 TRAINING Loss: 2.284e-03  VALIDATION Loss: 2.234e-03
+====> Epoch: 74 TRAINING Loss: 2.275e-03  VALIDATION Loss: 2.651e-03
+====> Epoch: 75 TRAINING Loss: 2.219e-03  VALIDATION Loss: 2.197e-03
+====> Epoch: 76 TRAINING Loss: 2.236e-03  VALIDATION Loss: 2.368e-03
+====> Epoch: 77 TRAINING Loss: 2.264e-03  VALIDATION Loss: 2.770e-03
+====> Epoch: 78 TRAINING Loss: 2.283e-03  VALIDATION Loss: 2.456e-03
+====> Epoch: 79 TRAINING Loss: 2.199e-03  VALIDATION Loss: 2.149e-03
+====> Epoch: 80 TRAINING Loss: 2.193e-03  VALIDATION Loss: 2.290e-03
+====> Epoch: 81 TRAINING Loss: 2.220e-03  VALIDATION Loss: 2.090e-03
+====> Epoch: 82 TRAINING Loss: 2.142e-03  VALIDATION Loss: 2.271e-03
+====> Epoch: 83 TRAINING Loss: 2.143e-03  VALIDATION Loss: 2.220e-03
+====> Epoch: 84 TRAINING Loss: 2.188e-03  VALIDATION Loss: 2.004e-03
+====> Epoch: 85 TRAINING Loss: 2.166e-03  VALIDATION Loss: 2.120e-03
+====> Epoch: 86 TRAINING Loss: 2.174e-03  VALIDATION Loss: 2.297e-03
+====> Epoch: 87 TRAINING Loss: 2.110e-03  VALIDATION Loss: 2.235e-03
+====> Epoch: 88 TRAINING Loss: 2.163e-03  VALIDATION Loss: 1.975e-03
+====> Epoch: 89 TRAINING Loss: 2.199e-03  VALIDATION Loss: 2.084e-03
+====> Epoch: 90 TRAINING Loss: 2.103e-03  VALIDATION Loss: 2.118e-03
+====> Epoch: 91 TRAINING Loss: 2.126e-03  VALIDATION Loss: 1.993e-03
+====> Epoch: 92 TRAINING Loss: 2.067e-03  VALIDATION Loss: 2.226e-03
+====> Epoch: 93 TRAINING Loss: 2.079e-03  VALIDATION Loss: 2.162e-03
+====> Epoch: 94 TRAINING Loss: 2.026e-03  VALIDATION Loss: 2.107e-03
+====> Epoch: 95 TRAINING Loss: 2.085e-03  VALIDATION Loss: 1.988e-03
+====> Epoch: 96 TRAINING Loss: 2.015e-03  VALIDATION Loss: 1.900e-03
+====> Epoch: 97 TRAINING Loss: 2.038e-03  VALIDATION Loss: 2.159e-03
+====> Epoch: 98 TRAINING Loss: 1.984e-03  VALIDATION Loss: 1.899e-03
+====> Epoch: 99 TRAINING Loss: 2.007e-03  VALIDATION Loss: 1.902e-03
+====> Epoch: 100 TRAINING Loss: 1.981e-03  VALIDATION Loss: 1.920e-03
+====> Epoch: 101 TRAINING Loss: 1.880e-03  VALIDATION Loss: 1.833e-03
+====> Epoch: 102 TRAINING Loss: 1.857e-03  VALIDATION Loss: 1.802e-03
+====> Epoch: 103 TRAINING Loss: 1.963e-03  VALIDATION Loss: 1.817e-03
+====> Epoch: 104 TRAINING Loss: 1.866e-03  VALIDATION Loss: 1.958e-03
+====> Epoch: 105 TRAINING Loss: 1.881e-03  VALIDATION Loss: 1.922e-03
+====> Epoch: 106 TRAINING Loss: 1.826e-03  VALIDATION Loss: 1.763e-03
+====> Epoch: 107 TRAINING Loss: 1.805e-03  VALIDATION Loss: 1.876e-03
+====> Epoch: 108 TRAINING Loss: 1.814e-03  VALIDATION Loss: 1.824e-03
+====> Epoch: 109 TRAINING Loss: 1.781e-03  VALIDATION Loss: 1.833e-03
+====> Epoch: 110 TRAINING Loss: 1.803e-03  VALIDATION Loss: 1.774e-03
+====> Epoch: 111 TRAINING Loss: 1.783e-03  VALIDATION Loss: 1.737e-03
+====> Epoch: 112 TRAINING Loss: 1.783e-03  VALIDATION Loss: 1.887e-03
+====> Epoch: 113 TRAINING Loss: 1.733e-03  VALIDATION Loss: 1.669e-03
+====> Epoch: 114 TRAINING Loss: 1.762e-03  VALIDATION Loss: 1.698e-03
+====> Epoch: 115 TRAINING Loss: 1.760e-03  VALIDATION Loss: 1.696e-03
+====> Epoch: 116 TRAINING Loss: 1.769e-03  VALIDATION Loss: 1.743e-03
+====> Epoch: 117 TRAINING Loss: 1.756e-03  VALIDATION Loss: 1.712e-03
+====> Epoch: 118 TRAINING Loss: 1.690e-03  VALIDATION Loss: 1.872e-03
+====> Epoch: 119 TRAINING Loss: 1.727e-03  VALIDATION Loss: 1.662e-03
+====> Epoch: 120 TRAINING Loss: 1.753e-03  VALIDATION Loss: 1.797e-03
+====> Epoch: 121 TRAINING Loss: 1.754e-03  VALIDATION Loss: 1.902e-03
+====> Epoch: 122 TRAINING Loss: 1.674e-03  VALIDATION Loss: 1.619e-03
+====> Epoch: 123 TRAINING Loss: 1.677e-03  VALIDATION Loss: 1.674e-03
+====> Epoch: 124 TRAINING Loss: 1.751e-03  VALIDATION Loss: 1.693e-03
+====> Epoch: 125 TRAINING Loss: 1.670e-03  VALIDATION Loss: 1.735e-03
+====> Epoch: 126 TRAINING Loss: 1.767e-03  VALIDATION Loss: 1.818e-03
+====> Epoch: 127 TRAINING Loss: 1.684e-03  VALIDATION Loss: 1.624e-03
+====> Epoch: 128 TRAINING Loss: 1.652e-03  VALIDATION Loss: 1.663e-03
+====> Epoch: 129 TRAINING Loss: 1.705e-03  VALIDATION Loss: 1.682e-03
+====> Epoch: 130 TRAINING Loss: 1.680e-03  VALIDATION Loss: 1.629e-03
+====> Epoch: 131 TRAINING Loss: 1.640e-03  VALIDATION Loss: 1.709e-03
+====> Epoch: 132 TRAINING Loss: 1.680e-03  VALIDATION Loss: 1.629e-03
+====> Epoch: 133 TRAINING Loss: 1.636e-03  VALIDATION Loss: 1.681e-03
+====> Epoch: 134 TRAINING Loss: 1.644e-03  VALIDATION Loss: 1.592e-03
+====> Epoch: 135 TRAINING Loss: 1.641e-03  VALIDATION Loss: 1.607e-03
+====> Epoch: 136 TRAINING Loss: 1.638e-03  VALIDATION Loss: 1.552e-03
+====> Epoch: 137 TRAINING Loss: 1.620e-03  VALIDATION Loss: 1.594e-03
+====> Epoch: 138 TRAINING Loss: 1.665e-03  VALIDATION Loss: 1.744e-03
+====> Epoch: 139 TRAINING Loss: 1.609e-03  VALIDATION Loss: 1.543e-03
+====> Epoch: 140 TRAINING Loss: 1.585e-03  VALIDATION Loss: 1.547e-03
+====> Epoch: 141 TRAINING Loss: 1.610e-03  VALIDATION Loss: 1.709e-03
+====> Epoch: 142 TRAINING Loss: 1.589e-03  VALIDATION Loss: 1.658e-03
+====> Epoch: 143 TRAINING Loss: 1.604e-03  VALIDATION Loss: 1.655e-03
+====> Epoch: 144 TRAINING Loss: 1.641e-03  VALIDATION Loss: 1.664e-03
+====> Epoch: 145 TRAINING Loss: 1.612e-03  VALIDATION Loss: 1.610e-03
+====> Epoch: 146 TRAINING Loss: 1.587e-03  VALIDATION Loss: 1.575e-03
+====> Epoch: 147 TRAINING Loss: 1.606e-03  VALIDATION Loss: 1.651e-03
+====> Epoch: 148 TRAINING Loss: 1.563e-03  VALIDATION Loss: 1.534e-03
+====> Epoch: 149 TRAINING Loss: 1.655e-03  VALIDATION Loss: 1.620e-03
+====> Epoch: 150 TRAINING Loss: 1.596e-03  VALIDATION Loss: 1.536e-03
+====> Epoch: 151 TRAINING Loss: 1.534e-03  VALIDATION Loss: 1.502e-03
+====> Epoch: 152 TRAINING Loss: 1.555e-03  VALIDATION Loss: 1.506e-03
+====> Epoch: 153 TRAINING Loss: 1.538e-03  VALIDATION Loss: 1.548e-03
+====> Epoch: 154 TRAINING Loss: 1.501e-03  VALIDATION Loss: 1.491e-03
+====> Epoch: 155 TRAINING Loss: 1.524e-03  VALIDATION Loss: 1.533e-03
+====> Epoch: 156 TRAINING Loss: 1.530e-03  VALIDATION Loss: 1.497e-03
+====> Epoch: 157 TRAINING Loss: 1.554e-03  VALIDATION Loss: 1.530e-03
+====> Epoch: 158 TRAINING Loss: 1.536e-03  VALIDATION Loss: 1.517e-03
+====> Epoch: 159 TRAINING Loss: 1.546e-03  VALIDATION Loss: 1.487e-03
+====> Epoch: 160 TRAINING Loss: 1.492e-03  VALIDATION Loss: 1.525e-03
+====> Epoch: 161 TRAINING Loss: 1.555e-03  VALIDATION Loss: 1.552e-03
+====> Epoch: 162 TRAINING Loss: 1.530e-03  VALIDATION Loss: 1.475e-03
+====> Epoch: 163 TRAINING Loss: 1.501e-03  VALIDATION Loss: 1.477e-03
+====> Epoch: 164 TRAINING Loss: 1.500e-03  VALIDATION Loss: 1.601e-03
+====> Epoch: 165 TRAINING Loss: 1.520e-03  VALIDATION Loss: 1.455e-03
+====> Epoch: 166 TRAINING Loss: 1.479e-03  VALIDATION Loss: 1.503e-03
+====> Epoch: 167 TRAINING Loss: 1.468e-03  VALIDATION Loss: 1.447e-03
+====> Epoch: 168 TRAINING Loss: 1.491e-03  VALIDATION Loss: 1.466e-03
+====> Epoch: 169 TRAINING Loss: 1.493e-03  VALIDATION Loss: 1.518e-03
+====> Epoch: 170 TRAINING Loss: 1.485e-03  VALIDATION Loss: 1.449e-03
+====> Epoch: 171 TRAINING Loss: 1.467e-03  VALIDATION Loss: 1.458e-03
+====> Epoch: 172 TRAINING Loss: 1.433e-03  VALIDATION Loss: 1.427e-03
+====> Epoch: 173 TRAINING Loss: 1.480e-03  VALIDATION Loss: 1.487e-03
+====> Epoch: 174 TRAINING Loss: 1.486e-03  VALIDATION Loss: 1.463e-03
+====> Epoch: 175 TRAINING Loss: 1.451e-03  VALIDATION Loss: 1.422e-03
+====> Epoch: 176 TRAINING Loss: 1.453e-03  VALIDATION Loss: 1.399e-03
+====> Epoch: 177 TRAINING Loss: 1.464e-03  VALIDATION Loss: 1.420e-03
+====> Epoch: 178 TRAINING Loss: 1.426e-03  VALIDATION Loss: 1.443e-03
+====> Epoch: 179 TRAINING Loss: 1.384e-03  VALIDATION Loss: 1.403e-03
+====> Epoch: 180 TRAINING Loss: 1.443e-03  VALIDATION Loss: 1.434e-03
+====> Epoch: 181 TRAINING Loss: 1.403e-03  VALIDATION Loss: 1.351e-03
+====> Epoch: 182 TRAINING Loss: 1.399e-03  VALIDATION Loss: 1.438e-03
+====> Epoch: 183 TRAINING Loss: 1.404e-03  VALIDATION Loss: 1.398e-03
+====> Epoch: 184 TRAINING Loss: 1.386e-03  VALIDATION Loss: 1.394e-03
+====> Epoch: 185 TRAINING Loss: 1.410e-03  VALIDATION Loss: 1.490e-03
+====> Epoch: 186 TRAINING Loss: 1.396e-03  VALIDATION Loss: 1.405e-03
+====> Epoch: 187 TRAINING Loss: 1.361e-03  VALIDATION Loss: 1.350e-03
+====> Epoch: 188 TRAINING Loss: 1.383e-03  VALIDATION Loss: 1.339e-03
+====> Epoch: 189 TRAINING Loss: 1.366e-03  VALIDATION Loss: 1.345e-03
+====> Epoch: 190 TRAINING Loss: 1.368e-03  VALIDATION Loss: 1.325e-03
+====> Epoch: 191 TRAINING Loss: 1.361e-03  VALIDATION Loss: 1.297e-03
+====> Epoch: 192 TRAINING Loss: 1.343e-03  VALIDATION Loss: 1.303e-03
+====> Epoch: 193 TRAINING Loss: 1.340e-03  VALIDATION Loss: 1.321e-03
+====> Epoch: 194 TRAINING Loss: 1.296e-03  VALIDATION Loss: 1.283e-03
+====> Epoch: 195 TRAINING Loss: 1.302e-03  VALIDATION Loss: 1.358e-03
+====> Epoch: 196 TRAINING Loss: 1.301e-03  VALIDATION Loss: 1.283e-03
+====> Epoch: 197 TRAINING Loss: 1.300e-03  VALIDATION Loss: 1.324e-03
+====> Epoch: 198 TRAINING Loss: 1.319e-03  VALIDATION Loss: 1.272e-03
+====> Epoch: 199 TRAINING Loss: 1.269e-03  VALIDATION Loss: 1.329e-03
+====> Epoch: 200 TRAINING Loss: 1.259e-03  VALIDATION Loss: 1.270e-03
+====> Epoch: 201 TRAINING Loss: 1.301e-03  VALIDATION Loss: 1.268e-03
+====> Epoch: 202 TRAINING Loss: 1.275e-03  VALIDATION Loss: 1.287e-03
+====> Epoch: 203 TRAINING Loss: 1.260e-03  VALIDATION Loss: 1.331e-03
+====> Epoch: 204 TRAINING Loss: 1.281e-03  VALIDATION Loss: 1.243e-03
+====> Epoch: 205 TRAINING Loss: 1.255e-03  VALIDATION Loss: 1.258e-03
+====> Epoch: 206 TRAINING Loss: 1.242e-03  VALIDATION Loss: 1.219e-03
+====> Epoch: 207 TRAINING Loss: 1.221e-03  VALIDATION Loss: 1.212e-03
+====> Epoch: 208 TRAINING Loss: 1.215e-03  VALIDATION Loss: 1.218e-03
+====> Epoch: 209 TRAINING Loss: 1.216e-03  VALIDATION Loss: 1.217e-03
+====> Epoch: 210 TRAINING Loss: 1.208e-03  VALIDATION Loss: 1.244e-03
+====> Epoch: 211 TRAINING Loss: 1.202e-03  VALIDATION Loss: 1.206e-03
+====> Epoch: 212 TRAINING Loss: 1.199e-03  VALIDATION Loss: 1.193e-03
+====> Epoch: 213 TRAINING Loss: 1.195e-03  VALIDATION Loss: 1.232e-03
+====> Epoch: 214 TRAINING Loss: 1.202e-03  VALIDATION Loss: 1.181e-03
+====> Epoch: 215 TRAINING Loss: 1.181e-03  VALIDATION Loss: 1.160e-03
+====> Epoch: 216 TRAINING Loss: 1.187e-03  VALIDATION Loss: 1.190e-03
+====> Epoch: 217 TRAINING Loss: 1.141e-03  VALIDATION Loss: 1.164e-03
+====> Epoch: 218 TRAINING Loss: 1.179e-03  VALIDATION Loss: 1.152e-03
+====> Epoch: 219 TRAINING Loss: 1.175e-03  VALIDATION Loss: 1.184e-03
+====> Epoch: 220 TRAINING Loss: 1.142e-03  VALIDATION Loss: 1.180e-03
+====> Epoch: 221 TRAINING Loss: 1.169e-03  VALIDATION Loss: 1.169e-03
+====> Epoch: 222 TRAINING Loss: 1.121e-03  VALIDATION Loss: 1.136e-03
+====> Epoch: 223 TRAINING Loss: 1.140e-03  VALIDATION Loss: 1.156e-03
+====> Epoch: 224 TRAINING Loss: 1.151e-03  VALIDATION Loss: 1.139e-03
+====> Epoch: 225 TRAINING Loss: 1.131e-03  VALIDATION Loss: 1.127e-03
+====> Epoch: 226 TRAINING Loss: 1.138e-03  VALIDATION Loss: 1.149e-03
+====> Epoch: 227 TRAINING Loss: 1.115e-03  VALIDATION Loss: 1.136e-03
+====> Epoch: 228 TRAINING Loss: 1.134e-03  VALIDATION Loss: 1.135e-03
+====> Epoch: 229 TRAINING Loss: 1.116e-03  VALIDATION Loss: 1.131e-03
+====> Epoch: 230 TRAINING Loss: 1.121e-03  VALIDATION Loss: 1.126e-03
+====> Epoch: 231 TRAINING Loss: 1.118e-03  VALIDATION Loss: 1.119e-03
+====> Epoch: 232 TRAINING Loss: 1.104e-03  VALIDATION Loss: 1.113e-03
+====> Epoch: 233 TRAINING Loss: 1.120e-03  VALIDATION Loss: 1.116e-03
+====> Epoch: 234 TRAINING Loss: 1.101e-03  VALIDATION Loss: 1.106e-03
+====> Epoch: 235 TRAINING Loss: 1.097e-03  VALIDATION Loss: 1.106e-03
+====> Epoch: 236 TRAINING Loss: 1.097e-03  VALIDATION Loss: 1.113e-03
+====> Epoch: 237 TRAINING Loss: 1.094e-03  VALIDATION Loss: 1.105e-03
+====> Epoch: 238 TRAINING Loss: 1.100e-03  VALIDATION Loss: 1.106e-03
+====> Epoch: 239 TRAINING Loss: 1.089e-03  VALIDATION Loss: 1.108e-03
+====> Epoch: 240 TRAINING Loss: 1.093e-03  VALIDATION Loss: 1.103e-03
+====> Epoch: 241 TRAINING Loss: 1.090e-03  VALIDATION Loss: 1.099e-03
+====> Epoch: 242 TRAINING Loss: 1.096e-03  VALIDATION Loss: 1.099e-03
+====> Epoch: 243 TRAINING Loss: 1.078e-03  VALIDATION Loss: 1.104e-03
+====> Epoch: 244 TRAINING Loss: 1.083e-03  VALIDATION Loss: 1.101e-03
+====> Epoch: 245 TRAINING Loss: 1.078e-03  VALIDATION Loss: 1.101e-03
+====> Epoch: 246 TRAINING Loss: 1.091e-03  VALIDATION Loss: 1.093e-03
+====> Epoch: 247 TRAINING Loss: 1.088e-03  VALIDATION Loss: 1.097e-03
+====> Epoch: 248 TRAINING Loss: 1.095e-03  VALIDATION Loss: 1.100e-03
+====> Epoch: 249 TRAINING Loss: 1.084e-03  VALIDATION Loss: 1.098e-03
+Training has finished
+Model saved
+n_epochs: 250, batch_size: 128, lr: 5e-04
+Modules prepared
+cuda:0  prepared
+Loading data...
+Shuffling...
+Dataset prepared
+16 components selected for the latent vectors
+Shape of the test set:  (15000, 4300)
+Calling accelerator...
+DistributedType.NO
+Loading model...
+Testing starts now...
+Saving latents and predicted percentiles...
+Loading modules
+cuda:0  prepared
+Loading data...
+Creating dataset and calling accelerator
+Shape of the dataset:  (150000, 4300)
+Loading module trained with latents of  16  components
+Getting latent vectors and predicted percentiles
+Saving spectra, percentiles, latents and predicted percentiles

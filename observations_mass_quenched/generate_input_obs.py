@@ -44,8 +44,8 @@ def generate_weights_from_SFHs_non_param(n,percen=True):
     
     for i in range(n):
         rand_sfh_tuple=priors.sample_sfh_tuple()
-        rand_sfh_tuple[0]=16
-        rand_sfh_tuple[1]=-3.0
+        rand_sfh_tuple[1]=np.random.uniform(size=1)*(0-(-50)) + (-50)
+        rand_sfh_tuple[3:]=np.cumsum(np.random.dirichlet(np.ones((3+1,))*1, size=1))[0:-1]
         rand_sfh, rand_time = db.tuple_to_sfh(rand_sfh_tuple, zval = z[i]) 
         curves.append(rand_sfh*1e9) #conversion from Msun/yr to Msun/Gyr
         times.append(rand_time)

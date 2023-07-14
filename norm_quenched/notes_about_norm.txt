@@ -1,1 +1,0 @@
-We work with 15 different metallicities and base alpha/Fe models. We normalize each spectrum by its median (new input: norm. spectra). This is the easiest way to apply our pipeline with observations. Here we are not convolving anything, this will be the next step.

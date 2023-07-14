@@ -2,17 +2,24 @@ import torch
 from .spender_model import MLP, SpectrumEncoder, encoder_percentiles
 
 
-#function tunned by Patricia
-def load_model(filename, device=None,n_latent=16,n_out=9,n_hidden=(16,16,16)):
-    """Load models from file
+def load_model(filename,n_latent=16,n_out=9,n_hidden=(16,16,16)):
+    """
+    Load encoder models from file
 
     Parameter
     ---------
     filename: str
         Path to file which contains the torch state dictionary
 
-    device: `torch.Device`
-        Device to load model structure into
+    n_latent: int
+        Number of components for the latent vectors
+    
+    n_out: int
+        Number of features to predict
+
+    n_hidden: tuple
+        A tuple of size equal to the number of hidden layers, and with values equal to the number of units
+        in each layer
 
     Returns
     -------

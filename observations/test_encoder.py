@@ -36,8 +36,6 @@ class Dataset(torch.utils.data.Dataset):
 
     def __init__(self,x,y):
 
-        """ generate and organize artificial data from parametrizations of SFHs"""
-
         self.x=torch.from_numpy(x) #seds
         self.y=torch.from_numpy(y) #percentiles
 
@@ -73,7 +71,7 @@ print(str(n_latent)+' components selected for the latent vectors')
 test_set = Dataset(x_test, y_test)
 print('Shape of the test set: ',np.shape(x_test))
 params={'batch_size': 128 } #no minitbatches or 128
-test_generator = torch.utils.data.DataLoader(test_set,**params) #without minibatches
+test_generator = torch.utils.data.DataLoader(test_set,**params)
 
 print('Calling accelerator...')
 accelerator = Accelerator(mixed_precision='fp16')
@@ -103,7 +101,7 @@ with torch.no_grad():
     
     
     
-print('Saving latents and predicted percentiles...')
-np.save("./saved_models/y_test_pred.npy",ys_)#y_.cpu())
-np.save('./saved_models/latents.npy',ss) #s.cpu())
-np.save('./saved_models/y_test.npy', percentiles) #,percent.cpu())
+print('Saving latents and predicted percentiles and [M/H]...')
+np.save("./saved_models/y_test_pred.npy",ys_)
+np.save('./saved_models/latents.npy',ss)
+np.save('./saved_models/y_test.npy', percentiles) 

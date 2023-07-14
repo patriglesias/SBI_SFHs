@@ -1,4 +1,4 @@
-# ## Load model and get a dataset of spectra - latents - percentiles #
+# Load model and get a dataset of spectra - latents - percentiles + [M/H] for the 150.000 samples 
 
 print('Loading modules')
 
@@ -10,11 +10,12 @@ from torch import nn
 from torch import optim
 from accelerate import Accelerator #to use pytorch
 from torch.utils.data import DataLoader
-from spender import SpectrumEncoder,MLP,encoder_percentiles,load_model
-#from generate_input import *
+from spender import SpectrumEncoder,MLP,encoder_percentiles,load_model #encoder model
+
+
+
 # CUDA for PyTorch
 use_cuda = torch.cuda.is_available()
-#torch.cuda.set_device(1)
 device = torch.device("cuda:0" if use_cuda else "cpu")
 torch.backends.cudnn.benchmark = True
 print(device,' prepared')
@@ -41,7 +42,7 @@ class Dataset(torch.utils.data.Dataset):
 
 
 
-n=150000
+n=150000 #number of total samples
 
 
 #load data:
@@ -85,9 +86,12 @@ with torch.no_grad():
 
 #save
 print('Saving spectra, percentiles, latents and predicted percentiles')
-#np.save("./saved_models/y_test_pred.npy",ys_)
 np.save('./saved_models/latents_all.npy',ss)
+
+
+#unnecesary
 #np.save("./saved_models/y.npy",y)
+#np.save("./saved_models/y_test_pred.npy",ys_)
 
 
 

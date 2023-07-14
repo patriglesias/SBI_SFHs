@@ -14,14 +14,11 @@ print('Modules prepared')
 
 # CUDA for PyTorch
 use_cuda = torch.cuda.is_available()
-#torch.cuda.set_device(1)
 device = torch.device("cuda:0" if use_cuda else "cpu")
 torch.backends.cudnn.benchmark = True
 print("GPU" if use_cuda else "CPU",' prepared')
-torch.backends.cudnn.enabled = False
 
-#print(torch.version.cuda)
-#print(torch.backends.cudnn.version())
+
 
 #dataset has been generated before, here we just load it
 print('Loading data...')
@@ -31,8 +28,6 @@ y=np.load('./saved_input/y.npy')
 class Dataset(torch.utils.data.Dataset):
 
     def __init__(self,x,y):
-
-        """ generate and organize artificial data from parametrizations of SFHs"""
 
         self.x=torch.from_numpy(x) #seds
         self.y=torch.from_numpy(y) #percentiles
@@ -59,8 +54,8 @@ n_latent=16
 
 
 # Datasets 
-#percentiles+[m/h shape(150.000, 10)
-#seds  shape (150.000, 19xx)
+#percentiles+[m/h] shape(150.000, 10)
+#seds  shape (150.000, 4300)
 
 
 
@@ -74,7 +69,6 @@ ind_sh=np.arange(len(seds[:,0]))
 np.random.shuffle(ind_sh)
 np.save('./saved_models/ind_sh.npy',ind_sh)
 
-#ind_sh=np.load('./saved_models/ind_sh_non_par_alpha.npy')
 
 seds=seds[ind_sh,:]
 y=y[ind_sh,:]
@@ -96,6 +90,42 @@ y_test = y[int(0.9*l):,:] #percentiles
 print(str(n_latent)+' components selected for the latent vectors')
 
 def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, outfile=None, losses=None, verbose=False, lr=3e-4):
+        """Train model of encoder
+
+        Parameters
+        ----------
+        model: 'torch.nn.Module'
+                The default class encoder_percentiles model
+
+        trainloader: 'torch.utils.data.Dataset'
+                      Dataset for the training set  
+
+        validloader: 'torch.utils.data.Dataset'
+                      Dataset for the validation set  
+
+        n_latent: int
+                  Number of components of the latent vectors  
+
+        n_epoch: int
+                 Number of epochs   
+
+        n_batch: int
+                Batch size
+
+        outfile: str
+                 Name of the output file, by default './saved_models/checkpoint.pt'
+
+        losses: list 
+                List of losses from previous trainings, by  default an empty list
+
+        verbose: bool
+                If verbosity
+
+        lr: float
+            Learning rate for Adam optimizer
+
+        """
+
 
     optimizer = optim.Adam(model.parameters(), lr=lr)
     scheduler = optim.lr_scheduler.OneCycleLR(optimizer, lr, total_steps=n_epoch)
@@ -169,8 +199,6 @@ def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, 
             }, outfile)
 
 
-### TRAINING MODE ###
-
 
 # Generators
 training_set = Dataset(x_train, y_train)
@@ -198,12 +226,14 @@ train(model, trainloader, validloader, n_latent,n_epoch=max_epochs, n_batch=batc
 print('Training has finished')
 print('Model saved')
 
+# save a brief description
 description='n_epochs: %d, batch_size: %d, lr: %.e'%(max_epochs,batch_size,lr)
 print(description)
 f=open('./saved_models/description.txt', "w")
 f.write(description)
 f.close()
   
+# save losses apart from checkpoint
 checkpoint = torch.load('./saved_models/checkpoint.pt')
 losses=np.array(checkpoint['losses'])
 np.savetxt('./saved_models/losses.txt',np.array(losses))

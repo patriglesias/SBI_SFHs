@@ -5,7 +5,6 @@
 /.DS_Store/
 .DS_Store
 spender/.ipynb_checkpoints
-spender/examples/.ipynb_checkpoints
-alpha_fe/.ipynb_checkpoints
-metallicities/.ipynb_checkpoints
-non_parametric_sfh/.ipynb_checkpoints
+observations/.ipynb_checkpoints
+./.ipynb_checkpoints
+synthetic_dataset/.ipynb_checkpoints

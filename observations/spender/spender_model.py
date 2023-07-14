@@ -2,7 +2,7 @@ import numpy as np
 import torch
 from torch import nn
 from torch.autograd import Variable
-#from torchinterp1d import Interp1d
+
 
 class MLP(nn.Sequential):
     """Multi-Layer Perceptron
@@ -93,6 +93,22 @@ class SpectrumEncoder(nn.Module):
 
 
     def _conv_blocks(self, filters, sizes, dropout=0):
+        """Convolutional blocks used in the encoder
+
+        Parameters
+        ----------
+        filters: list of int
+                Number of channels for each layer
+        sizes: list of int
+                Kernel sizes for each layer
+        Dropout: float
+                Dropout probability
+                
+        Returns
+        -------
+        convs: tuple of layers
+            Tuple of convolutional blocks
+        """
         convs = []
         for i in range(len(filters)):
             f_in = 1 if i == 0 else filters[i-1]
@@ -108,10 +124,25 @@ class SpectrumEncoder(nn.Module):
             act = nn.PReLU(f)
             drop = nn.Dropout(p=dropout)
             convs.append(nn.Sequential(conv, norm, act, drop))
-            #convs.append(nn.Sequential(conv, act, drop))
         return tuple(convs)
 
     def _downsample(self, x):
+         """Downsampling operations
+
+        Parameters
+        ----------
+        x: `torch.tensor`, shape (N, n_in)
+            Batch of observed spectra
+
+                
+        Returns
+        -------
+        h: `torch.tensor` 
+            Attention value
+        a: `torch.tensor` 
+            Attention key
+        """
+        
         # compression
         x = x.unsqueeze(1)
         x = self.pool1(self.conv1(x))
@@ -127,7 +158,7 @@ class SpectrumEncoder(nn.Module):
 
         Parameters
         ----------
-        x: `torch.tensor`, shape (N, 4300)
+        x: `torch.tensor`, shape (N, n_in)
             Batch of observed spectra
 
         Returns
@@ -148,8 +179,6 @@ class SpectrumEncoder(nn.Module):
         s = self.mlp(s)
         return s
 
-
-#generate latents optimized for getting percentiles
 
 class Base_encoder_percentiles(nn.Module):
     """Base class for spectrum encoder optimized for obtaining percentiles
@@ -182,7 +211,7 @@ class Base_encoder_percentiles(nn.Module):
 
         Parameters
         ----------
-        y: `torch.tensor`, shape (N, 4300)
+        y: `torch.tensor`, shape (N, n_in)
             Batch of observed spectra
 
         Returns
@@ -202,7 +231,7 @@ class Base_encoder_percentiles(nn.Module):
 
         Returns
         -------
-        y_: `torch.tensor`, shape (N, 9)
+        y_: `torch.tensor`, shape (N, n_out)
             Batch of predicted percentiles
         """
         return self.mlp(s)
@@ -212,14 +241,14 @@ class Base_encoder_percentiles(nn.Module):
 
         Parameter
         ---------
-        x: `torch.tensor`, shape (N, 4300)
+        x: `torch.tensor`, shape (N, n_in)
             Batch of spectra
 
         Returns
         -------
         s: `torch.tensor`, shape (N, S)
             Batch of latents
-        y_: `torch.tensor`, shape (N, 9)
+        y_: `torch.tensor`, shape (N, n_out)
             Batch of predicted percentiles
         """
 
@@ -234,14 +263,14 @@ class Base_encoder_percentiles(nn.Module):
 
         Parameter
         ---------
-        x: `torch.tensor`, shape (N, 4300)
+        x: `torch.tensor`, shape (N, n_in)
             Batch of spectra
 
         Returns
         -------
         s: `torch.tensor`, shape (N, S)
             Batch of latents.
-        y_: `torch.tensor`, shape (N, 9)
+        y_: `torch.tensor`, shape (N, n_out)
             Batch of predicted percentiles
         """
         s,  y_ = self._forward(x)
@@ -252,9 +281,9 @@ class Base_encoder_percentiles(nn.Module):
 
         Parameter
         --------
-        x:  `torch.tensor`, shape (N, 4300)
+        x:  `torch.tensor`, shape (N, n_in)
             Batch of percentiles
-        y: `torch.tensor`, shape (N, 9)
+        y: `torch.tensor`, shape (N, n_out)
             Batch of percentiles
         
         Returns
@@ -265,9 +294,8 @@ class Base_encoder_percentiles(nn.Module):
         return self._loss(y, y_) #compute loss with predicted vs real percentiles
 
     def _loss(self, y, y_ ):  
-
         #log cosh loss
-        loss_ind = torch.mean(torch.log(torch.cosh(y - y_ + 1e-12)))
+        loss_ind = torch.mean(torch.log(torch.cosh(y - y_ + 1e-12))) #avoid divergences
         return torch.sum(loss_ind)
 
 

@@ -24,6 +24,8 @@ Parameters:
 - $[\alpha/Fe]$ solar-scaled
 
 ![Different Ages](https://github.com/patriglesias/BNN_SFHs/blob/2ac3d3629b2c8993c6905aa41c537c344b4d33ec/synthetic_dataset/plots/spectra_different_ages.pdf)
+
+  
 ![Different Metallicities](https://github.com/patriglesias/BNN_SFHs/blob/2ac3d3629b2c8993c6905aa41c537c344b4d33ec/synthetic_dataset/plots/spectra_different_metallicities.pdf)
 
 ### 1.2 Generate SFHs

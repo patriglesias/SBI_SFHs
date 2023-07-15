@@ -76,11 +76,11 @@ As the input of the Bayesian network, we need to be sure the latent vectors cont
 ![Correlation latents with spectral regions](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/corr_spectra_3-1.png)
 
 
-![UMAP percentile 10%]()
-![UMAP percentile 90%]()
-![UMAP metallicity]()
-![UMAP Hbeta]()
-![UMAP Mgb177]()
+![UMAP percentile 10%](https://github.com/patriglesias/BNN_SFHs/blob/e9d0c15716afeb946acaaed2275e9a7318b1fb1b/plots_png/UMAP_10-1.png)
+![UMAP percentile 90%](https://github.com/patriglesias/BNN_SFHs/blob/e9d0c15716afeb946acaaed2275e9a7318b1fb1b/plots_png/UMAP_90-1.png)
+![UMAP metallicity](https://github.com/patriglesias/BNN_SFHs/blob/e9d0c15716afeb946acaaed2275e9a7318b1fb1b/plots_png/UMAP_met-1.png)
+![UMAP Hbeta](https://github.com/patriglesias/BNN_SFHs/blob/e9d0c15716afeb946acaaed2275e9a7318b1fb1b/plots_png/UMAP_Hbeta_o-1.png)
+![UMAP Mgb177](https://github.com/patriglesias/BNN_SFHs/blob/e9d0c15716afeb946acaaed2275e9a7318b1fb1b/plots_png/UMAP_Mgb5177-1.png)
 
 ## 4. Use Normalizing Flows to obtain posteriors - backward model
 

@@ -1,4 +1,4 @@
-# BNN_SFHs
+# SBI_SFHs
 We build a Bayesian framework to estimate the SFHs of galaxies from spectra via simulation-based inference.
 
 ## 1. Generate the input (synthetic) - forward model

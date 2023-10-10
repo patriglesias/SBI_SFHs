@@ -1,5 +1,5 @@
 # SBI_SFHs
-We build a Bayesian framework to estimate the SFHs of galaxies from spectra via simulation-based inference.
+We build a simulation-based inference framework to estimate the SFHs of galaxies from optical spectra.
 
 ## 1. Generate the input (synthetic) - forward model
 

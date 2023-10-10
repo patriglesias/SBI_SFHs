@@ -44,7 +44,7 @@ def generate_weights_from_SFHs_non_param(n,percen=True):
     for i in range(n):
         rand_sfh_tuple=priors.sample_sfh_tuple()
         #modify priors for the fractional sSFR in each time bin(dispersive - txs follow Dirichlet distribution of alpha=1)
-        rand_sfh_tuple[3:]=np.cumsum(np.random.dirichlet(np.ones((4,)), size=1))[0:-1]
+        rand_sfh_tuple[3:]=np.cumsum(np.random.dirichlet(np.ones((3,)), size=1))
         rand_sfh, rand_time = db.tuple_to_sfh(rand_sfh_tuple, zval = z[i]) 
         #save SFH
         curves.append(rand_sfh*1e9) #conversion from Msun/yr to Msun/Gyr

@@ -22,7 +22,7 @@ print("GPU" if use_cuda else "CPU",' prepared')
 
 #dataset has been generated before, here we just load it
 print('Loading data...')
-seds=np.load('../../seds_large/norm/seds.npy')
+seds=np.load('../../seds_large/no_ssfr/seds.npy')
 y=np.load('./saved_input/y.npy')
 
 class Dataset(torch.utils.data.Dataset):
@@ -90,7 +90,7 @@ y_test = y[int(0.9*l):,:] #percentiles
 print(str(n_latent)+' components selected for the latent vectors')
 
 def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, outfile=None, losses=None, verbose=False, lr=3e-4):
-        """Train model of encoder
+    """Train model of encoder
 
         Parameters
         ----------
@@ -124,7 +124,7 @@ def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, 
         lr: float
             Learning rate for Adam optimizer
 
-        """
+    """
 
 
     optimizer = optim.Adam(model.parameters(), lr=lr)

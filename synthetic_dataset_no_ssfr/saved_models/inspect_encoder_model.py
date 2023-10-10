@@ -47,20 +47,22 @@ plt.text(92,1.25e-2,'Log(cosh(y\'- y))')
 plt.tight_layout()
 plt.legend()
 #plt.ylim(0,5)
-plt.savefig('./losses.jpg')
+#plt.savefig('./losses.jpg')
 plt.show()
 
 ### load and visualize percentiles and latents###
 
-test_set=120000 #here we had a problem because with saved
+test_set=150000 #here we had a problem because with saved
 #with the same name all the predictions (not only test set)
 batch_size=128
 
 
 ind_sh=np.load('./ind_sh.npy',allow_pickle=True)
+print(np.shape(ind_sh))
 percent_pred=np.load('./y_test_pred.npy',allow_pickle=True)
 latents=np.load('./latents.npy',allow_pickle=True)
 percent=np.load('./y_test.npy',allow_pickle=True)
+
 
 
 
@@ -82,7 +84,7 @@ for j in tqdm(range(len(percent))):
         percent_arr[batch_size*j+i,:]=x
         
 
-for j in tqdm(np.arange(1,10)): #percentiles go from 10% to 90%
+for j in [1]: #tqdm(np.arange(1,10)): #percentiles go from 10% to 90%
     print('j')    
     for i in range(test_set)[::10]: 
         plt.plot(percent_arr[i,j-1],percent_pred_arr[i,j-1],'.')#,'k.')
@@ -94,9 +96,8 @@ for j in tqdm(np.arange(1,10)): #percentiles go from 10% to 90%
     plt.ylabel('Time percentile '+str(j*10)+' predicted (Gyrs)')
     plt.show()
 
-
-
-"""#histogram for percentiles and means
+"""
+#histogram for percentiles and means
 for j in np.arange(1,11): #percentiles go from 10% to 90%
         plt.hist(percent_arr[:,j-1],color='r',label='Real')
         plt.hist(percent_pred_arr[:,j-1],color='b',label='Predicted')#,'k.')

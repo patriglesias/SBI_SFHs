@@ -48,7 +48,7 @@ n=150000 #number of total samples
 #load data:
 print('Loading data...')
 
-seds=np.load('../../seds_large/norm/seds.npy')
+seds=np.load('../../seds_large/no_ssfr/seds.npy')
 y=np.load('./saved_input/y.npy')
 
 

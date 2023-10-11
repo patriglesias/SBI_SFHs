@@ -84,7 +84,7 @@ for j in tqdm(range(len(percent))):
         percent_arr[batch_size*j+i,:]=x
         
 
-for j in [1]: #tqdm(np.arange(1,10)): #percentiles go from 10% to 90%
+for j in [1,2]: #tqdm(np.arange(1,10)): #percentiles go from 10% to 90%
     print('j')    
     for i in range(test_set)[::10]: 
         plt.plot(percent_arr[i,j-1],percent_pred_arr[i,j-1],'.')#,'k.')

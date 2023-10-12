@@ -13,51 +13,54 @@ import dense_basis as db
 import astropy.units as u
 from astropy.cosmology import  Planck13,z_at_value
 
-
-
-
-
-def generate_weights_from_SFHs_non_param(n,percen=True):
-    """Create non-parametric SFHs with Dense Basis and obtain stellar mass percentiles
-
-        Parameters
-        ----------
-        n: int
-                Number of SFHs to generate
-        percent: bool
-                Return stellar mass percentiles or not
-        Returns
-        -------
-        times: array, size 1.000
-                Cosmic time values for each mass value in Gyr
-        ms: array, size 1.000
-                Normalized and non-cumulative mass curve as a function of time
-        if percent is true; percentiles: array, size 9
-            9 values for the time at which 10%, 20%, ... 90% of the total stellar mass are formed
-        """
-
-
-    priors = db.Priors() #load priors from Dense Basis
-
+def generate_non_param_SFHs(n,tx_alpha,prior='ssfr'):
+    priors = db.Priors()
     curves=[]
-    times=[] #needed because rand_time length and step may vary (depends on the redshift)
+    times=[] #needed because rand_time length and step depends on the redshift
 
     z=np.zeros((n,)) #present time
 
-    
+    if prior=='ssfr':
+        priors.ssfr_min = -17.0 #log(sfr/m)=log(sfr)-log(m)= -3 -14
+        priors.ssfr_max = -9.0  #log(sfr/m)=log(sfr)-log(m)= 0 - 9
+        priors.sfr_prior_type = 'sSFRflat'
+        priors.use_ssfr_prior = True
+        
+
+    elif prior=='sfr':
+        priors.sfr_max = -3.0
+        priors.sfr_min = 0.0
+        priors.sfr_prior_type = 'SFRflat'
+        priors.use_ssfr_prior = False
+
+    elif prior=='default':
+        pass
+        
+        
+    else:
+        sys.exit('Undefined prior')
+
+    priors.tx_alpha = tx_alpha
+    #priors.print_priors()
+
     for i in range(n):
         rand_sfh_tuple=priors.sample_sfh_tuple()
-        #modify priors for the present SFR and fractional sSFR in each time bin(dispersive)
-        #rand_sfh_tuple[1]=np.random.uniform(size=1)*(0-(-50)) + (-50)
-        rand_sfh_tuple[3:]=np.cumsum(np.random.dirichlet(np.ones((3+1,))*1, size=1))[0:-1]
-        rand_sfh, rand_time = db.tuple_to_sfh(rand_sfh_tuple, zval = z[i]) 
-        #save SFH
+        rand_sfh, rand_time = db.tuple_to_sfh( rand_sfh_tuple, zval = z[i]) 
         curves.append(rand_sfh*1e9) #conversion from Msun/yr to Msun/Gyr
         times.append(rand_time)
-
     
+    return times, curves
+
+
+
+
+
+def generate_weights_from_SFHs_non_param(n,percen=True,tx_alpha=1,prior='ssfr'):
+
+    times, curves=generate_non_param_SFHs(n,tx_alpha,prior)
+
     ms=[]
-    #non-cumulative mass curves
+    #non accumulative mass curves, we save it cause we will use it later
     for index,curve in enumerate(curves):        
         sfr_0=curve
         m=[]
@@ -66,9 +69,9 @@ def generate_weights_from_SFHs_non_param(n,percen=True):
         step=t[1]-t[0]
         #print(step)
         for i,tx in enumerate(t):  
-             m_t=sfr_0[i]*step #this gives directly the mass curve (non-cumulative)
+             m_t=sfr_0[i]*step #this gives directly the mass curve (non accumulative)
              m.append(m_t)
-        ms.append(m/np.sum(m)) #normalized (weigths)
+        ms.append(m/np.sum(m)) #normalized (weigths!!)
 
     if percen:
         #compute percentiles
@@ -86,6 +89,11 @@ def generate_weights_from_SFHs_non_param(n,percen=True):
         return np.array(times),np.array(ms),np.array(percentiles)
     else:
         return np.array(times),np.array(ms)
+
+
+
+
+
 
 def get_tbins(dir_name,strs_1,strs_2):
     """Get age bins of MILES SSP spectra
@@ -507,7 +515,7 @@ if __name__ == '__main__':
     print('Generating 10.000 SFHs and their corresponding spectra for each Z:')
     for k,i in tqdm(enumerate(z)):
             print('z= ',k)
-            t,m,per=generate_weights_from_SFHs_non_param(n)
+            t,m,per=generate_weights_from_SFHs_non_param(n,tx_alpha,prior='sfr')
             data_extended=interpolate_t(tbins,t[0],data_met[:,:,k])
             wave,sed=generate_all_spectrums(t[0],m,wave,data_extended)
 

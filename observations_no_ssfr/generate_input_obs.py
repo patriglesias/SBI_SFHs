@@ -48,7 +48,7 @@ def generate_weights_from_SFHs_non_param(n,percen=True):
     for i in range(n):
         rand_sfh_tuple=priors.sample_sfh_tuple()
         #modify priors for the present SFR and fractional sSFR in each time bin(dispersive)
-        rand_sfh_tuple[1]=np.random.uniform(size=1)*(0-(-50)) + (-50)
+        #rand_sfh_tuple[1]=np.random.uniform(size=1)*(0-(-50)) + (-50)
         rand_sfh_tuple[3:]=np.cumsum(np.random.dirichlet(np.ones((3+1,))*1, size=1))[0:-1]
         rand_sfh, rand_time = db.tuple_to_sfh(rand_sfh_tuple, zval = z[i]) 
         #save SFH

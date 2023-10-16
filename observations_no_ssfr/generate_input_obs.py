@@ -515,7 +515,7 @@ if __name__ == '__main__':
     print('Generating 10.000 SFHs and their corresponding spectra for each Z:')
     for k,i in tqdm(enumerate(z)):
             print('z= ',k)
-            t,m,per=generate_weights_from_SFHs_non_param(n,tx_alpha=1,prior='sfr')
+            t,m,per=generate_weights_from_SFHs_non_param(n,tx_alpha=1,prior='ssfr')
             data_extended=interpolate_t(tbins,t[0],data_met[:,:,k])
             wave,sed=generate_all_spectrums(t[0],m,wave,data_extended)
 
@@ -538,17 +538,17 @@ if __name__ == '__main__':
             y[i,:9]=percentiles[i,:]
             y[i,-1]=zs[i]
     
-        np.save('./saved_input/y.npy',y) 
+        np.save('./saved_input/y_ssfr.npy',y) 
     
     save=True
 
     if save:
         print('Saving...')
-        np.save('../../seds_large/obs_no_ssfr/seds.npy',seds)
-        np.save('./saved_input/wave.npy',wave)
-        np.save('./saved_input/t.npy',t[0])
-        np.save('../../seds_large/obs_no_ssfr/ms.npy',ms)
-        np.save('./saved_input/percent.npy',percentiles)
-        np.save('./saved_input/zs.npy',zs)
+        np.save('../../seds_large/obs_no_ssfr/seds_ssfr.npy',seds)
+        np.save('./saved_input/wave_ssfr.npy',wave)
+        np.save('./saved_input/t_ssfr.npy',t[0])
+        np.save('../../seds_large/obs_no_ssfr/ms_ssfr.npy',ms)
+        np.save('./saved_input/percent_ssfr.npy',percentiles)
+        np.save('./saved_input/zs_ssfr.npy',zs)
         
     

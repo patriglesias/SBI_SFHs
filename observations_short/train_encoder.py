@@ -22,8 +22,8 @@ print("GPU" if use_cuda else "CPU",' prepared')
 
 #dataset has been generated before, here we just load it
 print('Loading data...')
-seds=np.load('../../seds_large/obs_no_ssfr/seds_etg.npy')
-y=np.load('./saved_input/y_etg.npy')
+seds=np.load('../../seds_large/obs_no_ssfr/seds_main.npy')
+y=np.load('./saved_input/y_main.npy')
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -67,7 +67,7 @@ print('Creating datasets...')
 
 ind_sh=np.arange(len(seds[:,0]))
 np.random.shuffle(ind_sh)
-np.save('./saved_models/ind_sh_etg.npy',ind_sh)
+np.save('./saved_models/ind_sh_main.npy',ind_sh)
 
 
 seds=seds[ind_sh,:]
@@ -134,7 +134,7 @@ def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, 
     model,  trainloader, validloader, optimizer = accelerator.prepare(model,  trainloader, validloader, optimizer)
 
     if outfile is None:
-        outfile = "./saved_models/checkpoint_etg.pt"
+        outfile = "./saved_models/checkpoint_main.pt"
 
     epoch = 0
     if losses is None:
@@ -234,7 +234,7 @@ f.write(description)
 f.close()
   
 # save losses apart from checkpoint
-checkpoint = torch.load('./saved_models/checkpoint_etg.pt')
+checkpoint = torch.load('./saved_models/checkpoint_main.pt')
 losses=np.array(checkpoint['losses'])
 np.savetxt('./saved_models/losses.txt',np.array(losses))
 

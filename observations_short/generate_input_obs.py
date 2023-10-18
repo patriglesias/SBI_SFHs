@@ -39,6 +39,12 @@ def generate_non_param_SFHs(n,tx_alpha,prior='ssfr'):
         priors.sfr_prior_type = 'sSFRflat'
         priors.use_ssfr_prior = True
 
+    elif prior=='main':
+        priors.ssfr_min = -50.0 #log(sfr/m)=log(sfr)-log(m)= -36 -14
+        priors.ssfr_max = 0.0 #log(sfr/m)=log(sfr)-log(m)= 10 - 10
+        priors.sfr_prior_type = 'sSFRflat'
+        priors.use_ssfr_prior = True
+
 
     elif prior=='default':
         pass
@@ -551,11 +557,11 @@ if __name__ == '__main__':
 
     if save:
         print('Saving...')
-        np.save('../../seds_large/obs_no_ssfr/seds_etg.npy',seds)
-        np.save('./saved_input/wave_etg.npy',wave)
-        np.save('./saved_input/t_etg.npy',t[0])
-        np.save('../../seds_large/obs_no_ssfr/ms_etg.npy',ms)
-        np.save('./saved_input/percent_etg.npy',percentiles)
-        np.save('./saved_input/zs_etg.npy',zs)
+        np.save('../../seds_large/obs_no_ssfr/seds_main.npy',seds)
+        np.save('./saved_input/wave_main.npy',wave)
+        np.save('./saved_input/t_main.npy',t[0])
+        np.save('../../seds_large/obs_no_ssfr/ms_main.npy',ms)
+        np.save('./saved_input/percent_main.npy',percentiles)
+        np.save('./saved_input/zs_main.npy',zs)
         
     

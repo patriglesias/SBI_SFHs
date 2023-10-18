@@ -48,8 +48,8 @@ n=90000 #number of total samples
 #load data:
 print('Loading data...')
 
-seds=np.load('../../seds_large/obs_no_ssfr/seds_etg.npy')
-y=np.load('./saved_input/y_etg.npy')
+seds=np.load('../../seds_large/obs_no_ssfr/seds_main.npy')
+y=np.load('./saved_input/y_main.npy')
 
 
 #create a pytorch dataset
@@ -66,7 +66,7 @@ loader = accelerator.prepare(generator)
 #load model
 n_latent=16
 print('Loading module trained with latents of ', str(n_latent), ' components')
-model_file = "./saved_models/checkpoint_etg.pt"
+model_file = "./saved_models/checkpoint_main.pt"
 model, loss = load_model(model_file, device=accelerator.device,n_hidden=(16,32),n_out=10)
 model = accelerator.prepare(model)
 
@@ -86,7 +86,7 @@ with torch.no_grad():
 
 #save
 print('Saving spectra, percentiles, latents and predicted percentiles')
-np.save('./saved_models/latents_all_etg.npy',ss)
+np.save('./saved_models/latents_all_main.npy',ss)
 
 
 #unnecesary

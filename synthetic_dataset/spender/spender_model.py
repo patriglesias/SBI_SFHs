@@ -127,7 +127,7 @@ class SpectrumEncoder(nn.Module):
         return tuple(convs)
 
     def _downsample(self, x):
-         """Downsampling operations
+        """Downsampling operations
 
         Parameters
         ----------

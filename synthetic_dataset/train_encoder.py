@@ -90,7 +90,7 @@ y_test = y[int(0.9*l):,:] #percentiles
 print(str(n_latent)+' components selected for the latent vectors')
 
 def train(model, trainloader, validloader, n_latent, n_epoch=100, n_batch=None, outfile=None, losses=None, verbose=False, lr=3e-4):
-        """Train model of encoder
+    """Train model of encoder
 
         Parameters
         ----------

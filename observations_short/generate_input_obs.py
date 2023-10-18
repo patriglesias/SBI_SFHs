@@ -551,7 +551,7 @@ if __name__ == '__main__':
             y[i,:9]=percentiles[i,:]
             y[i,-1]=zs[i]
     
-        np.save('./saved_input/y_etg.npy',y) 
+        np.save('./saved_input/y_main.npy',y) 
     
     save=True
 

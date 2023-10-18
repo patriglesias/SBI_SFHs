@@ -501,7 +501,6 @@ def plot_sed_sfh(ms,t,wave,seds,n_int):
     t_back=t[::-1]
     for i,m in enumerate(ms[::n_int]):
        plt.plot(t_back,m,'-')
-
     plt.xlim(14,0)
     plt.xlabel('Lookback time [Gyr]')
     plt.title('Mstar norm non acummulative')

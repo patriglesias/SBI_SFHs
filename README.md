@@ -80,15 +80,16 @@ As the input of the Bayesian network, we need to be sure the latent vectors cont
 
 ![UMAP percentile 10%](https://github.com/patriglesias/SBI_SFHs/blob/be846f194ce741be4539151de6bc018396470c8a/plots_png/UMAP_10-1.png)
 ![UMAP percentile 90%](https://github.com/patriglesias/SBI_SFHs/blob/be846f194ce741be4539151de6bc018396470c8a/plots_png/UMAP_90-1.png)
-![UMAP metallicity](https://github.com/patriglesias/BNN_SFHs/blob/e9d0c15716afeb946acaaed2275e9a7318b1fb1b/plots_png/UMAP_met-1.png)
-![UMAP Hbeta](https://github.com/patriglesias/BNN_SFHs/blob/e9d0c15716afeb946acaaed2275e9a7318b1fb1b/plots_png/UMAP_Hbeta_o-1.png)
-![UMAP MgFe'](https://github.com/patriglesias/BNN_SFHs/blob/e9d0c15716afeb946acaaed2275e9a7318b1fb1b/plots_png/UMAP_Mgb5177-1.png)
+![UMAP metallicity](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/UMAP_met-1.png)
+![UMAP Hbeta](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/UMAP_hbeta-1.png)
+![UMAP MgFe'](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/UMAP_mgfe-1.png)
 
 ## 4. Use Normalizing Flows to obtain posteriors - backward model
 
 We employ Bayesian inference (Amortized Neural Posterior Estimation) to estimate the posterior probability distribution for each of the $9$ percentiles, as well as for the metallicity. We use $90$% of the generated samples ( $x =$ {latent vectors}, $y =$ {percentiles, $[M/H]$}) to train the network, a Masked Autoregressive Flow. 
 
-![BNN diagram](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/SNPE_SBI.png)
+![SBI diagram](https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/SNPE_SBI.png)
+Image credit: Talts20
 
 
 ## 5. Evaluate the performance with the test set 
@@ -97,21 +98,22 @@ We use the remaining $10$% of the samples to evaluate the performance of the mod
 
 The general performance is obtained by plotting the mean value of each posterior vs the ground truth, while the uncertainty prediction is checked by studying the coverage probabilities and a SBC test. We also do a Corner plot.
 
-![Examples percentile prediction](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/prediction_no_title_0-1.png)
-![Examples percentile prediction](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/prediction_no_title_11-1.png)
-![Examples percentile prediction](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/prediction_no_title_12-1.png)
-![Examples percentile prediction](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/prediction_no_title_13-1.png)
+![Examples percentile prediction](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/cummul_mass_growth_2-1.png)
 
 
-![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/sns_mean_true_kde_6_0-1.png)
-![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/sns_mean_true_kde_6_4-1.png)
-![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/sns_mean_true_kde_6_8-1.png)
-![Mean posterior vs ground truth](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/sns_mean_true_kde_6_9-1.png)
 
-![Corner plot](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/sns_conerplot_0-1.png)
-![Coverage probabilities](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/coverage-1.png)
+![Mean posterior vs ground truth](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/sns_mean_true_0-1.png)
+![Mean posterior vs ground truth](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/sns_mean_true_0-4.png)
+![Mean posterior vs ground truth](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/sns_mean_true_0-8.png)
+![Mean posterior vs ground truth](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/sns_mean_true_0-9.png)
 
 
+![Coverage probabilities](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/ecdf-1.png)
+![Ranks histogram SBC](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/rank_statisitic_1-1.png)
+![Ranks histogram SBC](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/rank_statisitic_2-1.png)
+![Ranks histogram SBC](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/rank_statisitic_3-1.png)
+![Ranks histogram SBC](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/rank_statisitic_4-1.png)
+![Corner plot](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/conerplot0_ok-1.png)
 
 ## 6. Timing
 
@@ -123,15 +125,10 @@ Once the model (encoder + ANPE) is trained, we estimate how much time it takes t
 
 We use the model trained with synthetic spectra and non-parametric SFHs to predict the $9$ percentiles + $[M/H]$ + $[\alpha/Fe]$ for observed early-type galaxies from their spectra.
 
-First, we convolve all the observations to emulate the maximum velocity dispersion of the dataset: $\sigma=300$ Km/s (convolve with $\sigma^2=\sigma_{300}^2+\sigma_{\text{sdss}}^2 - (\sigma_{v_{i}}^2+\sigma_{\text{sdss}}^2)=\sigma_{300}^2-\sigma_{v_{i}}^2$). Then, we limit the wavelength range to $[4023,5500]$ Å. On the other hand, we process the MILES spectra in order to simulate the conditions of the observations: we convolve with a kernel of size $\sigma^2=\sigma_{300}^2+\sigma_{\text{sdss}}^2 -\sigma_{\text{MILES}}$, we interpolate to get $\Delta \lambda = 1$ Å as in the observations, and we clip the spectra to $[4023,5500]$ Å too. Once we have all with the same resolution and wavelength range, we repeat the training with these MILES spectra, testing again its performance, and checking how the resolution and the wavelength range affect it. Eventually, we get the posteriors for the observations and analyze them, obtaining an SFH, a metallicity and an $[\alpha/Fe]$ value for each observed galaxy.
+First, we convolve all the observations to emulate the maximum velocity dispersion of the dataset: $\sigma=300$ Km/s (convolve with $\sigma^2=\sigma_{300}^2+\sigma_{\text{sdss}}^2 - (\sigma_{v_{i}}^2+\sigma_{\text{sdss}}^2)=\sigma_{300}^2-\sigma_{v_{i}}^2$). Then, we limit the wavelength range to $[4023,6000]$ Å. On the other hand, we process the MILES spectra in order to simulate the conditions of the observations: we convolve with a kernel of size $\sigma^2=\sigma_{300}^2+\sigma_{\text{sdss}}^2 -\sigma_{\text{MILES}}$, we interpolate to get $\Delta \lambda = 1$ Å as in the observations, and we clip the spectra to $[4023,6000]$ Å too. Once we have all with the same resolution and wavelength range, we repeat the training with these MILES spectra, testing again its performance, and checking how the resolution and the wavelength range affect it. Eventually, we get the posteriors for the observations and analyze them, obtaining an SFH and a metallicity value  for each observed galaxy.
 
+![All predictions for observations](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/pred_gal_full-1.png)
 
-![Predictions for observations](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/pred_ppxf2_0-1.png)
-![Predictions for observations](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/pred_ppxf2_10-1.png)
-![Predictions for observations](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/pred_ppxf2_17-1.png)
-
-
-![All predictions for observations](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/pred_gal_full-1.png)
 
 
 
@@ -139,6 +136,6 @@ First, we convolve all the observations to emulate the maximum velocity dispersi
 
 When working with real galaxy observations, we are not able to compare the predicted values with the ground truth. To evaluate the performance of the model in these situations we can try to recover the spectra by repeating the forward model with the predicted values (mean of the posteriors), taking into account that $\frac{\partial  \text{percentiles}}{\partial t} =$ SFH, and check how good is the reconstruction (residuals between real and reconstructed spectra).
 
-![Examples recover spectra](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/spectra_105.0-1.png)
-![Examples recover spectra](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/spectra_205.0-1.png)
-![Examples recover spectra](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/spectra_300.0-1.png)
+![Examples recover spectra](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/spectra_105.0-1.png)
+![Examples recover spectra](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/spectra_205.0-1.png)
+![Examples recover spectra](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/spectra_300.0-1.png)

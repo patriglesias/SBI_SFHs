@@ -10,7 +10,7 @@ We use different values of $[M/H]$ and base $[\alpha/Fe]$
 
 Parameters:
 **************
-- FWHm $=$ $2.51$ Å
+- FWHM $=$ $2.51$ Å
 - IMF $=$ KU ($1.3$)
 - BaSTI isochrones
 - $\lambda$ $\in$ $[3540.5,7409.6]$ Å
@@ -93,7 +93,7 @@ We employ Bayesian inference (Amortized Neural Posterior Estimation) to estimate
 
 We use the remaining $10$% of the samples to evaluate the performance of the model, by getting from their latent vectors probability distributions for the values of each of the $9$ percentiles + $[M/H]$ and comparing them with the actual true values.
 
-The general performance is obtained by plotting the mean value of each posterior vs the ground truth, while the uncertainty prediction is checked by studying the coverage probabilities. We also do a Corner plot.
+The general performance is obtained by plotting the mean value of each posterior vs the ground truth, while the uncertainty prediction is checked by studying the coverage probabilities and a SBC test. We also do a Corner plot.
 
 ![Examples percentile prediction](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/prediction_no_title_0-1.png)
 ![Examples percentile prediction](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/prediction_no_title_11-1.png)
@@ -108,6 +108,7 @@ The general performance is obtained by plotting the mean value of each posterior
 
 ![Corner plot](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/sns_conerplot_0-1.png)
 ![Coverage probabilities](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/coverage-1.png)
+
 
 
 ## 6. Timing

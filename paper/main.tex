@@ -1,0 +1,109 @@
+%                                                                 aa.dem
+% AA vers. 9.1, LaTeX class for Astronomy & Astrophysics
+% demonstration file
+%                                                       (c) EDP Sciences
+%-----------------------------------------------------------------------
+%
+%\documentclass[referee]{aa} % for a referee version
+%\documentclass[onecolumn]{aa} % for a paper on 1 column  
+%\documentclass[longauth]{aa} % for the long lists of affiliations 
+%\documentclass[letter]{aa} % for the letters 
+%\documentclass[bibyear]{aa} % if the references are not structured 
+%                              according to the author-year natbib style
+
+%
+\documentclass{aa}  
+
+%
+\usepackage{graphicx}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{txfonts}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[hyperindex=true,breaklinks=true,colorlinks=true,linkcolor=blue,filecolor=blue,urlcolor=blue,citecolor=blue,breaklinks=true]{hyperref}
+% To add links in your PDF file, use the package "hyperref"
+% with options according to your LaTeX or PDFLaTeX drivers.
+%
+
+\usepackage{tabularray}
+\usepackage{placeins}
+\usepackage{float}
+
+
+\begin{document} 
+
+
+   \title{Deriving Star Formation Histories of Galaxies from  Spectra with Simulation-based Inference}
+
+   \titlerunning{Star Formation Histories from  Spectra with Simulation-based Inference}
+
+   \subtitle{}
+
+   \author{Patricia Iglesias-Navarro \inst{1,2}   \and Marc Huertas-Company \inst{1,2,3,4} \and Ignacio Martín-Navarro \inst{1,2} \and Johan H. Knapen \inst{1,2} \and Emilie Pernet \inst{1,2,5}}
+
+   %check order and more authors
+
+   \institute{Instituto de Astrofísica de Canarias, C/ Vía Láctea s/n, 38205 La Laguna, Tenerife, Spain \and Departamento de Astrofísica, Universidad de La Laguna, 38200 La Laguna, Tenerife, Spain \and
+             Observatoire de Paris, LERMA, PSL University, 61 avenue de l'Observatoire, F-75014 Paris, France
+          \and  
+          Universit\'e Paris-Cit\'e, 5 Rue Thomas Mann, 75014 Paris, France \and
+    Department of Physics, Faculty of Engineering and Physical Sciences, University of Surrey, GU2 7XH, Guildford, United Kingdom}
+
+
+   \date{}
+
+% \abstract{}{}{}{}{} 
+% 5 {} token are mandatory
+ 
+  \abstract
+   {High-resolution galaxy spectra encode information about the stellar populations within galaxies. The properties of the stars, such as their ages, masses,  and metallicities, provide  insights into the underlying physical processes that drive the growth and transformation of galaxies over cosmic time.
+    We explore an amortised implicit inference approach to estimate from optical absorption spectra the posterior distributions of metallicities and star formation histories (SFHs) of galaxies, i.e. star formation rate as a function of time. 
+    We generate a sample of synthetic spectra to train and test our model in a simulation-based inference workflow using the spectroscopic predictions of the MILES stellar population library and non-parametric SFHs. We reliably estimate the mass assembly of an integrated stellar population with well-calibrated uncertainties. Specifically, we reach a score of accuracy of $0.97\,R^2$ for the time at which a given galaxy from the test set formed $50\%$ of its stellar mass, obtaining samples of the posteriors in only $10^{-4}$\,s. We then apply the pipeline to real observations of  massive elliptical galaxies, recovering the well-known relationship between the age and the velocity dispersion, and show that the most massive galaxies ($\sigma\sim300$ km/s) build up to 90\% of their total stellar masses $1$\,Gyr after the Big Bang. The measurements also agree with the state-of-the-art inversion codes, but the inference is performed up to five orders of magnitude faster.
+    This machine learning-based implicit inference applied to full spectral fitting makes it possible to address large number of galaxies while performing a thick sampling of the posteriors. It allows to estimate both the deterministic trends and the inherent uncertainties of the highly degenerated inversion problem, so far inaccessible, dealing with the size and complexity of upcoming spectroscopic surveys such as DESI, WEAVE or 4MOST.}
+    
+   \keywords{galaxies: evolution - galaxies: statistics}
+
+   \maketitle
+%
+%-------------------------------------------------------------------
+
+\input{introduction}
+
+%--------------------------------------------------------------------
+\input{methods}
+%--------------------------------------------------------------------
+
+\input{results}
+%--------------------------------------------------------------------
+
+\input{discussion}
+%--------------------------------------------------------------------
+
+\input{conclusions}
+%--------------------------------------------------------------------
+
+\begin{acknowledgements}
+
+Co-funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union. Neither the European Union nor the granting authority can be held responsible for them. MHC and PIN acknowledge financial support from the State Research Agency (AEI\-MCINN) of the Spanish Ministry of Science and Innovation under the grants ``Galaxy Evolution with Artificial Intelligence" with reference PGC2018-100852-A-I00 and "BASALT" with reference PID2021-126838NB-I00. JHK acknowledges support from the Agencia Estatal de Investigaci\'on del Ministerio de Ciencia, Innovaci\'on y Universidades (MCIU/AEI) under the grant "The structure and evolution of galaxies and their outer regions" and the European Regional Development Fund (ERDF) with reference PID2022-136505NB-I00/10.13039/501100011033. EP acknowledges support from the Turning Scheme. 
+
+
+
+\end{acknowledgements}
+
+
+\bibliographystyle{aa}
+\bibliography{references}
+% WARNING
+%-------------------------------------------------------------------
+% Please note that we have included the references to the file aa.dem in
+% order to compile it, but we ask you to:
+%
+% - use BibTeX with the regular commands:
+%   \bibliographystyle{aa} % style aa.bst
+%   \bibliography{Yourfile} % your references Yourfile.bib
+%
+% - join the .bib files when you upload your source files
+%-------------------------------------------------------------------
+
+%\input{appendix}
+
+\end{document}

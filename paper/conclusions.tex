@@ -1,0 +1,26 @@
+\section{Summary and outlook}
+
+By analysing the spectrum of a galaxy one can infer physical properties such as its stellar mass, star formation rates and chemical abundances, key ingredients of our understanding of galaxy evolution. State-of-the-art spectral fitting methods use MCMC sampling to perform Bayesian statistical inference, deriving posterior probability distributions of galaxy properties, given observations. However, obtaining a posterior sampled with $\sim 10{,}000$ evaluations with these methods requires $\gtrsim 1-10$ GPU hours per galaxy, and thus implies a major bottleneck for addressing large galaxy surveys. \\
+
+
+
+We demonstrate in this work that an amortised simulation-based inference, with a previous encoding of the spectra, provides an alternative approach for spectral fitting through a neural density estimator. By using MILES templates and non-parametric SFHs, we construct a flexible model that recovers SFHs and metallicities with their uncertainties for observed stacks of spectra from  the SDSS, taking $\sim 4$\,s per galaxy to perform $10{,}000$ evaluations of the posteriors for the ten quantities we predict. The key results of our project are as follows.\\
+
+
+    %Descripción del modelo
+    
+First, we construct a model composed of an encoder for the spectra based on a dot-product attention model, plus a Masked Autoregressive Flow, to estimate the posterior distributions for the cosmic time at which nine stellar mass percentiles are reached, and for the metallicity. We train it during $\sim4$ hours with $135{,}000$ synthetic samples obtained from SSP MILES templates and non-parametric SFHs from the GP-SFH module.\\
+
+    % Descripción performance en datos sintéticos
+    
+ Second, we test the model with $15{,}000$ synthetic samples, reaching an $R^2$ score of $0.88$, $0.97$, $0.98$, and $0.96$ when estimating  the percentiles $10\%$, $50\%$, $90\%$, and the metallicity, respectively. The model recovers uncertainties associated with the degeneration of the inversion problem.  It struggles more in assessing the first percentiles in  galaxies with recent star formation, but reflects these difficulties adequately in the posteriors as indicated by an SBC test.\\
+    
+
+    %Observations
+Third, we estimate with our model the SFHs and metallicities of $18$ stacks of ETGs from the SDSS, with a range of velocity dispersions of $105-300$ km/s,  as well as  reliable uncertainties for our measurements. We uncover very early bursts of star formation in the most massive galaxies, and a smoother growth of stellar mass when moving to intermediate masses, recovering the well-known relation between age and velocity dispersion. Moreover, we accurately reconstruct the spectra from MILES templates, using the nine ages and the mean metallicity measured, in good agreement with the real spectra with an averaged error of $1.7 \%$.\\
+
+In future we plan to explore different sets of assumptions for the isochrones, the stellar library, and the IMF, as well as the effects of the priors introduced by the selection of SFHs and metallicity ranges. To simulate spectra of young stellar populations, a data-driven approach, possibly a neural network, can be used to directly learn the emission features from observed spectra. This methodology can also be extended to model the noise. To obtain noise-aware representations, the encoder may use both the uncertainties in the fluxes and the noisy spectra. At that stage, the optimal dimension of the latent vectors must be studied again. Such a complete model would allow one to analyse massive sets of galaxy spectra in a highly efficient and reliable manner.\\
+
+
+The entire pipeline, including the scripts for the simulation and the Bayesian inference framework, is publicly available at \href{https://github.com/patriglesias/SBI_SFHs.git}{GitHub.}\footnote{\href{https://github.com/patriglesias/SBI_SFHs.git}{https://github.com/patriglesias/SBI\_SFHs.git}}
+

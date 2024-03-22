@@ -1,6 +1,6 @@
 # SBI_SFHs
 We build a simulation-based inference framework to estimate the SFHs of galaxies from optical spectra.
-**************
+
 
 ## 1. Generate the input (synthetic) - forward model
 
@@ -52,7 +52,7 @@ And we normalize each spectrum by its median.
 We get $10.000$ SFHs for each $[M/H]$, so: $10.000$ SFHs x $15$ bins of metallicity $= 150.000$ samples.
 
 <img src="https://github.com/patriglesias/SBI_SFHs/blob/be846f194ce741be4539151de6bc018396470c8a/plots_png/sim_spectra-1.png" width="400">
-**************
+
 
 ## 2. Encode spectra (encoding architecture by SPENDER [Melchior22])
 
@@ -61,7 +61,7 @@ We want to encode $4300$-components vectors (the spectra) into $16$-components l
 The network consists of a $3$-layer CNN (moving to wider kernels and including max-pooling) + an attention module (dot-product) + extra-CNN to optimize encoding for our goal (obtain $9$ percentiles and a value for $[M/H]$, incorporating a convenient loss function).
 
 <img src="https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/arquitectura_spender-1.png" width="400">
-**************
+
 
 ## 3. Interpretation of the  latent vectors
 
@@ -84,7 +84,7 @@ As the input of the Bayesian network, we need to be sure the latent vectors cont
 <img src="https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/UMAP_met-1.png" width="400">
 <img src="https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/UMAP_hbeta-1.png" width="400">
 <img src="https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/UMAP_mgfe-1.png" width="400">
-**************
+
 
 ## 4. Use Normalizing Flows to obtain posteriors - backward model
 
@@ -93,7 +93,7 @@ We employ Bayesian inference (Amortized Neural Posterior Estimation) to estimate
 <img src="https://github.com/patriglesias/BNN_SFHs/blob/2fd75d6bc874adf295b364da9e416e78cf536d25/img_readme/SNPE_SBI.png" width="400">
 Image credit: Talts20
 
-**************
+
 
 ## 5. Evaluate the performance with the test set 
 
@@ -114,14 +114,14 @@ The general performance is obtained by plotting the mean value of each posterior
 <img src="https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/rank_statisitic_4-1.png" width="400">
 <img src="https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/conerplot0_ok-1.png" width="400">
 
-**************
+
 
 ## 6. Timing
 
 Once the model (encoder + ANPE) is trained, we estimate how much time it takes to predict the $9$ percentiles + $[M/H]$ given one spectrum. We can compare it with the time required by some traditional methods like MCMC.
 
 
-**************
+
 
 ## 7. Test with observations
 
@@ -132,7 +132,7 @@ First, we convolve all the observations to emulate the maximum velocity dispersi
 <img src="https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/pred_gal_full-1.png" width="400">
 
 
-**************
+
 
 
 ## 8. Recover spectra

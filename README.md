@@ -134,8 +134,8 @@ First, we convolve all the observations to emulate the maximum velocity dispersi
 
 ## 8. Recover spectra
 
-When working with real galaxy observations, we are not able to compare the predicted values with the ground truth. To evaluate the performance of the model in these situations we can try to recover the spectra by repeating the forward model with the predicted values (mean of the posteriors), taking into account that $\frac{\partial  \text{percentiles}}{\partial t} =$ SFH, and check how good is the reconstruction (residuals between real and reconstructed spectra).
+When working with real galaxy observations, we are not able to compare the predicted values with the ground truth. To evaluate the performance of the model in these situations we can try to recover the spectra by repeating the forward model with the predicted values (mean of the posteriors), taking into account that $\frac{\partial  \text{percentiles}}{\partial t} =$ SFR($t$), and check how good is the reconstruction (residuals between real and reconstructed spectra). We compare the results with the fits of pPXF [Cappellari & Emsellem (2004) ](https://ui.adsabs.harvard.edu/abs/2004PASP..116..138C), a popular spectral fitting code.
 
-![Examples recover spectra](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/spectra_105.0-1.png)
-![Examples recover spectra](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/spectra_205.0-1.png)
-![Examples recover spectra](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/spectra_300.0-1.png)
+![Examples recover spectra](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/spectra_105.0_2-1.png)
+![Examples recover spectra](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/spectra_205.0_2-1.png)
+![Examples recover spectra](https://github.com/patriglesias/SBI_SFHs/blob/4ce5675c850ebd98031bed68a4c71b2aa71163bf/plots_png/spectra_300.0_2-1.png)

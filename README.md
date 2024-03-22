@@ -23,10 +23,12 @@ Parameters:
 - $[M/H]$ $\in$ $[-2.27, -1.79, -1.49, -1.26, -0.96, -0.66, -0.35, -0.25,  0.06,  0.15,  0.26,  0.40]$
 - $[\alpha/Fe]$ solar-scaled
 
-![Different Ages](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/spectra_different_ages-1.png){: width="50%"}
+
+<img src="https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/spectra_different_ages-1.png" width="500" >
+
 
   
-![Different Metallicities](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/spectra_different_metallicities-1.png){: width="50%"}
+![Different Metallicities](https://github.com/patriglesias/BNN_SFHs/blob/55d859ad4765f1bad79afc30ee99ba11af8aeb1c/plots_png/spectra_different_metallicities-1.png)
 
 ### 1.2 Generate SFHs
 

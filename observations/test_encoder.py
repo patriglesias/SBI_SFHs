@@ -5,7 +5,7 @@ from torch import nn
 from torch import optim
 from accelerate import Accelerator #to use pytorch
 from torch.utils.data import DataLoader
-from spender import SpectrumEncoder,MLP,encoder_percentiles,load_model
+from encoder import SpectrumEncoder,MLP,encoder_percentiles,load_model
 
 print('Modules prepared')
 

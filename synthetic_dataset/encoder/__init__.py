@@ -1,5 +1,5 @@
 import torch
-from .spender_model import MLP, SpectrumEncoder, encoder_percentiles
+from .encoder_model import MLP, SpectrumEncoder, encoder_percentiles
 
 
 def load_model(filename,device,n_latent=16,n_out=9,n_hidden=(16,16,16)):

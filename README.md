@@ -1,3 +1,6 @@
+[![arXiv](https://img.shields.io/badge/arXiv-2203.07391-B31B1B.svg)](https://arxiv.org/abs/2406.18661)
+
+
 # SBI_SFHs
 We build a simulation-based inference framework to estimate the SFHs of galaxies from optical spectra.
 
